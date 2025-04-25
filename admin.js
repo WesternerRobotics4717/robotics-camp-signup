@@ -10,6 +10,7 @@ fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswD
         <p><strong>${entry.studentName}</strong> - ${entry.date}</p>
         <button onclick="removeClient(${idx})">Remove</button>
       `;
+      panel.appendChild(div);
     });
   });
 
