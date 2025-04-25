@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4717 Westerner Robotics Camp Signup</title>
+  <style>
+    :root {
+      --primary-color: #d4af37;
+      --background-color: #1a1a1a;
+      --secondary-color: #888888;
+      --text-color: #f0f0f0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: black;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    main {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card {
+      background: #2c2c2c;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+      max-width: 600px;
+      width: 100%;
+      margin-bottom: 2rem;
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: black;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    button:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border-radius: 0.3rem;
+      border: none;
+      font-size: 1rem;
+    }
+
+    h2 {
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    4717 Westerner Robotics Camp Signup
+  </header>
+  <main>
+    <!-- Step 1: Week Selection -->
+    <div class="card active" id="step1">
+      <h2>Select Camp Week</h2>
+      <form id="weekForm">
+        <label><input type="radio" name="week" value="June 10-11" required /> June 10–11</label><br />
+        <label><input type="radio" name="week" value="June 17-18" /> June 17–18</label><br />
+        <label><input type="radio" name="week" value="June 24-25" /> June 24–25</label><br />
+        <button type="submit">Next</button>
+      </form>
+    </div>
+
+    <!-- Step 2: Time Slot Selection -->
+    <div class="card" id="step2">
+      <h2>Select Time Slot</h2>
+      <form id="timeForm">
+        <label><input type="radio" name="time" value="Morning (4th-6th Grade)" required /> 9am–12pm (Incoming 4th–6th Graders)</label><br />
+        <label><input type="radio" name="time" value="Afternoon (7th-12th Grade)" /> 1:30pm–4:30pm (Incoming 7th–12th Graders)</label><br />
+        <button type="submit">Next</button>
+      </form>
+    </div>
+
+    <!-- Step 3: Student and Parent Info -->
+    <div class="card" id="step3">
+      <h2>Camper & Parent Info</h2>
+      <form id="infoForm">
+        <input type="text" name="studentName" placeholder="Student Full Name" required />
+        <input type="number" name="age" placeholder="Student Age" required />
+        <input type="text" name="parentName" placeholder="Parent Full Name" required />
+        <input type="tel" name="phone" placeholder="Contact Phone" required />
+        <input type="email" name="email" placeholder="Contact Email" required />
+        <input type="text" name="address" placeholder="Street Address" required />
+        <input type="text" name="city" placeholder="City" required />
+        <input type="text" name="state" placeholder="State" required />
+        <input type="text" name="zip" placeholder="ZIP Code" required />
+        <p><a href="#" download>Download Required Release Form</a></p>
+        <button type="submit">Add to Cart</button>
+      </form>
+    </div>
+
+    <!-- Step 4: Cart and Payment Options -->
+    <div class="card" id="step4">
+      <h2>Checkout</h2>
+      <p>Choose how you'd like to pay:</p>
+      <form id="paymentForm">
+        <label><input type="radio" name="payment" value="cash" required /> Pay with Cash at Arrival</label><br />
+        <label><input type="radio" name="payment" value="venmo" /> Pay with Venmo (Insert Link)</label><br />
+        <button type="submit">Confirm and Submit</button>
+      </form>
+    </div>
+
+    <!-- Step 5: Confirmation -->
+    <div class="card" id="step5">
+      <h2>All Done!</h2>
+      <p>Thank you for registering for our robotics camp! A confirmation email will be sent shortly.</p>
+    </div>
+  </main>
+
+  <script>
+    const steps = ["step1", "step2", "step3", "step4", "step5"];
+    let currentStep = 0;
+
+    function showStep(index) {
+      steps.forEach((id, i) => {
+        document.getElementById(id).classList.toggle("active", i === index);
+      });
+    }
+
+    document.getElementById("weekForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      currentStep = 1;
+      showStep(currentStep);
+    });
+
+    document.getElementById("timeForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      currentStep = 2;
+      showStep(currentStep);
+    });
+
+    document.getElementById("infoForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      currentStep = 3;
+      showStep(currentStep);
+    });
+
+    document.getElementById("paymentForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      currentStep = 4;
+      showStep(currentStep);
+    });
+  </script>
+</body>
+</html>
