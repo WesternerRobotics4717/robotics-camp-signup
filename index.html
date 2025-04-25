@@ -25,6 +25,16 @@
       padding: 1rem;
       text-align: center;
       font-size: 1.5rem;
+      position: relative;
+    }
+
+    .admin-link {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      font-size: 0.9rem;
+      color: black;
+      text-decoration: underline;
     }
 
     main {
@@ -58,6 +68,7 @@
       border-radius: 0.5rem;
       cursor: pointer;
       margin-top: 1rem;
+      margin-right: 0.5rem;
     }
 
     button:disabled {
@@ -80,56 +91,46 @@
 
     .calendar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
-      margin-top: 1rem;
     }
 
     .calendar label {
-      background: #3a3a3a;
+      background: #444;
       padding: 1rem;
-      border-radius: 0.5rem;
       text-align: center;
+      border-radius: 0.5rem;
       cursor: pointer;
       transition: background 0.3s;
     }
 
+    .calendar input[type="radio"]:checked + span {
+      background-color: var(--primary-color);
+      color: black;
+      font-weight: bold;
+    }
+
     .calendar input[type="radio"] {
       display: none;
-    }
-
-    .calendar label:hover {
-      background: #4a4a4a;
-    }
-
-    nav {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-    }
-
-    nav a {
-      color: var(--primary-color);
-      text-decoration: none;
-      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <header>
     4717 Westerner Robotics Camp Signup
+    <a class="admin-link" href="admin.html">Admin</a>
   </header>
-  <nav>
-    <a href="admin.html">Admin</a>
-  </nav>
   <main>
     <!-- Step 1: Week Selection -->
     <div class="card active" id="step1">
       <h2>Select Camp Week</h2>
       <form id="weekForm">
-        <div class="calendar" id="calendarOptions">
-          <!-- Week options added by script -->
+        <div class="calendar">
+          <label><input type="radio" name="week" value="June 10-11" required><span>June 10–11</span></label>
+          <label><input type="radio" name="week" value="June 17-18"><span>June 17–18</span></label>
+          <label><input type="radio" name="week" value="June 24-25"><span>June 24–25</span></label>
         </div>
+        <button type="button" onclick="prevStep()" style="display:none">Back</button>
         <button type="submit">Next</button>
       </form>
     </div>
@@ -140,6 +141,7 @@
       <form id="timeForm">
         <label><input type="radio" name="time" value="Morning (4th-6th Grade)" required /> 9am–12pm (Incoming 4th–6th Graders)</label><br />
         <label><input type="radio" name="time" value="Afternoon (7th-12th Grade)" /> 1:30pm–4:30pm (Incoming 7th–12th Graders)</label><br />
+        <button type="button" onclick="prevStep()">Back</button>
         <button type="submit">Next</button>
       </form>
     </div>
@@ -158,6 +160,7 @@
         <input type="text" name="state" placeholder="State" required />
         <input type="text" name="zip" placeholder="ZIP Code" required />
         <p><a href="#" download>Download Required Release Form</a></p>
+        <button type="button" onclick="prevStep()">Back</button>
         <button type="submit">Add to Cart</button>
       </form>
     </div>
@@ -169,6 +172,7 @@
       <form id="paymentForm">
         <label><input type="radio" name="payment" value="cash" required /> Pay with Cash at Arrival</label><br />
         <label><input type="radio" name="payment" value="venmo" /> Pay with Venmo (Insert Link)</label><br />
+        <button type="button" onclick="prevStep()">Back</button>
         <button type="submit">Confirm and Submit</button>
       </form>
     </div>
@@ -190,38 +194,12 @@
       });
     }
 
-    const calendarWeeks = [
-      { date: "June 10–11", id: "week1" },
-      { date: "June 17–18", id: "week2" },
-      { date: "June 24–25", id: "week3" },
-    ];
-
-    const maxPerSession = 25;
-    const sessionCounts = {
-      "June 10–11": 0,
-      "June 17–18": 0,
-      "June 24–25": 0,
-    };
-
-    const calendarDiv = document.getElementById("calendarOptions");
-    calendarWeeks.forEach(({ date }, i) => {
-      const label = document.createElement("label");
-      const input = document.createElement("input");
-      input.type = "radio";
-      input.name = "week";
-      input.value = date;
-      input.required = true;
-      input.id = `week_${i}`;
-
-      if (sessionCounts[date] >= maxPerSession) {
-        input.disabled = true;
-        label.style.opacity = 0.5;
-        label.innerHTML = `<strong>${date}</strong><br>FULL`;
-      } else {
-        label.innerHTML = `<input type="radio" name="week" value="${date}" required /> ${date}`;
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        showStep(currentStep);
       }
-      calendarDiv.appendChild(label);
-    });
+    }
 
     document.getElementById("weekForm").addEventListener("submit", (e) => {
       e.preventDefault();
@@ -244,8 +222,7 @@
     document.getElementById("paymentForm").addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const infoForm = document.getElementById("infoForm");
-      const formData = new FormData(infoForm);
+      const formData = new FormData(document.getElementById("infoForm"));
       formData.append("week", document.querySelector('input[name="week"]:checked').value);
       formData.append("time", document.querySelector('input[name="time"]:checked').value);
       formData.append("payment", document.querySelector('input[name="payment"]:checked').value);
