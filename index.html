@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>4717 Robotics Camp Signup</title>
   <style>
     :root {
@@ -30,7 +30,8 @@
     main {
       padding: 2rem;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
     }
 
     .card {
@@ -86,6 +87,10 @@
       border-radius: 0.3rem;
       border: none;
     }
+
+    #previewSection {
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -94,9 +99,9 @@
     <div class="card active" id="step1">
       <h2>Select a Camp Week</h2>
       <div>
-        <div class="bubble-button" data-value="June 10-11">June 10–11</div>
-        <div class="bubble-button" data-value="June 17-18">June 17–18</div>
-        <div class="bubble-button" data-value="June 24-25">June 24–25</div>
+        <div class="bubble-button" data-value="June 10–11">June 10–11</div>
+        <div class="bubble-button" data-value="June 17–18">June 17–18</div>
+        <div class="bubble-button" data-value="June 24–25">June 24–25</div>
       </div>
       <button id="next1" disabled>Next</button>
     </div>
@@ -128,12 +133,6 @@
       </form>
     </div>
 
-    <div id="previewSection">
-      <h3>Registrations:</h3>
-      <ul id="registrationsList"></ul>
-      <button type="button" onclick="addRegistration()">Add Another Week/Kid</button>
-    </div>
-
     <div class="card" id="step4">
       <h2>Choose Payment Method</h2>
       <form id="paymentForm">
@@ -142,16 +141,26 @@
         <button type="button" onclick="showStep(2)">Back</button>
         <button type="submit">Submit</button>
       </form>
+      <div id="paymentPreview"></div>
     </div>
 
     <div class="card" id="step5">
       <h2>Thank You!</h2>
       <p>Your registration has been received. You'll get a confirmation email shortly.</p>
+      <div id="confirmationPreview"></div>
     </div>
+
+    <!-- Preview Section (for adding multiple kids) -->
+    <div id="previewSection">
+      <h3>Registrations:</h3>
+      <ul id="registrationsList"></ul>
+    </div>
+
+    <button type="button" id="addAnotherBtn" onclick="addRegistration()">Add Another Week/Kid</button>
   </main>
 
   <script>
-    let formData = { week: "" };
+    let formData = {};
     let registrations = [];
 
     document.querySelectorAll(".bubble-button").forEach(btn => {
@@ -165,83 +174,77 @@
 
     document.getElementById("next1").addEventListener("click", () => showStep(1));
 
-    document.getElementById("timeForm").addEventListener("submit", (e) => {
+    document.getElementById("timeForm").addEventListener("submit", e => {
       e.preventDefault();
       formData.time = document.querySelector('input[name="time"]:checked').value;
       showStep(2);
     });
 
-    document.getElementById("infoForm").addEventListener("submit", (e) => {
+    document.getElementById("infoForm").addEventListener("submit", e => {
       e.preventDefault();
-      const infoForm = document.getElementById("infoForm");
-      new FormData(infoForm).forEach((v, k) => formData[k] = v);
+      new FormData(e.target).forEach((v, k) => formData[k] = v);
       showStep(3);
     });
 
-    document.getElementById("paymentForm").addEventListener("submit", (e) => {
+    document.getElementById("paymentForm").addEventListener("submit", e => {
       e.preventDefault();
 
-      if (registrations.length === 0) {
-        alert("Please add at least one camper before paying.");
-        return;
-      }
-
-      const payment = document.querySelector("input[name='payment']:checked").value;
+      formData.payment = document.querySelector('input[name="payment"]:checked').value;
+      registrations.push({...formData});
+      renderRegistrations("confirmationPreview");
 
       registrations.forEach(entry => {
-        const data = new FormData();
-        for (let key in entry) data.append(key, entry[key]);
-        data.append("payment", payment);
+        const finalForm = new FormData();
+        for (let key in entry) finalForm.append(key, entry[key]);
 
         fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
           method: "POST",
-          body: data
-        });
+          body: finalForm
+        }).then(res => res.text()).then(res => console.log("Submitted:", res));
       });
 
-      registrations = [];
       document.getElementById("registrationsList").innerHTML = "";
+      document.getElementById("addAnotherBtn").style.display = "none";
       showStep(4);
     });
 
-    function addRegistration() {
-      const infoForm = document.getElementById("infoForm");
-      const camper = {
-        week: formData.week,
-        time: formData.time,
-        studentName: infoForm.studentName.value,
-        age: infoForm.age.value,
-        parentName: infoForm.parentName.value,
-        phone: infoForm.phone.value,
-        email: infoForm.email.value,
-        address: infoForm.address.value,
-        city: infoForm.city.value,
-        state: infoForm.state.value,
-        zip: infoForm.zip.value,
-      };
+    function showStep(index) {
+      document.querySelectorAll(".card").forEach((card, i) => card.classList.toggle("active", i === index));
+      if (index === 3) {
+        // Add current formData to preview
+        const temp = {...formData};
+        renderRegistrations("paymentPreview", [temp, ...registrations]);
+      }
+    }
 
-      for (let key in camper) {
-        if (!camper[key]) {
-          alert("Please fill out all fields before adding.");
-          return;
-        }
+    function addRegistration() {
+      if (!formData.studentName || !formData.age || !formData.parentName || !formData.email || !formData.week) {
+        alert("Please fill out all required fields.");
+        return;
       }
 
-      registrations.push(camper);
-
+      registrations.push({...formData});
       const listItem = document.createElement("li");
-      listItem.innerText = `${camper.studentName} - ${camper.week} (${camper.time})`;
+      listItem.textContent = `${formData.studentName} (Age ${formData.age}) - ${formData.week}, ${formData.time}`;
       document.getElementById("registrationsList").appendChild(listItem);
 
-      // Reset everything for a new camper
-      infoForm.reset();
-      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+      // Reset form for next entry
       formData = {};
+      document.getElementById("infoForm").reset();
+      document.querySelector('input[name="time"]:checked')?.checked = false;
+      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+      document.getElementById("next1").disabled = true;
+
       showStep(0);
     }
 
-    function showStep(index) {
-      document.querySelectorAll(".card").forEach((card, i) => card.classList.toggle("active", i === index));
+    function renderRegistrations(containerId, list = registrations) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "<h3>Submitted Registrations:</h3><ul>" +
+        list.map(r =>
+          `<li>${r.studentName} (Age ${r.age}) - ${r.week}, ${r.time} - ${r.payment || "N/A"}</li>`
+        ).join("") +
+        "</ul>";
     }
   </script>
 </body>
