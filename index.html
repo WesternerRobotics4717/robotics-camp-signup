@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>4717 Westerner Robotics Camp Signup</title>
+  <title>4717 Robotics Camp Signup</title>
   <style>
     :root {
-      --primary-color: #d4af37; /* Gold */
-      --background-color: #1a1a1a; /* Black */
-      --secondary-color: #888888; /* Grey */
+      --primary-color: #d4af37;
+      --background-color: #1a1a1a;
       --text-color: #f0f0f0;
+      --inactive-button: #555;
     }
 
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: var(--background-color);
       color: var(--text-color);
+      font-family: 'Segoe UI', sans-serif;
     }
 
     header {
@@ -27,217 +27,170 @@
       font-size: 1.5rem;
     }
 
-    header a {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      color: black;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
     main {
       padding: 2rem;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      justify-content: center;
     }
 
     .card {
-      background: #2c2c2c;
+      background-color: #2c2c2c;
       padding: 2rem;
       border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
       max-width: 600px;
       width: 100%;
-      margin-bottom: 2rem;
       display: none;
     }
 
-    .active {
+    .card.active {
       display: block;
+    }
+
+    .bubble-button {
+      display: inline-block;
+      background-color: #444;
+      color: white;
+      border: 2px solid var(--primary-color);
+      border-radius: 2rem;
+      padding: 1rem 1.5rem;
+      margin: 0.5rem;
+      cursor: pointer;
+    }
+
+    .bubble-button.selected {
+      background-color: var(--primary-color);
+      color: black;
     }
 
     button {
       background-color: var(--primary-color);
       color: black;
       border: none;
-      padding: 0.75rem 1.5rem;
+      padding: 0.7rem 1.5rem;
+      margin-top: 1rem;
       font-size: 1rem;
       border-radius: 0.5rem;
       cursor: pointer;
-      margin-top: 1rem;
     }
 
     button:disabled {
-      background-color: #555;
+      background-color: var(--inactive-button);
       cursor: not-allowed;
     }
 
-    input, select, textarea {
+    input, select {
       width: 100%;
       padding: 0.5rem;
-      margin: 0.5rem 0;
+      margin-top: 0.5rem;
       border-radius: 0.3rem;
       border: none;
-      font-size: 1rem;
-    }
-
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-
-    .date-button {
-      background-color: #444;
-      color: white;
-      border: 2px solid var(--primary-color);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .date-button.full {
-      background-color: #999;
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-
-    .date-button.selected {
-      background-color: var(--primary-color);
-      color: black;
-    }
-
-    h2 {
-      color: var(--primary-color);
     }
   </style>
 </head>
 <body>
-  <header>
-    4717 Westerner Robotics Camp Signup
-    <a href="admin.html">Admin</a>
-  </header>
+  <header>4717 Robotics Camp Signup</header>
   <main>
-    <!-- Step 1: Week Selection -->
     <div class="card active" id="step1">
-      <h2>Select Camp Week</h2>
-      <form id="weekForm">
-        <div class="calendar">
-          <div class="date-button" data-week="June 10-11">June 10–11</div>
-          <div class="date-button" data-week="June 17-18">June 17–18</div>
-          <div class="date-button" data-week="June 24-25">June 24–25</div>
-        </div>
-        <input type="hidden" name="week" id="selectedWeek" required />
-        <button type="submit" disabled id="nextBtnWeek">Next</button>
-      </form>
+      <h2>Select a Camp Week</h2>
+      <div>
+        <div class="bubble-button" data-value="June 10-11">June 10–11</div>
+        <div class="bubble-button" data-value="June 17-18">June 17–18</div>
+        <div class="bubble-button" data-value="June 24-25">June 24–25</div>
+      </div>
+      <button id="next1" disabled>Next</button>
     </div>
 
-    <!-- Step 2: Time Slot Selection -->
     <div class="card" id="step2">
-      <h2>Select Time Slot</h2>
+      <h2>Select a Time Slot</h2>
       <form id="timeForm">
-        <label><input type="radio" name="time" value="Morning (4th-6th Grade)" required /> 9am–12pm (Incoming 4th–6th Graders)</label><br />
-        <label><input type="radio" name="time" value="Afternoon (7th-12th Grade)" /> 1:30pm–4:30pm (Incoming 7th–12th Graders)</label><br />
+        <label><input type="radio" name="time" value="Morning (4th–6th Grade)" required> Morning (4th–6th Grade)</label><br>
+        <label><input type="radio" name="time" value="Afternoon (7th–12th Grade)"> Afternoon (7th–12th Grade)</label><br>
         <button type="button" onclick="showStep(0)">Back</button>
         <button type="submit">Next</button>
       </form>
     </div>
 
-    <!-- Step 3: Student and Parent Info -->
     <div class="card" id="step3">
       <h2>Camper & Parent Info</h2>
       <form id="infoForm">
-        <input type="text" name="studentName" placeholder="Student Full Name" required />
-        <input type="number" name="age" placeholder="Student Age" required />
-        <input type="text" name="parentName" placeholder="Parent Full Name" required />
-        <input type="tel" name="phone" placeholder="Contact Phone" required />
-        <input type="email" name="email" placeholder="Contact Email" required />
-        <input type="text" name="address" placeholder="Street Address" required />
-        <input type="text" name="city" placeholder="City" required />
-        <input type="text" name="state" placeholder="State" required />
-        <input type="text" name="zip" placeholder="ZIP Code" required />
-        <p><a href="#" download>Download Required Release Form</a></p>
+        <input name="studentName" type="text" placeholder="Student Name" required>
+        <input name="age" type="number" placeholder="Student Age" required>
+        <input name="parentName" type="text" placeholder="Parent Name" required>
+        <input name="phone" type="tel" placeholder="Phone Number" required>
+        <input name="email" type="email" placeholder="Email Address" required>
+        <input name="address" type="text" placeholder="Street Address" required>
+        <input name="city" type="text" placeholder="City" required>
+        <input name="state" type="text" placeholder="State" required>
+        <input name="zip" type="text" placeholder="ZIP Code" required>
         <button type="button" onclick="showStep(1)">Back</button>
-        <button type="submit">Add to Cart</button>
+        <button type="submit">Next</button>
       </form>
     </div>
 
-    <!-- Step 4: Cart and Payment Options -->
     <div class="card" id="step4">
-      <h2>Checkout</h2>
-      <p>Choose how you'd like to pay:</p>
+      <h2>Choose Payment Method</h2>
       <form id="paymentForm">
-        <label><input type="radio" name="payment" value="cash" required /> Pay with Cash at Arrival</label><br />
-        <label><input type="radio" name="payment" value="venmo" /> Pay with Venmo (Insert Link)</label><br />
+        <label><input type="radio" name="payment" value="cash" required> Cash</label><br>
+        <label><input type="radio" name="payment" value="venmo"> Venmo</label><br>
         <button type="button" onclick="showStep(2)">Back</button>
-        <button type="submit">Confirm and Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </div>
 
-    <!-- Step 5: Confirmation -->
     <div class="card" id="step5">
-      <h2>All Done!</h2>
-      <p>Thank you for registering for our robotics camp! A confirmation email will be sent shortly.</p>
+      <h2>Thank You!</h2>
+      <p>Your registration has been received. You'll get a confirmation email shortly.</p>
     </div>
   </main>
 
   <script>
-    const steps = ["step1", "step2", "step3", "step4", "step5"];
-    let currentStep = 0;
+    let formData = { week: "" };
 
-    function showStep(index) {
-      steps.forEach((id, i) => {
-        document.getElementById(id).classList.toggle("active", i === index);
-      });
-      currentStep = index;
-    }
-
-    document.querySelectorAll(".date-button").forEach(btn => {
+    document.querySelectorAll(".bubble-button").forEach(btn => {
       btn.addEventListener("click", () => {
-        if (btn.classList.contains("full")) return;
-        document.querySelectorAll(".date-button").forEach(b => b.classList.remove("selected"));
+        document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
         btn.classList.add("selected");
-        document.getElementById("selectedWeek").value = btn.dataset.week;
-        document.getElementById("nextBtnWeek").disabled = false;
+        formData.week = btn.dataset.value;
+        document.getElementById("next1").disabled = false;
       });
     });
 
-    document.getElementById("weekForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      showStep(1);
-    });
+    document.getElementById("next1").addEventListener("click", () => showStep(1));
 
     document.getElementById("timeForm").addEventListener("submit", (e) => {
       e.preventDefault();
+      formData.time = document.querySelector('input[name="time"]:checked').value;
       showStep(2);
     });
 
     document.getElementById("infoForm").addEventListener("submit", (e) => {
       e.preventDefault();
+      new FormData(e.target).forEach((v, k) => formData[k] = v);
       showStep(3);
     });
 
     document.getElementById("paymentForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      // ==== GOOGLE SHEETS INTEGRATION ====
-      const formData = new FormData(document.getElementById("infoForm"));
-      formData.append("week", document.getElementById("selectedWeek").value);
-      formData.append("time", document.querySelector('input[name="time"]:checked').value);
-      formData.append("payment", document.querySelector('input[name="payment"]:checked').value);
+      formData.payment = document.querySelector('input[name="payment"]:checked').value;
 
-      fetch('https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec', {
-        method: 'POST',
-        body: formData
+      const finalForm = new FormData();
+      for (let key in formData) finalForm.append(key, formData[key]);
+
+      fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
+        method: "POST",
+        body: finalForm
       })
-      .then(response => response.text())
-      .then(data => console.log("Submitted to Google Sheets:", data))
-      .catch(error => console.error("Submission error:", error));
+        .then(res => res.text())
+        .then(res => console.log("Submitted:", res))
+        .catch(err => console.error("Error:", err));
 
       showStep(4);
     });
+
+    function showStep(index) {
+      document.querySelectorAll(".card").forEach((card, i) => card.classList.toggle("active", i === index));
+    }
   </script>
 </body>
 </html>
