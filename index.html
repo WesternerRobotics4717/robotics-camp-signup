@@ -4,12 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>4717 Westerner Robotics Camp Signup</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
-      --primary-color: #d4af37;
-      --background-color: #1a1a1a;
-      --secondary-color: #888888;
+      --primary-color: #d4af37; /* Gold */
+      --background-color: #1a1a1a; /* Black */
+      --secondary-color: #888888; /* Grey */
       --text-color: #f0f0f0;
     }
 
@@ -78,20 +77,59 @@
     h2 {
       color: var(--primary-color);
     }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .calendar label {
+      background: #3a3a3a;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .calendar input[type="radio"] {
+      display: none;
+    }
+
+    .calendar label:hover {
+      background: #4a4a4a;
+    }
+
+    nav {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    nav a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <header>
     4717 Westerner Robotics Camp Signup
   </header>
+  <nav>
+    <a href="admin.html">Admin</a>
+  </nav>
   <main>
     <!-- Step 1: Week Selection -->
     <div class="card active" id="step1">
       <h2>Select Camp Week</h2>
       <form id="weekForm">
-        <label><input type="radio" name="week" value="June 10-11" required /> June 10–11</label><br />
-        <label><input type="radio" name="week" value="June 17-18" /> June 17–18</label><br />
-        <label><input type="radio" name="week" value="June 24-25" /> June 24–25</label><br />
+        <div class="calendar" id="calendarOptions">
+          <!-- Week options added by script -->
+        </div>
         <button type="submit">Next</button>
       </form>
     </div>
@@ -142,9 +180,6 @@
     </div>
   </main>
 
-  <!-- Admin Button -->
-  <button onclick="location.href='admin.html'" style="position: fixed; bottom: 1rem; right: 1rem;">Admin</button>
-
   <script>
     const steps = ["step1", "step2", "step3", "step4", "step5"];
     let currentStep = 0;
@@ -154,6 +189,39 @@
         document.getElementById(id).classList.toggle("active", i === index);
       });
     }
+
+    const calendarWeeks = [
+      { date: "June 10–11", id: "week1" },
+      { date: "June 17–18", id: "week2" },
+      { date: "June 24–25", id: "week3" },
+    ];
+
+    const maxPerSession = 25;
+    const sessionCounts = {
+      "June 10–11": 0,
+      "June 17–18": 0,
+      "June 24–25": 0,
+    };
+
+    const calendarDiv = document.getElementById("calendarOptions");
+    calendarWeeks.forEach(({ date }, i) => {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = "week";
+      input.value = date;
+      input.required = true;
+      input.id = `week_${i}`;
+
+      if (sessionCounts[date] >= maxPerSession) {
+        input.disabled = true;
+        label.style.opacity = 0.5;
+        label.innerHTML = `<strong>${date}</strong><br>FULL`;
+      } else {
+        label.innerHTML = `<input type="radio" name="week" value="${date}" required /> ${date}`;
+      }
+      calendarDiv.appendChild(label);
+    });
 
     document.getElementById("weekForm").addEventListener("submit", (e) => {
       e.preventDefault();
@@ -176,7 +244,8 @@
     document.getElementById("paymentForm").addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const formData = new FormData(document.getElementById("infoForm"));
+      const infoForm = document.getElementById("infoForm");
+      const formData = new FormData(infoForm);
       formData.append("week", document.querySelector('input[name="week"]:checked').value);
       formData.append("time", document.querySelector('input[name="time"]:checked').value);
       formData.append("payment", document.querySelector('input[name="payment"]:checked').value);
@@ -186,13 +255,11 @@
         body: formData
       })
       .then(response => response.text())
-      .then(data => {
-        console.log("Submitted to Google Sheets:", data);
-        // You can customize the confirmation email content on the Apps Script side
-        currentStep = 4;
-        showStep(currentStep);
-      })
+      .then(data => console.log("Submitted to Google Sheets:", data))
       .catch(error => console.error("Submission error:", error));
+
+      currentStep = 4;
+      showStep(currentStep);
     });
   </script>
 </body>
