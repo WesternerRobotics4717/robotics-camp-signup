@@ -1,212 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - 4717 Westerner Robotics Camp</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Robotics Camp</title>
   <style>
-    :root {
-      --primary-color: #d4af37; /* Gold */
-      --background-color: #1a1a1a; /* Black */
-      --secondary-color: #888888; /* Grey */
-      --text-color: #f0f0f0;
-    }
-
     body {
-      margin: 0;
+      background-color: #1a1a1a;
+      color: #f0f0f0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
-    }
-
-    header {
-      background-color: var(--primary-color);
-      color: black;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-    }
-
-    main {
       padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
-
-    .card {
-      background: #2c2c2c;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-      max-width: 600px;
-      width: 100%;
-      margin-bottom: 2rem;
+    h1 {
+      color: #d4af37;
     }
-
-    button {
-      background-color: var(--primary-color);
-      color: black;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-
-    button:disabled {
-      background-color: #555;
-      cursor: not-allowed;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 1rem;
+      margin-top: 2rem;
     }
-
-    table, th, td {
-      border: 1px solid var(--primary-color);
-    }
-
     th, td {
-      padding: 0.75rem;
-      text-align: center;
-    }
-
-    th {
-      background-color: var(--primary-color);
-    }
-
-    .remove-btn {
-      background-color: #e74c3c;
-      color: white;
+      border: 1px solid #444;
       padding: 0.5rem;
+      text-align: left;
+    }
+    th {
+      background-color: #333;
+    }
+    button {
+      background-color: #d4af37;
+      color: black;
       border: none;
-      border-radius: 0.5rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 0.3rem;
       cursor: pointer;
     }
-
-    .remove-btn:hover {
-      background-color: #c0392b;
+    #logout-btn {
+      float: right;
     }
   </style>
-</head>
-<body>
-  <header>
-    Admin - 4717 Westerner Robotics Camp
-  </header>
-  <main>
-    <div class="card">
-      <h2>Admin Dashboard</h2>
-      <p>Welcome, please manage the camp registrations below:</p>
-
-      <!-- Admin Login -->
-      <p id="adminStatus"></p>
-      
-      <button id="loginButton">Log in with Google</button>
-
-      <div id="adminView" style="display:none;">
-        <!-- Registered Clients Table -->
-        <h3>Registered Clients</h3>
-        <table id="clientsTable">
-          <thead>
-            <tr>
-              <th>Student Name</th>
-              <th>Parent Name</th>
-              <th>Email</th>
-              <th>Session</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Clients will be dynamically inserted here -->
-          </tbody>
-        </table>
-
-        <!-- Session Availability -->
-        <h3>Session Availability</h3>
-        <div id="sessionAvailability">
-          <!-- Session availability will be displayed here -->
-        </div>
-      </div>
-    </div>
-  </main>
-
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script>
-    const adminEmail = "lhsrobo@gmail.com";
-    let isLoggedIn = false;
+    const allowedAdmins = ["lhsrobo@gmail.com"];
 
-    const clients = [
-      { name: "John Doe", parent: "Jane Doe", email: "johndoe@gmail.com", session: "June 10-11", time: "9am-12pm" },
-      { name: "Alice Smith", parent: "Bob Smith", email: "alicesmith@gmail.com", session: "June 17-18", time: "1:30pm-4:30pm" },
-      // Add more sample client data here or fetch from your backend
-    ];
-
-    const sessionCapacities = {
-      "June 10-11": 25,
-      "June 17-18": 25,
-      "June 24-25": 25
-    };
-
-    // Admin login check
-    document.getElementById("loginButton").addEventListener("click", () => {
-      const email = prompt("Enter your admin email:");
-      if (email === adminEmail) {
-        isLoggedIn = true;
-        document.getElementById("adminStatus").innerText = "Logged in as: " + email;
-        document.getElementById("loginButton").style.display = "none";
-        document.getElementById("adminView").style.display = "block";
-        renderClients();
-        renderSessionAvailability();
-      } else {
-        alert("You are not authorized to access this page.");
-      }
-    });
-
-    // Render clients table
-    function renderClients() {
-      const tableBody = document.querySelector("#clientsTable tbody");
-      tableBody.innerHTML = "";
-      clients.forEach((client, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${client.name}</td>
-          <td>${client.parent}</td>
-          <td>${client.email}</td>
-          <td>${client.session} (${client.time})</td>
-          <td><button class="remove-btn" onclick="removeClient(${index})">Remove</button></td>
-        `;
-        tableBody.appendChild(row);
+    function initAdmin() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init().then(function(auth2) {
+          auth2.signIn().then(function(googleUser) {
+            const profile = googleUser.getBasicProfile();
+            const email = profile.getEmail();
+            if (!allowedAdmins.includes(email)) {
+              alert("You are not authorized to view this page.");
+              window.location.href = "/";
+            } else {
+              document.getElementById("admin-content").style.display = "block";
+              fetchData();
+            }
+          });
+        });
       });
     }
 
-    // Render session availability
-    function renderSessionAvailability() {
-      const sessionDiv = document.getElementById("sessionAvailability");
-      sessionDiv.innerHTML = "";
-      for (const [session, capacity] of Object.entries(sessionCapacities)) {
-        const div = document.createElement("div");
-        div.innerHTML = `${session}: ${capacity} spots available`;
-        sessionDiv.appendChild(div);
+    function fetchData() {
+      fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec?action=get")
+        .then(res => res.json())
+        .then(data => {
+          const tableBody = document.getElementById("data-table");
+          tableBody.innerHTML = "";
+          data.forEach((row, index) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${row.studentName}</td>
+              <td>${row.week}</td>
+              <td>${row.time}</td>
+              <td>${row.parentName}</td>
+              <td>${row.email}</td>
+              <td>${row.phone}</td>
+              <td>${row.address}, ${row.city}, ${row.state} ${row.zip}</td>
+              <td><button onclick="removeEntry(${index}, '${row.email}', '${row.week}')">Remove</button></td>
+            `;
+            tableBody.appendChild(tr);
+          });
+        });
+    }
+
+    function removeEntry(index, email, week) {
+      if (confirm("Are you sure you want to remove this camper?")) {
+        fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "remove", index, email, week })
+        })
+        .then(res => res.text())
+        .then(res => {
+          alert(res);
+          fetchData();
+        });
       }
     }
-
-    // Remove a client and update the session availability
-    function removeClient(index) {
-      const client = clients.splice(index, 1)[0];  // Remove the client from the array
-      sessionCapacities[client.session]++;  // Update session capacity
-      sendEmail(client.email, "Your registration has been removed", "We regret to inform you that your registration has been removed.");
-      renderClients();
-      renderSessionAvailability();
-    }
-
-    // Simulate sending an email
-    function sendEmail(to, subject, body) {
-      console.log(`Email sent to: ${to}, Subject: ${subject}, Body: ${body}`);
-      // In a real application, you'd integrate email sending here, using Google Apps Script or an API.
-    }
   </script>
+</head>
+<body onload="initAdmin()">
+  <h1>Admin Panel <button id="logout-btn" onclick="gapi.auth2.getAuthInstance().signOut().then(() => window.location.href = '/')">Log Out</button></h1>
+  <div id="admin-content" style="display:none">
+    <table>
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Week</th>
+          <th>Time</th>
+          <th>Parent</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="data-table"></tbody>
+    </table>
+  </div>
 </body>
 </html>
