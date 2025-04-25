@@ -128,6 +128,12 @@
       </form>
     </div>
 
+    <div id="previewSection">
+      <h3>Registrations:</h3>
+      <ul id="registrationsList"></ul>
+      <button type="button" onclick="addRegistration()">Add Another Week/Kid</button>
+    </div>
+
     <div class="card" id="step4">
       <h2>Choose Payment Method</h2>
       <form id="paymentForm">
@@ -146,6 +152,7 @@
 
   <script>
     let formData = { week: "" };
+    let registrations = [];
 
     document.querySelectorAll(".bubble-button").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -166,27 +173,72 @@
 
     document.getElementById("infoForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      new FormData(e.target).forEach((v, k) => formData[k] = v);
+      const infoForm = document.getElementById("infoForm");
+      new FormData(infoForm).forEach((v, k) => formData[k] = v);
       showStep(3);
     });
 
     document.getElementById("paymentForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      formData.payment = document.querySelector('input[name="payment"]:checked').value;
 
-      const finalForm = new FormData();
-      for (let key in formData) finalForm.append(key, formData[key]);
+      if (registrations.length === 0) {
+        alert("Please add at least one camper before paying.");
+        return;
+      }
 
-      fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
-        method: "POST",
-        body: finalForm
-      })
-        .then(res => res.text())
-        .then(res => console.log("Submitted:", res))
-        .catch(err => console.error("Error:", err));
+      const payment = document.querySelector("input[name='payment']:checked").value;
 
+      registrations.forEach(entry => {
+        const data = new FormData();
+        for (let key in entry) data.append(key, entry[key]);
+        data.append("payment", payment);
+
+        fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
+          method: "POST",
+          body: data
+        });
+      });
+
+      registrations = [];
+      document.getElementById("registrationsList").innerHTML = "";
       showStep(4);
     });
+
+    function addRegistration() {
+      const infoForm = document.getElementById("infoForm");
+      const camper = {
+        week: formData.week,
+        time: formData.time,
+        studentName: infoForm.studentName.value,
+        age: infoForm.age.value,
+        parentName: infoForm.parentName.value,
+        phone: infoForm.phone.value,
+        email: infoForm.email.value,
+        address: infoForm.address.value,
+        city: infoForm.city.value,
+        state: infoForm.state.value,
+        zip: infoForm.zip.value,
+      };
+
+      for (let key in camper) {
+        if (!camper[key]) {
+          alert("Please fill out all fields before adding.");
+          return;
+        }
+      }
+
+      registrations.push(camper);
+
+      const listItem = document.createElement("li");
+      listItem.innerText = `${camper.studentName} - ${camper.week} (${camper.time})`;
+      document.getElementById("registrationsList").appendChild(listItem);
+
+      // Reset everything for a new camper
+      infoForm.reset();
+      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+      formData = {};
+      showStep(0);
+    }
 
     function showStep(index) {
       document.querySelectorAll(".card").forEach((card, i) => card.classList.toggle("active", i === index));
