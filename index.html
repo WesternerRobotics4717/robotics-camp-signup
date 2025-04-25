@@ -25,16 +25,15 @@
       padding: 1rem;
       text-align: center;
       font-size: 1.5rem;
-      position: relative;
     }
 
-    .admin-link {
+    header a {
       position: absolute;
       right: 1rem;
       top: 1rem;
-      font-size: 0.9rem;
       color: black;
-      text-decoration: underline;
+      text-decoration: none;
+      font-weight: bold;
     }
 
     main {
@@ -68,7 +67,6 @@
       border-radius: 0.5rem;
       cursor: pointer;
       margin-top: 1rem;
-      margin-right: 0.5rem;
     }
 
     button:disabled {
@@ -85,40 +83,42 @@
       font-size: 1rem;
     }
 
-    h2 {
-      color: var(--primary-color);
-    }
-
     .calendar {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
     }
 
-    .calendar label {
-      background: #444;
+    .date-button {
+      background-color: #444;
+      color: white;
+      border: 2px solid var(--primary-color);
+      border-radius: 0.5rem;
       padding: 1rem;
       text-align: center;
-      border-radius: 0.5rem;
       cursor: pointer;
-      transition: background 0.3s;
     }
 
-    .calendar input[type="radio"]:checked + span {
+    .date-button.full {
+      background-color: #999;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .date-button.selected {
       background-color: var(--primary-color);
       color: black;
-      font-weight: bold;
     }
 
-    .calendar input[type="radio"] {
-      display: none;
+    h2 {
+      color: var(--primary-color);
     }
   </style>
 </head>
 <body>
   <header>
     4717 Westerner Robotics Camp Signup
-    <a class="admin-link" href="admin.html">Admin</a>
+    <a href="admin.html">Admin</a>
   </header>
   <main>
     <!-- Step 1: Week Selection -->
@@ -126,12 +126,12 @@
       <h2>Select Camp Week</h2>
       <form id="weekForm">
         <div class="calendar">
-          <label><input type="radio" name="week" value="June 10-11" required><span>June 10–11</span></label>
-          <label><input type="radio" name="week" value="June 17-18"><span>June 17–18</span></label>
-          <label><input type="radio" name="week" value="June 24-25"><span>June 24–25</span></label>
+          <div class="date-button" data-week="June 10-11">June 10–11</div>
+          <div class="date-button" data-week="June 17-18">June 17–18</div>
+          <div class="date-button" data-week="June 24-25">June 24–25</div>
         </div>
-        <button type="button" onclick="prevStep()" style="display:none">Back</button>
-        <button type="submit">Next</button>
+        <input type="hidden" name="week" id="selectedWeek" required />
+        <button type="submit" disabled id="nextBtnWeek">Next</button>
       </form>
     </div>
 
@@ -141,7 +141,7 @@
       <form id="timeForm">
         <label><input type="radio" name="time" value="Morning (4th-6th Grade)" required /> 9am–12pm (Incoming 4th–6th Graders)</label><br />
         <label><input type="radio" name="time" value="Afternoon (7th-12th Grade)" /> 1:30pm–4:30pm (Incoming 7th–12th Graders)</label><br />
-        <button type="button" onclick="prevStep()">Back</button>
+        <button type="button" onclick="showStep(0)">Back</button>
         <button type="submit">Next</button>
       </form>
     </div>
@@ -160,7 +160,7 @@
         <input type="text" name="state" placeholder="State" required />
         <input type="text" name="zip" placeholder="ZIP Code" required />
         <p><a href="#" download>Download Required Release Form</a></p>
-        <button type="button" onclick="prevStep()">Back</button>
+        <button type="button" onclick="showStep(1)">Back</button>
         <button type="submit">Add to Cart</button>
       </form>
     </div>
@@ -172,7 +172,7 @@
       <form id="paymentForm">
         <label><input type="radio" name="payment" value="cash" required /> Pay with Cash at Arrival</label><br />
         <label><input type="radio" name="payment" value="venmo" /> Pay with Venmo (Insert Link)</label><br />
-        <button type="button" onclick="prevStep()">Back</button>
+        <button type="button" onclick="showStep(2)">Back</button>
         <button type="submit">Confirm and Submit</button>
       </form>
     </div>
@@ -192,38 +192,39 @@
       steps.forEach((id, i) => {
         document.getElementById(id).classList.toggle("active", i === index);
       });
+      currentStep = index;
     }
 
-    function prevStep() {
-      if (currentStep > 0) {
-        currentStep--;
-        showStep(currentStep);
-      }
-    }
+    document.querySelectorAll(".date-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (btn.classList.contains("full")) return;
+        document.querySelectorAll(".date-button").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        document.getElementById("selectedWeek").value = btn.dataset.week;
+        document.getElementById("nextBtnWeek").disabled = false;
+      });
+    });
 
     document.getElementById("weekForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      currentStep = 1;
-      showStep(currentStep);
+      showStep(1);
     });
 
     document.getElementById("timeForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      currentStep = 2;
-      showStep(currentStep);
+      showStep(2);
     });
 
     document.getElementById("infoForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      currentStep = 3;
-      showStep(currentStep);
+      showStep(3);
     });
 
     document.getElementById("paymentForm").addEventListener("submit", (e) => {
       e.preventDefault();
-
+      // ==== GOOGLE SHEETS INTEGRATION ====
       const formData = new FormData(document.getElementById("infoForm"));
-      formData.append("week", document.querySelector('input[name="week"]:checked').value);
+      formData.append("week", document.getElementById("selectedWeek").value);
       formData.append("time", document.querySelector('input[name="time"]:checked').value);
       formData.append("payment", document.querySelector('input[name="payment"]:checked').value);
 
@@ -235,8 +236,7 @@
       .then(data => console.log("Submitted to Google Sheets:", data))
       .catch(error => console.error("Submission error:", error));
 
-      currentStep = 4;
-      showStep(currentStep);
+      showStep(4);
     });
   </script>
 </body>
