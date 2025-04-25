@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>4717 Westerner Robotics Camp Signup</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
-      --primary-color: #d4af37; /* Gold */
-      --background-color: #1a1a1a; /* Black */
-      --secondary-color: #888888; /* Grey */
+      --primary-color: #d4af37;
+      --background-color: #1a1a1a;
+      --secondary-color: #888888;
       --text-color: #f0f0f0;
     }
 
@@ -141,6 +142,9 @@
     </div>
   </main>
 
+  <!-- Admin Button -->
+  <button onclick="location.href='admin.html'" style="position: fixed; bottom: 1rem; right: 1rem;">Admin</button>
+
   <script>
     const steps = ["step1", "step2", "step3", "step4", "step5"];
     let currentStep = 0;
@@ -184,13 +188,11 @@
       .then(response => response.text())
       .then(data => {
         console.log("Submitted to Google Sheets:", data);
+        // You can customize the confirmation email content on the Apps Script side
         currentStep = 4;
         showStep(currentStep);
       })
-      .catch(error => {
-        console.error("Submission error:", error);
-        alert("There was an issue submitting your form. Please try again later.");
-      });
+      .catch(error => console.error("Submission error:", error));
     });
   </script>
 </body>
