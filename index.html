@@ -125,7 +125,7 @@
         <input name="city" type="text" placeholder="City" required>
         <input name="state" type="text" placeholder="State" required>
         <input name="zip" type="text" placeholder="Zip Code" required>
-        <input name="notes" type="text" placeholder="Important info (allergies, medical conditions, ect)" required>
+        <input name="notes" type="text" placeholder="Allergies, medical conditions, etc." required>
         <button type="button" id="back2">Back</button>
         <button type="submit">Next</button>
       </form>
@@ -150,6 +150,7 @@
   <script>
     let formData = {};
 
+    // Handle week selection
     document.querySelectorAll(".bubble-button").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
@@ -159,8 +160,13 @@
       });
     });
 
+    // Next and back buttons
     document.getElementById("next1").addEventListener("click", () => showStep(1));
+    document.getElementById("back1").addEventListener("click", () => showStep(0));
+    document.getElementById("back2").addEventListener("click", () => showStep(1));
+    document.getElementById("back3").addEventListener("click", () => showStep(2));
 
+    // Time form
     document.getElementById("timeForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const time = document.querySelector('input[name="time"]:checked');
@@ -170,6 +176,7 @@
       }
     });
 
+    // Info form
     document.getElementById("infoForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const infoForm = document.getElementById("infoForm");
@@ -177,16 +184,26 @@
       showStep(3);
     });
 
+    // Payment form
     document.getElementById("paymentForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const payment = document.querySelector("input[name='payment']:checked")?.value;
       if (payment) {
         formData.payment = payment;
-        submitForm();
+        sendForm();
+        showStep(4);
       }
     });
 
-    function submitForm() {
+    // Show step function
+    function showStep(index) {
+      document.querySelectorAll(".card").forEach((card, i) =>
+        card.classList.toggle("active", i === index)
+      );
+    }
+
+    // Submit the form data
+    function sendForm() {
       const data = new FormData();
       for (let key in formData) {
         data.append(key, formData[key]);
@@ -195,23 +212,10 @@
       fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
         method: "POST",
         body: data
-      }).then(() => {
-        showStep(4);
-      }).catch((error) => {
-        alert("There was an error submitting the form. Please try again.");
-        console.error(error);
       });
-    }
 
-    function showStep(index) {
-      document.querySelectorAll(".card").forEach((card, i) =>
-        card.classList.toggle("active", i === index)
-      );
+      formData = {}; // Clear formData
     }
-
-    document.getElementById("back1").addEventListener("click", () => showStep(0));
-    document.getElementById("back2").addEventListener("click", () => showStep(1));
-    document.getElementById("back3").addEventListener("click", () => showStep(2));
   </script>
 </body>
 </html>
