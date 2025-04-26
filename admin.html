@@ -1,123 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - Robotics Camp</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4717 Robotics Camp Signup</title>
   <style>
+    :root {
+      --primary-color: #d4af37;
+      --background-color: #1a1a1a;
+      --text-color: #f0f0f0;
+      --inactive-button: #555;
+    }
+
     body {
-      background-color: #1a1a1a;
-      color: #f0f0f0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 2rem;
+      margin: 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', sans-serif;
     }
-    h1 {
-      color: #d4af37;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 2rem;
-    }
-    th, td {
-      border: 1px solid #444;
-      padding: 0.5rem;
-      text-align: left;
-    }
-    th {
-      background-color: #333;
-    }
-    button {
-      background-color: #d4af37;
+
+    header {
+      background-color: var(--primary-color);
       color: black;
-      border: none;
-      padding: 0.3rem 0.7rem;
-      border-radius: 0.3rem;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    main {
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .card {
+      background-color: #2c2c2c;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+      max-width: 600px;
+      width: 100%;
+      display: none;
+    }
+
+    .card.active {
+      display: block;
+    }
+
+    .bubble-button {
+      display: inline-block;
+      background-color: #444;
+      color: white;
+      border: 2px solid var(--primary-color);
+      border-radius: 2rem;
+      padding: 1rem 1.5rem;
+      margin: 0.5rem;
       cursor: pointer;
     }
-    #logout-btn {
-      float: right;
+
+    .bubble-button.selected {
+      background-color: var(--primary-color);
+      color: black;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: black;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: var(--inactive-button);
+      cursor: not-allowed;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 0.3rem;
+      border: none;
+    }
+
+    #previewSection {
+      background-color: #111;
+      padding: 1rem 2rem;
+      border-top: 2px solid var(--primary-color);
+    }
+
+    #previewSection h3 {
+      margin-top: 0;
+    }
+
+    #registrationsList li {
+      margin: 0.3rem 0;
     }
   </style>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+  <header>4717 Robotics Camp Signup</header>
+
+  <main>
+    <div class="card active" id="step1">
+      <h2>Select a Camp Week</h2>
+      <div>
+        <div class="bubble-button" data-value="June 10-11">June 10–11</div>
+        <div class="bubble-button" data-value="June 17-18">June 17–18</div>
+        <div class="bubble-button" data-value="June 24-25">June 24–25</div>
+      </div>
+      <button id="next1" disabled>Next</button>
+    </div>
+
+    <div class="card" id="step2">
+      <h2>Select a Time Slot</h2>
+      <form id="timeForm">
+        <label><input type="radio" name="time" value="Morning (4th–6th Grade)" required> Morning (4th–6th Grade)</label><br>
+        <label><input type="radio" name="time" value="Afternoon (7th–12th Grade)"> Afternoon (7th–12th Grade)</label><br>
+        <button type="button" onclick="showStep(0)">Back</button>
+        <button type="submit">Next</button>
+      </form>
+    </div>
+
+    <div class="card" id="step3">
+      <h2>Camper & Parent Info</h2>
+      <form id="infoForm">
+        <input name="studentName" type="text" placeholder="Student Name" required>
+        <input name="age" type="number" placeholder="Student Age" required>
+        <input name="parentName" type="text" placeholder="Parent Name" required>
+        <input name="phone" type="tel" placeholder="Phone Number" required>
+        <input name="email" type="email" placeholder="Email Address" required>
+        <input name="address" type="text" placeholder="Street Address" required>
+        <input name="city" type="text" placeholder="City" required>
+        <input name="state" type="text" placeholder="State" required>
+        <input name="zip" type="text" placeholder="ZIP Code" required>
+        <button type="button" onclick="showStep(1)">Back</button>
+        <button type="submit">Next</button>
+      </form>
+    </div>
+
+    <div class="card" id="step4">
+      <h2>Choose Payment Method</h2>
+      <form id="paymentForm">
+        <label><input type="radio" name="payment" value="cash" required> Cash</label><br>
+        <label><input type="radio" name="payment" value="venmo"> Venmo</label><br>
+        <button type="button" onclick="showStep(2)">Back</button>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <div class="card" id="step5">
+      <h2>Thank You!</h2>
+      <p>Your registration has been received. You'll get a confirmation email shortly.</p>
+    </div>
+  </main>
+
+  <!-- Preview Section at bottom -->
+  <div id="previewSection">
+    <h3>Registrations:</h3>
+    <ul id="registrationsList"></ul>
+    <button id="addBtn" type="button" onclick="addRegistration()">Add Another Week/Kid</button>
+  </div>
+
   <script>
-    const allowedAdmins = ["lhsrobo@gmail.com"];
+    let formData = { week: "" };
+    let registrations = [];
 
-    function initAdmin() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init().then(function(auth2) {
-          auth2.signIn().then(function(googleUser) {
-            const profile = googleUser.getBasicProfile();
-            const email = profile.getEmail();
-            if (!allowedAdmins.includes(email)) {
-              alert("You are not authorized to view this page.");
-              window.location.href = "/";
-            } else {
-              document.getElementById("admin-content").style.display = "block";
-              fetchData();
-            }
-          });
-        });
+    document.querySelectorAll(".bubble-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        formData.week = btn.dataset.value;
+        document.getElementById("next1").disabled = false;
+        updatePreview();
       });
-    }
+    });
 
-    function fetchData() {
-      fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec?action=get")
-        .then(res => res.json())
-        .then(data => {
-          const tableBody = document.getElementById("data-table");
-          tableBody.innerHTML = "";
-          data.forEach((row, index) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${row.studentName}</td>
-              <td>${row.week}</td>
-              <td>${row.time}</td>
-              <td>${row.parentName}</td>
-              <td>${row.email}</td>
-              <td>${row.phone}</td>
-              <td>${row.address}, ${row.city}, ${row.state} ${row.zip}</td>
-              <td><button onclick="removeEntry(${index}, '${row.email}', '${row.week}')">Remove</button></td>
-            `;
-            tableBody.appendChild(tr);
-          });
-        });
-    }
+    document.getElementById("next1").addEventListener("click", () => showStep(1));
 
-    function removeEntry(index, email, week) {
-      if (confirm("Are you sure you want to remove this camper?")) {
+    document.getElementById("timeForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      formData.time = document.querySelector('input[name="time"]:checked').value;
+      updatePreview();
+      showStep(2);
+    });
+
+    document.getElementById("infoForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const infoForm = document.getElementById("infoForm");
+      new FormData(infoForm).forEach((v, k) => formData[k] = v);
+      updatePreview();
+      showStep(3);
+    });
+
+    document.getElementById("paymentForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      if (registrations.length === 0) {
+        alert("Please add at least one camper before paying.");
+        return;
+      }
+
+      const payment = document.querySelector("input[name='payment']:checked").value;
+
+      registrations.forEach(entry => {
+        const data = new FormData();
+        for (let key in entry) data.append(key, entry[key]);
+        data.append("payment", payment);
+
         fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "remove", index, email, week })
-        })
-        .then(res => res.text())
-        .then(res => {
-          alert(res);
-          fetchData();
+          body: data
         });
+      });
+
+      registrations = [];
+      document.getElementById("registrationsList").innerHTML = "";
+      showStep(4);
+    });
+
+    function addRegistration() {
+      const infoForm = document.getElementById("infoForm");
+
+      const camper = {
+        week: formData.week,
+        time: formData.time,
+        studentName: infoForm.studentName.value,
+        age: infoForm.age.value,
+        parentName: infoForm.parentName.value,
+        phone: infoForm.phone.value,
+        email: infoForm.email.value,
+        address: infoForm.address.value,
+        city: infoForm.city.value,
+        state: infoForm.state.value,
+        zip: infoForm.zip.value
+      };
+
+      for (let key in camper) {
+        if (!camper[key]) {
+          alert("Please fill out all fields before adding.");
+          return;
+        }
+      }
+
+      registrations.push(camper);
+
+      infoForm.reset();
+      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+      formData = {};
+      updatePreview();
+      showStep(0);
+    }
+
+    function updatePreview() {
+      const list = document.getElementById("registrationsList");
+      list.innerHTML = "";
+
+      registrations.forEach(c => {
+        const li = document.createElement("li");
+        li.innerText = `${c.studentName} - ${c.week} (${c.time})`;
+        list.appendChild(li);
+      });
+
+      if (formData.studentName && formData.week && formData.time) {
+        const li = document.createElement("li");
+        li.innerText = `${formData.studentName} - ${formData.week} (${formData.time}) [in progress]`;
+        li.style.opacity = "0.6";
+        list.appendChild(li);
       }
     }
+
+    function showStep(index) {
+      document.querySelectorAll(".card").forEach((card, i) =>
+        card.classList.toggle("active", i === index)
+      );
+
+      document.getElementById("addBtn").style.display = index === 4 ? "none" : "inline-block";
+      updatePreview();
+    }
   </script>
-</head>
-<body onload="initAdmin()">
-  <h1>Admin Panel <button id="logout-btn" onclick="gapi.auth2.getAuthInstance().signOut().then(() => window.location.href = '/')">Log Out</button></h1>
-  <div id="admin-content" style="display:none">
-    <table>
-      <thead>
-        <tr>
-          <th>Student Name</th>
-          <th>Week</th>
-          <th>Time</th>
-          <th>Parent</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Address</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="data-table"></tbody>
-    </table>
-  </div>
 </body>
 </html>
