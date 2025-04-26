@@ -1,103 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Robotics Camp Registration</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Westerner Robotics Camp</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      font-family: "Segoe UI", sans-serif;
+      background: #111;
+      color: #fff;
+      margin: 0;
+      padding: 0;
     }
-    .card {
-      display: none;
-      border: 1px solid #ccc;
-      padding: 20px;
-      margin-bottom: 20px;
+
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #222;
       border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
     }
-    .card.active {
+
+    h1 {
+      text-align: center;
+      color: gold;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
       display: block;
     }
+
     .bubble-button {
       display: inline-block;
-      padding: 10px 20px;
-      margin: 5px;
-      background-color: #eee;
-      border-radius: 20px;
+      margin: 0.3rem;
+      padding: 0.5rem 1rem;
+      border: 2px solid gold;
+      border-radius: 25px;
       cursor: pointer;
+      background: transparent;
+      color: gold;
     }
+
     .bubble-button.selected {
-      background-color: #4CAF50;
-      color: white;
+      background: gold;
+      color: #111;
     }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+
     button {
-      padding: 10px 20px;
-      margin-top: 10px;
+      background: gold;
+      color: #111;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:disabled {
+      background: grey;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Robotics Camp Signup</h1>
 
-  <h1>Robotics Camp Registration</h1>
+    <form id="campForm">
+      <div class="step active" id="step1">
+        <h2>Select a Week</h2>
+        <div>
+          <div class="bubble-button" data-value="June 3–6">June 3–6</div>
+          <div class="bubble-button" data-value="June 10–13">June 10–13</div>
+          <div class="bubble-button" data-value="June 17–20">June 17–20</div>
+          <div class="bubble-button" data-value="June 24–27">June 24–27</div>
+        </div>
+        <button type="button" id="nextToTime" disabled>Next</button>
+      </div>
 
-  <!-- Step 1: Pick a week -->
-  <div id="step1" class="card active">
-    <h2>Select a Week</h2>
-    <div id="weekButtons">
-      <div class="bubble-button" data-value="June 10-14">June 10–14</div>
-      <div class="bubble-button" data-value="June 17-21">June 17–21</div>
-      <div class="bubble-button" data-value="June 24-28">June 24–28</div>
-    </div>
-    <button id="next1" disabled>Next</button>
-  </div>
+      <div class="step" id="step2">
+        <h2>Select Time Slot</h2>
+        <div>
+          <label><input type="radio" name="time" value="8:30–10:30 (3rd–5th Grade)" required> 8:30–10:30 (3rd–5th Grade)</label><br>
+          <label><input type="radio" name="time" value="11:00–1:00 (6th–8th Grade)" required> 11:00–1:00 (6th–8th Grade)</label>
+        </div>
+        <button type="button" id="backToWeek">Back</button>
+        <button type="button" id="nextToInfo">Next</button>
+      </div>
 
-  <!-- Step 2: Pick a time -->
-  <div id="step2" class="card">
-    <h2>Select a Time</h2>
-    <form id="timeForm">
-      <label><input type="radio" name="time" value="Morning"> Morning (8am–12pm)</label><br>
-      <label><input type="radio" name="time" value="Afternoon"> Afternoon (1pm–5pm)</label><br><br>
-      <button type="submit">Next</button>
-      <button type="button">Back</button>
+      <div class="step" id="step3">
+        <h2>Camper Information</h2>
+        <input name="studentName" placeholder="Student Name" required />
+        <input name="age" type="number" placeholder="Age" required />
+        <input name="parentName" placeholder="Parent Name" required />
+        <input name="phone" type="tel" placeholder="Phone Number" required />
+        <input name="email" type="email" placeholder="Parent Email" required />
+        <input name="address" placeholder="Street Address" required />
+        <input name="city" placeholder="City" required />
+        <input name="state" placeholder="State" required />
+        <input name="zip" placeholder="ZIP Code" required />
+        <textarea name="notes" placeholder="Anything else we should know?"></textarea>
+        <button type="button" id="backToTime">Back</button>
+        <button type="submit">Submit</button>
+      </div>
+
+      <div class="step" id="step4">
+        <h2>Thank You!</h2>
+        <p>Your registration has been submitted. We'll email you soon!</p>
+      </div>
     </form>
-  </div>
-
-  <!-- Step 3: Fill out camper info -->
-  <div id="step3" class="card">
-    <h2>Camper Information</h2>
-    <form id="infoForm">
-      <input type="text" name="studentName" placeholder="Student Name" required><br><br>
-      <input type="text" name="age" placeholder="Age" required><br><br>
-      <input type="text" name="parentName" placeholder="Parent Name" required><br><br>
-      <input type="text" name="phone" placeholder="Phone Number" required><br><br>
-      <input type="email" name="email" placeholder="Parent Email" required><br><br>
-      <input type="text" name="address" placeholder="Address" required><br><br>
-      <input type="text" name="city" placeholder="City" required><br><br>
-      <input type="text" name="state" placeholder="State" required><br><br>
-      <input type="text" name="zip" placeholder="Zip Code" required><br><br>
-      <textarea name="notes" placeholder="Notes (Optional)"></textarea><br><br>
-      <button type="submit">Next</button>
-      <button type="button">Back</button>
-    </form>
-  </div>
-
-  <!-- Step 4: Choose payment -->
-  <div id="step4" class="card">
-    <h2>Select Payment Method</h2>
-    <form id="paymentForm">
-      <label><input type="radio" name="payment" value="Cash"> Cash</label><br>
-      <label><input type="radio" name="payment" value="Venmo"> Venmo</label><br><br>
-      <button type="submit">Submit Registration</button>
-      <button type="button">Back</button>
-    </form>
-  </div>
-
-  <!-- Step 5: Confirmation -->
-  <div id="step5" class="card">
-    <h2>Registration Complete!</h2>
-    <p>Thank you for registering! Please fill out a new form if you want to register another camper.</p>
   </div>
 
   <script>
@@ -108,74 +133,46 @@
         document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
         btn.classList.add("selected");
         formData.week = btn.dataset.value;
-        document.getElementById("next1").disabled = false;
+        document.getElementById("nextToTime").disabled = false;
       });
     });
 
-    document.getElementById("next1").addEventListener("click", () => showStep(1));
-
-    document.getElementById("timeForm").addEventListener("submit", (e) => {
-      e.preventDefault();
+    document.getElementById("nextToTime").addEventListener("click", () => showStep(1));
+    document.getElementById("backToWeek").addEventListener("click", () => showStep(0));
+    document.getElementById("nextToInfo").addEventListener("click", () => {
       const time = document.querySelector('input[name="time"]:checked');
       if (time) {
         formData.time = time.value;
         showStep(2);
+      } else {
+        alert("Please select a time slot.");
       }
     });
+    document.getElementById("backToTime").addEventListener("click", () => showStep(1));
 
-    document.getElementById("infoForm").addEventListener("submit", (e) => {
+    document.getElementById("campForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const infoForm = document.getElementById("infoForm");
-      new FormData(infoForm).forEach((v, k) => formData[k] = v);
+      const form = new FormData(e.target);
+      form.forEach((v, k) => formData[k] = v);
+
+      const postData = new FormData();
+      for (let key in formData) {
+        postData.append(key, formData[key]);
+      }
+
+      await fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
+        method: "POST",
+        body: postData
+      });
+
       showStep(3);
     });
 
-    document.getElementById("paymentForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const payment = document.querySelector("input[name='payment']:checked")?.value;
-      if (!payment) {
-        alert("Please select a payment method.");
-        return;
-      }
-
-      formData.payment = payment;
-
-      const payload = new URLSearchParams(formData);
-
-      fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: payload
-      })
-      .then(response => response.text())
-      .then(result => {
-        if (result.includes("Success")) {
-          formData = { week: "" };
-          showStep(4);
-        } else {
-          console.error("Server error:", result);
-          alert("There was an error submitting. Please try again.");
-        }
-      })
-      .catch(error => {
-        console.error("Network error:", error);
-        alert("There was a network error. Please try again.");
-      });
-    });
-
-    // Back buttons
-    document.querySelector("#step2 button[type='button']").addEventListener("click", () => showStep(0));
-    document.querySelector("#step3 button[type='button']").addEventListener("click", () => showStep(1));
-    document.querySelector("#step4 button[type='button']").addEventListener("click", () => showStep(2));
-
     function showStep(index) {
-      document.querySelectorAll(".card").forEach((card, i) =>
-        card.classList.toggle("active", i === index)
+      document.querySelectorAll(".step").forEach((step, i) =>
+        step.classList.toggle("active", i === index)
       );
     }
   </script>
-
 </body>
 </html>
