@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Frc Team 4717 Westerner Robotics Camp Sign-Up</title>
+  <title>4717 Robotics Camp Signup</title>
   <style>
     :root {
       --primary-color: #d4af37;
@@ -100,7 +100,7 @@
   </style>
 </head>
 <body>
-  <header>Frc Team 4717 Westerner Robotics Camp Sign-Up</header>
+  <header>4717 Robotics Camp Signup</header>
   <main>
     <div class="card active" id="step1">
       <h2>Select a Camp Week</h2>
@@ -114,19 +114,19 @@
 
     <div class="card" id="step2">
       <h2>Select a Time Slot</h2>
-      <div id="timeButtons">
-        <div class="bubble-button" data-time="Morning (4th–6th Grade)">Morning (4th–6th Grade)</div>
-        <div class="bubble-button" data-time="Afternoon (7th–12th Grade)">Afternoon (7th–12th Grade)</div>
-      </div>
+      <form id="timeForm">
+        <label><input type="radio" name="time" value="Morning (4th–6th Grade)" required> Morning (4th–6th Grade)</label><br>
+        <label><input type="radio" name="time" value="Afternoon (7th–12th Grade)"> Afternoon (7th–12th Grade)</label><br>
         <button type="button">Back</button>
-        <button type="submit" disabled>Next</button>
+        <button type="submit">Next</button>
+      </form>
     </div>
 
     <div class="card" id="step3">
       <h2>Camper & Parent Info</h2>
       <form id="infoForm">
-        <input name="studentName" type="text" placeholder="Engineer Name" required>
-        <input name="age" type="number" placeholder="Engineer Age" required>
+        <input name="studentName" type="text" placeholder="Student Name" required>
+        <input name="age" type="number" placeholder="Student Age" required>
         <input name="parentName" type="text" placeholder="Parent Name" required>
         <input name="phone" type="tel" placeholder="Phone Number" required>
         <input name="email" type="email" placeholder="Email Address" required>
@@ -134,7 +134,7 @@
         <input name="city" type="text" placeholder="City" required>
         <input name="state" type="text" placeholder="State" required>
         <input name="zip" type="text" placeholder="Zip Code" required>
-        <input name="notes" type="text" placeholder="Please put any important needs such as allergies or heath conditions we might need to be aware of" required>
+        <input name="notes" type="text" placeholder="Please put any info that might be important for us to know such as allergies" required>
         <button type="button">Back</button>
         <button type="submit">Next</button>
       </form>
@@ -152,8 +152,7 @@
 
     <div class="card" id="step5">
       <h2>Thank You!</h2>
-      <p>When you first drop off your young engineer please sign the provided consent and release form</p>
-      <p>You should be reciveing a conformation email shortly! Please email us at lhsrobo@gmail.com if you do not recive the email.</p>
+      <p>Your registration has been received. You'll get a confirmation email shortly.</p>
     </div>
 
     <div id="previewSection">
@@ -163,12 +162,10 @@
     </div>
   </main>
 
-<script>
-  let formData = { week: "" };
-  let registrations = [];
-  let selectedTime = "";
+  <script>
+    let formData = { week: "" };
+    let registrations = [];
 
-  // Week bubble buttons
     document.querySelectorAll(".bubble-button").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
@@ -179,132 +176,116 @@
       });
     });
 
-   document.getElementById("next1").addEventListener("click", () => showStep(1));
-  // Time bubble buttons
-  document.querySelectorAll("#timeButtons .bubble-button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("#timeButtons .bubble-button").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      selectedTime = btn.dataset.time;
-      document.getElementById("next2").disabled = false;
+    document.getElementById("next1").addEventListener("click", () => showStep(1));
+
+    document.getElementById("timeForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const time = document.querySelector('input[name="time"]:checked');
+      if (time) {
+        formData.time = time.value;
+        updatePreview();
+        showStep(2);
+      }
     });
-  });
 
-  // Step 1 -> Step 2
-  //document.getElementById("next1").addEventListener("click", () => showStep(1));
+    document.getElementById("infoForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const infoForm = document.getElementById("infoForm");
+      new FormData(infoForm).forEach((v, k) => formData[k] = v);
+      updatePreview();
+      showStep(3);
+    });
 
-  // Step 2 -> Step 3
-  document.getElementById("timeForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (!selectedTime) return alert("Please select a time.");
-    formData.time = selectedTime;
-    updatePreview();
-    showStep(2);
-  });
+    document.getElementById("paymentForm").addEventListener("submit", (e) => {
+      e.preventDefault();
 
-  // Step 3 -> Step 4
-  document.getElementById("infoForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const infoForm = document.getElementById("infoForm");
-    new FormData(infoForm).forEach((v, k) => formData[k] = v);
-    updatePreview();
-    showStep(3);
-  });
+      if (registrations.length === 0) {
+        alert("Please add at least one camper before paying.");
+        return;
+      }
 
-  // Payment submit
-  document.getElementById("paymentForm").addEventListener("submit", (e) => {
-    e.preventDefault();
+      const payment = document.querySelector("input[name='payment']:checked")?.value;
 
-    if (registrations.length === 0) {
-      alert("Please add at least one camper before paying.");
-      return;
+      registrations.forEach(entry => {
+        const data = new FormData();
+        for (let key in entry) data.append(key, entry[key]);
+        data.append("payment", payment);
+
+        fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
+          method: "POST",
+          body: data
+        });
+      });
+
+      registrations = [];
+      document.getElementById("registrationsList").innerHTML = "";
+      showStep(4);
+    });
+
+    function addRegistration() {
+      const infoForm = document.getElementById("infoForm");
+
+      const camper = {
+        week: formData.week,
+        time: formData.time,
+        studentName: infoForm.studentName.value,
+        age: infoForm.age.value,
+        parentName: infoForm.parentName.value,
+        phone: infoForm.phone.value,
+        email: infoForm.email.value,
+        address: infoForm.address.value,
+        city: infoForm.city.value,
+        state: infoForm.state.value,
+        zip: infoForm.zip.value,
+        notes: infoForm.notes.value
+      };
+
+      for (let key in camper) {
+        if (!camper[key]) {
+          alert("Please fill out all fields before adding.");
+          return;
+        }
+      }
+
+      registrations.push(camper);
+
+      infoForm.reset();
+      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+      formData = {};
+      updatePreview();
+      showStep(0);
     }
 
-    const payment = document.querySelector("input[name='payment']:checked")?.value;
+    function updatePreview() {
+      const list = document.getElementById("registrationsList");
+      list.innerHTML = "";
 
-    registrations.forEach(entry => {
-      const data = new FormData();
-      for (let key in entry) data.append(key, entry[key]);
-      data.append("payment", payment);
-
-      fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
-        method: "POST",
-        body: data
+      registrations.forEach(c => {
+        const li = document.createElement("li");
+        li.innerText = `${c.studentName} - ${c.week} (${c.time})`;
+        list.appendChild(li);
       });
-    });
 
-    registrations = [];
-    document.getElementById("registrationsList").innerHTML = "";
-    showStep(4);
-  });
-
-  function addRegistration() {
-    const infoForm = document.getElementById("infoForm");
-
-    const camper = {
-      week: formData.week,
-      time: formData.time,
-      studentName: infoForm.studentName.value,
-      age: infoForm.age.value,
-      parentName: infoForm.parentName.value,
-      phone: infoForm.phone.value,
-      email: infoForm.email.value,
-      address: infoForm.address.value,
-      city: infoForm.city.value,
-      state: infoForm.state.value,
-      zip: infoForm.zip.value,
-      notes: infoForm.notes.value
-    };
-
-    for (let key in camper) {
-      if (!camper[key]) {
-        alert("Please fill out all fields before adding a new engineer");
-        return;
+      if (formData.studentName && formData.week && formData.time) {
+        const li = document.createElement("li");
+        li.innerText = `${formData.studentName} - ${formData.week} (${formData.time}) [in progress]`;
+        li.style.opacity = "0.6";
+        list.appendChild(li);
       }
     }
 
-    registrations.push(camper);
+    function showStep(index) {
+      document.querySelectorAll(".card").forEach((card, i) =>
+        card.classList.toggle("active", i === index)
+      );
 
-    infoForm.reset();
-    document.querySelectorAll(".week-button").forEach(b => b.classList.remove("selected"));
-    document.querySelectorAll("#timeButtons .bubble-button").forEach(b => b.classList.remove("selected"));
-    selectedTime = "";
-    formData = {};
-    updatePreview();
-    showStep(0);
-  }
-
-  function updatePreview() {
-    const list = document.getElementById("registrationsList");
-    list.innerHTML = "";
-
-    registrations.forEach(c => {
-      const li = document.createElement("li");
-      li.innerText = `${c.studentName} - ${c.week} (${c.time})`;
-      list.appendChild(li);
-    });
-
-    if (formData.studentName && formData.week && formData.time) {
-      const li = document.createElement("li");
-      li.innerText = `${formData.studentName} - ${formData.week} (${formData.time}) [in progress]`;
-      li.style.opacity = "0.6";
-      list.appendChild(li);
+      document.getElementById("addBtn").style.display = index === 4 ? "none" : "inline-block";
+      updatePreview();
     }
-  }
 
-  function showStep(index) {
-    document.querySelectorAll(".card").forEach((card, i) =>
-      card.classList.toggle("active", i === index)
-    );
-
-    document.getElementById("addBtn").style.display = index === 4 ? "none" : "inline-block";
-    updatePreview();
-  }
-
-  // Back buttons
-  document.querySelector("#step2 button[type='button']").addEventListener("click", () => showStep(0));
-  document.querySelector("#step3 button[type='button']").addEventListener("click", () => showStep(1));
-  document.querySelector("#step4 button[type='button']").addEventListener("click", () => showStep(2));
-</script>
+    document.querySelector("#step2 button[type='button']").addEventListener("click", () => showStep(0));
+    document.querySelector("#step3 button[type='button']").addEventListener("click", () => showStep(1));
+    document.querySelector("#step4 button[type='button']").addEventListener("click", () => showStep(2));
+  </script>
 </body>
 </html>
