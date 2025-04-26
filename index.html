@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>4717 Robotics Camp Signup</title>
   <style>
     :root {
@@ -30,7 +30,6 @@
     main {
       padding: 2rem;
       display: flex;
-      justify-content: center;
       flex-direction: column;
       align-items: center;
     }
@@ -90,12 +89,7 @@
     }
 
     #previewSection {
-      margin-top: 2rem;
-      max-width: 600px;
-      width: 100%;
-      background: #333;
-      padding: 1rem;
-      border-radius: 1rem;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -105,9 +99,9 @@
     <div class="card active" id="step1">
       <h2>Select a Camp Week</h2>
       <div>
-        <div class="bubble-button" data-value="June 10-11">June 10–11</div>
-        <div class="bubble-button" data-value="June 17-18">June 17–18</div>
-        <div class="bubble-button" data-value="June 24-25">June 24–25</div>
+        <div class="bubble-button" data-value="June 10–11">June 10–11</div>
+        <div class="bubble-button" data-value="June 17–18">June 17–18</div>
+        <div class="bubble-button" data-value="June 24–25">June 24–25</div>
       </div>
       <button id="next1" disabled>Next</button>
     </div>
@@ -117,7 +111,7 @@
       <form id="timeForm">
         <label><input type="radio" name="time" value="Morning (4th–6th Grade)" required> Morning (4th–6th Grade)</label><br>
         <label><input type="radio" name="time" value="Afternoon (7th–12th Grade)"> Afternoon (7th–12th Grade)</label><br>
-        <button type="button">Back</button>
+        <button type="button" onclick="showStep(0)">Back</button>
         <button type="submit">Next</button>
       </form>
     </div>
@@ -134,7 +128,7 @@
         <input name="city" type="text" placeholder="City" required>
         <input name="state" type="text" placeholder="State" required>
         <input name="zip" type="text" placeholder="ZIP Code" required>
-        <button type="button">Back</button>
+        <button type="button" onclick="showStep(1)">Back</button>
         <button type="submit">Next</button>
       </form>
     </div>
@@ -144,25 +138,29 @@
       <form id="paymentForm">
         <label><input type="radio" name="payment" value="cash" required> Cash</label><br>
         <label><input type="radio" name="payment" value="venmo"> Venmo</label><br>
-        <button type="button">Back</button>
+        <button type="button" onclick="showStep(2)">Back</button>
         <button type="submit">Submit</button>
       </form>
+      <div id="paymentPreview"></div>
     </div>
 
     <div class="card" id="step5">
       <h2>Thank You!</h2>
       <p>Your registration has been received. You'll get a confirmation email shortly.</p>
+      <div id="confirmationPreview"></div>
     </div>
 
+    <!-- Preview Section (for adding multiple kids) -->
     <div id="previewSection">
       <h3>Registrations:</h3>
       <ul id="registrationsList"></ul>
-      <button id="addBtn" type="button" onclick="addRegistration()">Add Another Week/Kid</button>
     </div>
+
+    <button type="button" id="addAnotherBtn" onclick="addRegistration()">Add Another Week/Kid</button>
   </main>
 
   <script>
-    let formData = { week: "" };
+    let formData = {};
     let registrations = [];
 
     document.querySelectorAll(".bubble-button").forEach(btn => {
@@ -171,119 +169,83 @@
         btn.classList.add("selected");
         formData.week = btn.dataset.value;
         document.getElementById("next1").disabled = false;
-        updatePreview();
       });
     });
 
     document.getElementById("next1").addEventListener("click", () => showStep(1));
 
-    document.getElementById("timeForm").addEventListener("submit", (e) => {
+    document.getElementById("timeForm").addEventListener("submit", e => {
       e.preventDefault();
-      const time = document.querySelector('input[name="time"]:checked');
-      if (time) {
-        formData.time = time.value;
-        updatePreview();
-        showStep(2);
-      }
+      formData.time = document.querySelector('input[name="time"]:checked').value;
+      showStep(2);
     });
 
-    document.getElementById("infoForm").addEventListener("submit", (e) => {
+    document.getElementById("infoForm").addEventListener("submit", e => {
       e.preventDefault();
-      const infoForm = document.getElementById("infoForm");
-      new FormData(infoForm).forEach((v, k) => formData[k] = v);
-      updatePreview();
+      new FormData(e.target).forEach((v, k) => formData[k] = v);
       showStep(3);
     });
 
-    document.getElementById("paymentForm").addEventListener("submit", (e) => {
+    document.getElementById("paymentForm").addEventListener("submit", e => {
       e.preventDefault();
 
-      if (registrations.length === 0) {
-        alert("Please add at least one camper before paying.");
-        return;
-      }
-
-      const payment = document.querySelector("input[name='payment']:checked")?.value;
+      formData.payment = document.querySelector('input[name="payment"]:checked').value;
+      registrations.push({...formData});
+      renderRegistrations("confirmationPreview");
 
       registrations.forEach(entry => {
-        const data = new FormData();
-        for (let key in entry) data.append(key, entry[key]);
-        data.append("payment", payment);
+        const finalForm = new FormData();
+        for (let key in entry) finalForm.append(key, entry[key]);
 
         fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
           method: "POST",
-          body: data
-        });
+          body: finalForm
+        }).then(res => res.text()).then(res => console.log("Submitted:", res));
       });
 
-      registrations = [];
       document.getElementById("registrationsList").innerHTML = "";
+      document.getElementById("addAnotherBtn").style.display = "none";
       showStep(4);
     });
 
+    function showStep(index) {
+      document.querySelectorAll(".card").forEach((card, i) => card.classList.toggle("active", i === index));
+      if (index === 3) {
+        // Add current formData to preview
+        const temp = {...formData};
+        renderRegistrations("paymentPreview", [temp, ...registrations]);
+      }
+    }
+
     function addRegistration() {
-      const infoForm = document.getElementById("infoForm");
-
-      const camper = {
-        week: formData.week,
-        time: formData.time,
-        studentName: infoForm.studentName.value,
-        age: infoForm.age.value,
-        parentName: infoForm.parentName.value,
-        phone: infoForm.phone.value,
-        email: infoForm.email.value,
-        address: infoForm.address.value,
-        city: infoForm.city.value,
-        state: infoForm.state.value,
-        zip: infoForm.zip.value
-      };
-
-      for (let key in camper) {
-        if (!camper[key]) {
-          alert("Please fill out all fields before adding.");
-          return;
-        }
+      if (!formData.studentName || !formData.age || !formData.parentName || !formData.email || !formData.week) {
+        alert("Please fill out all required fields.");
+        return;
       }
 
-      registrations.push(camper);
+      registrations.push({...formData});
+      const listItem = document.createElement("li");
+      listItem.textContent = `${formData.studentName} (Age ${formData.age}) - ${formData.week}, ${formData.time}`;
+      document.getElementById("registrationsList").appendChild(listItem);
 
-      infoForm.reset();
-      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+      // Reset form for next entry
       formData = {};
-      updatePreview();
+      document.getElementById("infoForm").reset();
+      document.querySelector('input[name="time"]:checked')?.checked = false;
+      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+      document.getElementById("next1").disabled = true;
+
       showStep(0);
     }
 
-    function updatePreview() {
-      const list = document.getElementById("registrationsList");
-      list.innerHTML = "";
-
-      registrations.forEach(c => {
-        const li = document.createElement("li");
-        li.innerText = `${c.studentName} - ${c.week} (${c.time})`;
-        list.appendChild(li);
-      });
-
-      if (formData.studentName && formData.week && formData.time) {
-        const li = document.createElement("li");
-        li.innerText = `${formData.studentName} - ${formData.week} (${formData.time}) [in progress]`;
-        li.style.opacity = "0.6";
-        list.appendChild(li);
-      }
+    function renderRegistrations(containerId, list = registrations) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "<h3>Submitted Registrations:</h3><ul>" +
+        list.map(r =>
+          `<li>${r.studentName} (Age ${r.age}) - ${r.week}, ${r.time} - ${r.payment || "N/A"}</li>`
+        ).join("") +
+        "</ul>";
     }
-
-    function showStep(index) {
-      document.querySelectorAll(".card").forEach((card, i) =>
-        card.classList.toggle("active", i === index)
-      );
-
-      document.getElementById("addBtn").style.display = index === 4 ? "none" : "inline-block";
-      updatePreview();
-    }
-
-    document.querySelector("#step2 button[type='button']").addEventListener("click", () => showStep(0));
-    document.querySelector("#step3 button[type='button']").addEventListener("click", () => showStep(1));
-    document.querySelector("#step4 button[type='button']").addEventListener("click", () => showStep(2));
   </script>
 </body>
 </html>
