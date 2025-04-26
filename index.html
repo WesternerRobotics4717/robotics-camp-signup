@@ -100,7 +100,7 @@
   </style>
 </head>
 <body>
-  <header>4717 Robotics Camp Signup</header>
+  <header>Frc Team 4717 Westerner Robotics Camp Sign-Up</header>
   <main>
     <div class="card active" id="step1">
       <h2>Select a Camp Week</h2>
@@ -169,16 +169,17 @@
   let selectedTime = "";
 
   // Week bubble buttons
-  document.querySelectorAll(".week-button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".week-button").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      formData.week = btn.dataset.value;
-      document.getElementById("next1").disabled = false;
-      updatePreview();
+    document.querySelectorAll(".bubble-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        formData.week = btn.dataset.value;
+        document.getElementById("next1").disabled = false;
+        updatePreview();
+      });
     });
-  });
 
+   document.getElementById("next1").addEventListener("click", () => showStep(1));
   // Time bubble buttons
   document.querySelectorAll("#timeButtons .bubble-button").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -190,7 +191,7 @@
   });
 
   // Step 1 -> Step 2
-  document.getElementById("next1").addEventListener("click", () => showStep(1));
+  //document.getElementById("next1").addEventListener("click", () => showStep(1));
 
   // Step 2 -> Step 3
   document.getElementById("timeForm").addEventListener("submit", (e) => {
