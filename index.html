@@ -100,7 +100,7 @@
   </style>
 </head>
 <body>
-  <header>4717 Robotics Camp Signup</header>
+  <header>Team 4717 Robotics Camp Signup</header>
   <main>
     <div class="card active" id="step1">
       <h2>Select a Camp Week</h2>
@@ -114,17 +114,12 @@
 
     <div class="card" id="step2">
       <h2>Select a Time Slot</h2>
-      <div>
-        <div class="bubble-buttion" data-value="Morning 9am-12pm (Grades 4th-6th)">Morning 9am-12pm (Grades 4th-6th)</div>
-        <div class="bubble-buttion" data-value="Afternoon 1:30pm-4:30pm(7th–12th Grade)">Afternoon 1:30pm-4:30pm(7th–12th Grade)</div>
-      </div>
-      <!--<form id="timeForm">
+      <form id="timeForm">
         <label><input type="radio" name="time" value="Morning (4th–6th Grade)" required> Morning (4th–6th Grade)</label><br>
-        <label><input type="radio" name="time" value="Afternoon (7th–12th Grade)"> Afternoon (7th–12th Grade)</label><br>-->
+        <label><input type="radio" name="time" value="Afternoon (7th–12th Grade)"> Afternoon (7th–12th Grade)</label><br>
         <button type="button">Back</button>
-        <button id="next1" disabled>Next</button>
-        <!--<button type="submit">Next</button>
-      </form>-->
+        <button type="submit">Next</button>
+      </form>
     </div>
 
     <div class="card" id="step3">
@@ -158,6 +153,7 @@
     <div class="card" id="step5">
       <h2>Thank You!</h2>
       <p>Your registration has been received. You'll get a confirmation email shortly.</p>
+       <p>Please be ready to pay and sign the consent and realse form when dropping off your younge engineer</p>
     </div>
 
     <div id="previewSection">
@@ -182,18 +178,7 @@
     });
 
     document.getElementById("next1").addEventListener("click", () => showStep(1));
-    let formData = { time: ""};
-    let registrations = [];
-    document.querySelectorAll(".bubble-button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        formData.week = btn.dataset.value;
-        document.getElementById("next2").disabled = false;
-        updatePreview();
-      });
-    });
-    /*document.getElementById("timeForm").addEventListener("submit", (e) => {
+    document.getElementById("timeForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const time = document.querySelector('input[name="time"]:checked');
       if (time) {
@@ -201,8 +186,7 @@
         updatePreview();
         showStep(2);
       }
-    });*/
- document.getElementById("next2").addEventListener("click", () => showStep(2));
+    });
     document.getElementById("infoForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const infoForm = document.getElementById("infoForm");
