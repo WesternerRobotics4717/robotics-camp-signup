@@ -206,16 +206,19 @@
 
       const payment = document.querySelector("input[name='payment']:checked")?.value;
 
-      registrations.forEach(entry => {
-        const data = new FormData();
-        for (let key in entry) data.append(key, entry[key]);
-        data.append("payment", payment);
+      const payload = registrations.map(entry => ({
+  ...entry,
+  payment
+}));
 
-        fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
-          method: "POST",
-          body: data
-        });
-      });
+fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ registrations: payload })
+});
+
 
       registrations = [];
       document.getElementById("registrationsList").innerHTML = "";
