@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>4717 Robotics Camp Signup</title>
+  <title>Team 4717 Robotics Camp Signup</title>
   <style>
     :root {
       --primary-color: #d4af37;
@@ -153,7 +153,6 @@
     <div class="card" id="step5">
       <h2>Thank You!</h2>
       <p>Your registration has been received. You'll get a confirmation email shortly.</p>
-       <p>Please be ready to pay and sign the consent and realse form when dropping off your younge engineer</p>
     </div>
 
     <div id="previewSection">
@@ -178,6 +177,7 @@
     });
 
     document.getElementById("next1").addEventListener("click", () => showStep(1));
+
     document.getElementById("timeForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const time = document.querySelector('input[name="time"]:checked');
@@ -187,6 +187,7 @@
         showStep(2);
       }
     });
+
     document.getElementById("infoForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const infoForm = document.getElementById("infoForm");
