@@ -88,15 +88,6 @@
       border-radius: 0.3rem;
       border: none;
     }
-
-    #previewSection {
-      margin-top: 2rem;
-      max-width: 600px;
-      width: 100%;
-      background: #333;
-      padding: 1rem;
-      border-radius: 1rem;
-    }
   </style>
 </head>
 <body>
@@ -117,7 +108,7 @@
       <form id="timeForm">
         <label><input type="radio" name="time" value="Morning (4th–6th Grade)" required> Morning (4th–6th Grade)</label><br>
         <label><input type="radio" name="time" value="Afternoon (7th–12th Grade)"> Afternoon (7th–12th Grade)</label><br>
-        <button type="button">Back</button>
+        <button type="button" id="back1">Back</button>
         <button type="submit">Next</button>
       </form>
     </div>
@@ -134,8 +125,8 @@
         <input name="city" type="text" placeholder="City" required>
         <input name="state" type="text" placeholder="State" required>
         <input name="zip" type="text" placeholder="Zip Code" required>
-        <input name="notes" type="text" placeholder="Please put any info that might be important for us to know such as allergies or medical conditions" required>
-        <button type="button">Back</button>
+        <input name="notes" type="text" placeholder="Important info (allergies, medical conditions, ect)" required>
+        <button type="button" id="back2">Back</button>
         <button type="submit">Next</button>
       </form>
     </div>
@@ -145,7 +136,7 @@
       <form id="paymentForm">
         <label><input type="radio" name="payment" value="cash" required> Cash</label><br>
         <label><input type="radio" name="payment" value="venmo"> Venmo</label><br>
-        <button type="button">Back</button>
+        <button type="button" id="back3">Back</button>
         <button type="submit">Submit</button>
       </form>
     </div>
@@ -154,13 +145,10 @@
       <h2>Thank You!</h2>
       <p>Your registration has been received. You'll get a confirmation email shortly.</p>
     </div>
-
-    
   </main>
 
   <script>
-    let formData = { week: "" };
-    let registrations = [];
+    let formData = {};
 
     document.querySelectorAll(".bubble-button").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -168,7 +156,6 @@
         btn.classList.add("selected");
         formData.week = btn.dataset.value;
         document.getElementById("next1").disabled = false;
-        updatePreview();
       });
     });
 
@@ -179,7 +166,6 @@
       const time = document.querySelector('input[name="time"]:checked');
       if (time) {
         formData.time = time.value;
-        updatePreview();
         showStep(2);
       }
     });
@@ -188,100 +174,44 @@
       e.preventDefault();
       const infoForm = document.getElementById("infoForm");
       new FormData(infoForm).forEach((v, k) => formData[k] = v);
-      updatePreview();
       showStep(3);
     });
 
     document.getElementById("paymentForm").addEventListener("submit", (e) => {
       e.preventDefault();
-
-      if (registrations.length === 0) {
-        alert("Please add at least one camper before paying.");
-        return;
-      }
-
       const payment = document.querySelector("input[name='payment']:checked")?.value;
-
-      registrations.forEach(entry => {
-        const data = new FormData();
-        for (let key in entry) data.append(key, entry[key]);
-        data.append("payment", payment);
-
-        fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
-          method: "POST",
-          body: data
-        });
-      });
-
-      registrations = [];
-      document.getElementById("registrationsList").innerHTML = "";
-      showStep(4);
+      if (payment) {
+        formData.payment = payment;
+        submitForm();
+      }
     });
 
-    function addRegistration() {
-      const infoForm = document.getElementById("infoForm");
-
-      const camper = {
-        week: formData.week,
-        time: formData.time,
-        studentName: infoForm.studentName.value,
-        age: infoForm.age.value,
-        parentName: infoForm.parentName.value,
-        phone: infoForm.phone.value,
-        email: infoForm.email.value,
-        address: infoForm.address.value,
-        city: infoForm.city.value,
-        state: infoForm.state.value,
-        zip: infoForm.zip.value,
-        notes: infoForm.notes.value
-      };
-
-      for (let key in camper) {
-        if (!camper[key]) {
-          alert("Please fill out all fields before adding.");
-          return;
-        }
+    function submitForm() {
+      const data = new FormData();
+      for (let key in formData) {
+        data.append(key, formData[key]);
       }
 
-      registrations.push(camper);
-
-      infoForm.reset();
-      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
-      formData = {};
-      updatePreview();
-      showStep(0);
-    }
-
-    function updatePreview() {
-      const list = document.getElementById("registrationsList");
-      list.innerHTML = "";
-
-      registrations.forEach(c => {
-        const li = document.createElement("li");
-        li.innerText = `${c.studentName} - ${c.week} (${c.time})`;
-        list.appendChild(li);
+      fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
+        method: "POST",
+        body: data
+      }).then(() => {
+        showStep(4);
+      }).catch((error) => {
+        alert("There was an error submitting the form. Please try again.");
+        console.error(error);
       });
-
-      if (formData.studentName && formData.week && formData.time) {
-        const li = document.createElement("li");
-        li.innerText = `${formData.studentName} - ${formData.week} (${formData.time}) [in progress]`;
-        li.style.opacity = "0.6";
-        list.appendChild(li);
-      }
     }
 
     function showStep(index) {
       document.querySelectorAll(".card").forEach((card, i) =>
         card.classList.toggle("active", i === index)
       );
-
-      document.getElementById("addBtn").style.display = index === 4 ? "none" : "inline-block";
-      updatePreview();
     }
 
-    document.querySelector("#step2 button[type='button']").addEventListener("click", () => showStep(0));
-    document.querySelector("#step3 button[type='button']").addEventListener("click", () => showStep(1));
-    document.querySelector("#step4 button[type='button']").addEventListener("click", () => showStep(2));
+    document.getElementById("back1").addEventListener("click", () => showStep(0));
+    document.getElementById("back2").addEventListener("click", () => showStep(1));
+    document.getElementById("back3").addEventListener("click", () => showStep(2));
   </script>
 </body>
 </html>
