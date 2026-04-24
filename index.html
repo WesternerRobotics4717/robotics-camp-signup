@@ -4,218 +4,633 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Team 4717 Robotics Camp Signup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #d4af37;
-      --background-color: #1a1a1a;
-      --text-color: #f0f0f0;
-      --inactive-button: #555;
+      --gold: #d4af37;
+      --gold-light: #f0cc55;
+      --gold-dim: rgba(212,175,55,0.13);
+      --bg: #111214;
+      --surface: #1c1d20;
+      --surface2: #242629;
+      --border: rgba(212,175,55,0.2);
+      --text: #f0f0f0;
+      --muted: #888;
+      --green: #4caf7d;
+      --green-dim: rgba(76,175,125,0.12);
+      --radius: 12px;
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
 
-    body {
-      margin: 0;
-      background-color: var(--background-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', sans-serif;
-    }
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.1rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    .logo-ring { width: 40px; height: 40px; border: 2.5px solid var(--gold); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+    .logo-ring svg { width: 20px; height: 20px; fill: var(--gold); }
+    .header-text h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); line-height: 1; }
+    .header-text p { font-size: 0.72rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase; }
 
-    header {
-      background-color: var(--primary-color);
-      color: black;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-    }
+    .progress-wrap { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 2rem; }
+    .progress-steps { display: flex; align-items: center; max-width: 640px; margin: 0 auto; }
+    .step-dot { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
+    .step-dot .dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #444; display: grid; place-items: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem; color: var(--muted); transition: all 0.3s; background: var(--bg); }
+    .step-dot .label { font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; transition: color 0.3s; }
+    .step-dot.active .dot { border-color: var(--gold); background: var(--gold); color: #111; }
+    .step-dot.active .label { color: var(--gold); }
+    .step-dot.done .dot { border-color: var(--gold); background: transparent; color: var(--gold); }
+    .step-dot.done .label { color: var(--gold); opacity: 0.6; }
+    .step-line { flex: 1; height: 2px; background: #333; margin-bottom: 20px; transition: background 0.3s; }
+    .step-line.done { background: var(--gold); }
 
-    main {
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-    }
+    main { flex: 1; display: flex; justify-content: center; padding: 2rem 1.5rem 3rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.25rem; max-width: 620px; width: 100%; display: none; animation: fadeUp 0.3s ease; }
+    .card.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gold); margin-bottom: 0.25rem; }
+    .card .subtitle { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; }
 
-    .card {
-      background-color: #2c2c2c;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-      max-width: 600px;
-      width: 100%;
-      display: none;
-    }
+    .week-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+    .week-card { background: var(--surface2); border: 1.5px solid #3a3a3a; border-radius: var(--radius); padding: 1rem 0.5rem; cursor: pointer; text-align: center; transition: all 0.2s; user-select: none; position: relative; }
+    .week-card:hover { border-color: var(--gold); background: var(--gold-dim); }
+    .week-card.selected { border-color: var(--gold); background: var(--gold-dim); }
+    .week-card.selected .wk-label { color: var(--gold-light); }
+    .week-card .wk-label { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; display: block; margin-bottom: 2px; }
+    .week-card .wk-sub { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; display: block; }
+    .week-card .wk-price { font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--gold); display: block; margin-top: 6px; }
+    .week-card .check-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; background: var(--gold); border-radius: 50%; display: none; place-items: center; font-size: 0.65rem; color: #111; font-weight: 900; }
+    .week-card.selected .check-badge { display: grid; }
 
-    .card.active {
-      display: block;
-    }
+    .bundle-banner { background: var(--green-dim); border: 1.5px solid var(--green); border-radius: 10px; padding: 0.85rem 1.1rem; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; animation: fadeUp 0.3s ease; }
+    .bundle-banner .bb-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .bundle-banner .bb-text strong { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; color: var(--green); letter-spacing: 0.03em; display: block; }
+    .bundle-banner .bb-text span { font-size: 0.75rem; color: #aaa; }
+    .bundle-banner.hidden { display: none; }
 
-    .bubble-button {
-      display: inline-block;
-      background-color: #444;
-      color: white;
-      border: 2px solid var(--primary-color);
-      border-radius: 2rem;
-      padding: 1rem 1.5rem;
-      margin: 0.5rem;
-      cursor: pointer;
-    }
+    .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2e2e2e; padding-top: 0.9rem; margin-top: 0.75rem; }
+    .price-row .pr-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+    .price-row .pr-total { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gold); }
+    .price-row .pr-original { font-size: 0.85rem; color: var(--muted); text-decoration: line-through; margin-right: 0.5rem; }
 
-    .bubble-button.selected {
-      background-color: var(--primary-color);
-      color: black;
-    }
+    .time-cards { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.5rem; }
+    .time-card { display: flex; align-items: center; gap: 1rem; background: var(--surface2); border: 1.5px solid #3a3a3a; border-radius: var(--radius); padding: 1rem 1.2rem; cursor: pointer; transition: all 0.2s; }
+    .time-card:hover { border-color: var(--gold); background: var(--gold-dim); }
+    .time-card.selected { border-color: var(--gold); background: var(--gold-dim); }
+    .time-card input[type="radio"] { display: none; }
+    .radio-visual { width: 18px; height: 18px; border: 2px solid #555; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; transition: all 0.2s; }
+    .time-card.selected .radio-visual { border-color: var(--gold); }
+    .time-card.selected .radio-visual::after { content: ''; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+    .time-info .time-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.04em; }
+    .time-info .time-grade { font-size: 0.73rem; color: var(--muted); margin-top: 2px; }
 
-    button {
-      background-color: var(--primary-color);
-      color: black;
-      border: none;
-      padding: 0.7rem 1.5rem;
-      margin-top: 1rem;
-      font-size: 1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-    }
+    .field-group { margin-bottom: 0.9rem; }
+    .field-group label { display: block; font-size: 0.69rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+    .field-group input, .field-group select { width: 100%; background: var(--surface2); border: 1.5px solid #3a3a3a; color: var(--text); border-radius: 8px; padding: 0.6rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; transition: border-color 0.2s; appearance: none; }
+    .field-group input:focus, .field-group select:focus { outline: none; border-color: var(--gold); }
+    .field-group input::placeholder { color: #555; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .three-col { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; }
 
-    button:disabled {
-      background-color: var(--inactive-button);
-      cursor: not-allowed;
-    }
+    .size-grid { display: flex; gap: 0.55rem; flex-wrap: wrap; }
+    .size-btn { background: var(--surface2); border: 1.5px solid #3a3a3a; color: var(--muted); border-radius: 8px; padding: 0.45rem 0.8rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s; user-select: none; }
+    .size-btn:hover { border-color: var(--gold); color: var(--text); }
+    .size-btn.selected { border-color: var(--gold); background: var(--gold-dim); color: var(--gold-light); }
 
-    input, select {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border-radius: 0.3rem;
-      border: none;
+    .payment-cards { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.5rem; }
+    .payment-card { display: flex; align-items: center; gap: 1rem; background: var(--surface2); border: 1.5px solid #3a3a3a; border-radius: var(--radius); padding: 1rem 1.2rem; cursor: pointer; transition: all 0.2s; }
+    .payment-card:hover { border-color: var(--gold); background: var(--gold-dim); }
+    .payment-card.selected { border-color: var(--gold); background: var(--gold-dim); }
+    .payment-card input[type="radio"] { display: none; }
+    .payment-icon { width: 34px; height: 34px; border-radius: 8px; background: #333; display: grid; place-items: center; font-size: 1rem; flex-shrink: 0; }
+    .payment-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.03em; }
+    .payment-desc { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+
+    .btn-row { display: flex; gap: 0.7rem; margin-top: 1.5rem; align-items: center; }
+    .btn-primary { background: var(--gold); color: #111; border: none; padding: 0.72rem 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; flex: 1; }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-primary:disabled { background: #3a3a3a; color: #666; cursor: not-allowed; transform: none; }
+    .btn-back { background: transparent; color: var(--muted); border: 1.5px solid #3a3a3a; padding: 0.72rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-back:hover { border-color: #666; color: var(--text); }
+    .btn-ghost { background: transparent; color: var(--gold); border: 1.5px solid var(--border); padding: 0.72rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-ghost:hover { background: var(--gold-dim); }
+
+    .section-divider { display: flex; align-items: center; gap: 0.75rem; margin: 1.25rem 0 0.85rem; }
+    .section-divider span { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap; }
+    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: #2e2e2e; }
+
+    .cart-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+    .cart-item { background: var(--surface2); border: 1px solid #333; border-radius: 10px; padding: 0.9rem 1rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
+    .cart-item-info .ci-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.03em; }
+    .cart-item-info .ci-detail { font-size: 0.72rem; color: var(--muted); margin-top: 3px; line-height: 1.6; }
+    .cart-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+    .cart-item-price { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--gold); }
+    .remove-btn { font-size: 0.65rem; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 0.07em; border: none; background: none; padding: 0; transition: color 0.2s; }
+    .remove-btn:hover { color: #e07070; }
+
+    .total-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; }
+    .total-line { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--muted); padding: 0.2rem 0; }
+    .total-line.grand { border-top: 1px solid #333; margin-top: 0.5rem; padding-top: 0.65rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text); }
+    .total-line.grand span:last-child { color: var(--gold); }
+    .savings-text { color: var(--green); }
+
+    .success-wrap { text-align: center; padding: 1rem 0 0.5rem; }
+    .success-icon { width: 68px; height: 68px; border: 3px solid var(--gold); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 1.4rem; font-size: 1.8rem; }
+    .success-wrap h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .success-wrap p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+    .registration-cards { display: flex; flex-direction: column; gap: 0.5rem; margin: 1.25rem 0; }
+    .reg-chip { background: var(--surface2); border: 1px solid #333; border-radius: 8px; padding: 0.65rem 0.9rem; font-size: 0.8rem; color: var(--text); display: flex; justify-content: space-between; align-items: center; }
+    .reg-chip span { color: var(--gold); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.95rem; }
+
+    @media (max-width: 520px) {
+      .card { padding: 1.5rem 1rem; }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .week-grid { grid-template-columns: 1fr; }
+      .btn-row { flex-wrap: wrap; }
+      .btn-primary { order: -1; }
     }
   </style>
 </head>
 <body>
-  <header>Team 4717 Robotics Camp Signup</header>
-  <main>
-    <div class="card active" id="step1">
-      <h2>Select a Camp Week</h2>
-      <div>
-       <div class="bubble-button" data-value="June 10-11">June 10–11</div>
-        <div class="bubble-button" data-value="June 17-18">June 17–18</div>
-        <div class="bubble-button" data-value="June 24-25">June 24–25</div>
+
+<header>
+  <div class="logo-ring">
+    <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5 2.5 2.5 0 0 0 7.5 18 2.5 2.5 0 0 0 10 15.5 2.5 2.5 0 0 0 7.5 13m9 0A2.5 2.5 0 0 0 14 15.5a2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5z"/></svg>
+  </div>
+  <div class="header-text">
+    <h1>Team 4717 Robotics Camp</h1>
+    <p>Registration · Summer 2025</p>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="step-dot active" data-step="0"><div class="dot">1</div><div class="label">Weeks</div></div>
+    <div class="step-line" data-line="0"></div>
+    <div class="step-dot" data-step="1"><div class="dot">2</div><div class="label">Time</div></div>
+    <div class="step-line" data-line="1"></div>
+    <div class="step-dot" data-step="2"><div class="dot">3</div><div class="label">Info</div></div>
+    <div class="step-line" data-line="2"></div>
+    <div class="step-dot" data-step="3"><div class="dot">4</div><div class="label">Payment</div></div>
+    <div class="step-line" data-line="3"></div>
+    <div class="step-dot" data-step="4"><div class="dot">5</div><div class="label">Review</div></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- STEP 1: Week -->
+  <div class="card active" id="step1">
+    <h2>Choose Camp Weeks</h2>
+    <p class="subtitle">Pick one or more weeks — register for all 3 and save $30</p>
+
+    <div class="bundle-banner hidden" id="bundleBanner">
+      <div class="bb-icon">🎉</div>
+      <div class="bb-text">
+        <strong>Bundle Discount Applied!</strong>
+        <span>All 3 weeks selected — $150 instead of $180</span>
       </div>
-      <button id="next1" disabled>Next</button>
     </div>
 
-    <div class="card" id="step2">
-      <h2>Select a Time Slot</h2>
-      <form id="timeForm">
-        <label><input type="radio" name="time" value="Morning 9am-12pm (4th–6th Grade)" required> Morning 9am-12pm (4th–6th Grade)</label><br>
-        <label><input type="radio" name="time" value="Afternoon 1:30pm-4:30pm (7th–12th Grade)"> Afternoon 1:30pm-4:30pm (7th–12th Grade)</label><br>
-        <button type="button" id="back1">Back</button>
-        <button type="submit">Next</button>
-      </form>
+    <div class="week-grid">
+      <div class="week-card" data-value="June 1-3">
+        <div class="check-badge">✓</div>
+        <span class="wk-label">June 1–3</span>
+        <span class="wk-sub">Week 1</span>
+        <span class="wk-price">$60</span>
+      </div>
+      <div class="week-card" data-value="June 8-10">
+        <div class="check-badge">✓</div>
+        <span class="wk-label">June 8–10</span>
+        <span class="wk-sub">Week 2</span>
+        <span class="wk-price">$60</span>
+      </div>
+      <div class="week-card" data-value="June 15-17">
+        <div class="check-badge">✓</div>
+        <span class="wk-label">June 15–17</span>
+        <span class="wk-sub">Week 3</span>
+        <span class="wk-price">$60</span>
+      </div>
     </div>
 
-    <div class="card" id="step3">
-      <h2>Camper & Parent Info</h2>
-      <form id="infoForm">
-        <input name="studentName" type="text" placeholder="Student Name" required>
-        <input name="age" type="number" placeholder="Student Age" required>
-        <input name="parentName" type="text" placeholder="Parent Name" required>
-        <input name="phone" type="tel" placeholder="Phone Number" required>
-        <input name="email" type="email" placeholder="Email Address" required>
-        <input name="address" type="text" placeholder="Street Address" required>
-        <input name="city" type="text" placeholder="City" required>
-        <input name="state" type="text" placeholder="State" required>
-        <input name="zip" type="text" placeholder="Zip Code" required>
-        <input name="notes" type="text" placeholder="Allergies, medical conditions, etc." required>
-        <button type="button" id="back2">Back</button>
-        <button type="submit">Next</button>
-      </form>
+    <div class="price-row">
+      <div>
+        <div class="pr-label">Estimated cost for this camper</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Select all 3 for the $150 bundle deal</div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:0.4rem;">
+        <span class="pr-original" id="originalPrice" style="display:none;"></span>
+        <span class="pr-total" id="displayPrice">$0</span>
+      </div>
     </div>
 
-    <div class="card" id="step4">
-      <h2>Choose Payment Method</h2>
-      <form id="paymentForm">
-        <label><input type="radio" name="payment" value="cash or check" required> Cash or Check</label><br>
-        <label><input type="radio" name="payment" value="venmo"> Venmo</label><br>
-        <button type="button" id="back3">Back</button>
-        <button type="submit">Submit</button>
-      </form>
+    <div class="btn-row">
+      <button class="btn-primary" id="next1" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Time -->
+  <div class="card" id="step2">
+    <h2>Select Time Slot</h2>
+    <p class="subtitle">Choose the session that fits your camper's grade level</p>
+    <div class="time-cards">
+      <div class="time-card" data-value="Morning 9am-12pm (4th–6th Grade)">
+        <input type="radio" name="time" value="Morning 9am-12pm (4th–6th Grade)">
+        <div class="radio-visual"></div>
+        <div class="time-info">
+          <div class="time-title">Morning · 9:00 AM – 12:00 PM</div>
+          <div class="time-grade">4th – 6th Grade</div>
+        </div>
+      </div>
+      <div class="time-card" data-value="Afternoon 1:30pm-4:30pm (7th–12th Grade)">
+        <input type="radio" name="time" value="Afternoon 1:30pm-4:30pm (7th–12th Grade)">
+        <div class="radio-visual"></div>
+        <div class="time-info">
+          <div class="time-title">Afternoon · 1:30 PM – 4:30 PM</div>
+          <div class="time-grade">7th – 12th Grade</div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" id="back1">← Back</button>
+      <button class="btn-primary" id="next2" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Info -->
+  <div class="card" id="step3">
+    <h2>Camper Info</h2>
+    <p class="subtitle">Tell us about your camper and how to reach you</p>
+
+    <div class="section-divider"><span>Student</span></div>
+    <div class="two-col">
+      <div class="field-group"><label>Student Name</label><input id="studentName" type="text" placeholder="First Last"></div>
+      <div class="field-group"><label>Age</label><input id="age" type="number" placeholder="e.g. 12"></div>
+    </div>
+    <div class="field-group">
+      <label>T-Shirt Size</label>
+      <div class="size-grid" id="shirtSizes">
+        <div class="size-btn" data-size="SM">SM</div>
+        <div class="size-btn" data-size="MD">MD</div>
+        <div class="size-btn" data-size="LG">LG</div>
+        <div class="size-btn" data-size="XL">XL</div>
+        <div class="size-btn" data-size="XXL">XXL</div>
+      </div>
     </div>
 
-    <div class="card" id="step5">
-      <h2>Thank You!</h2>
-      <p>Your registration has been received. You'll get a confirmation email shortly.</p>
+    <div class="section-divider"><span>Parent / Guardian</span></div>
+    <div class="two-col">
+      <div class="field-group"><label>Parent Name</label><input id="parentName" type="text" placeholder="First Last"></div>
+      <div class="field-group"><label>Phone Number</label><input id="phone" type="tel" placeholder="(555) 000-0000"></div>
     </div>
-  </main>
+    <div class="field-group"><label>Email Address</label><input id="email" type="email" placeholder="you@example.com"></div>
 
-  <script>
-    let formData = {};
+    <div class="section-divider"><span>Address</span></div>
+    <div class="field-group"><label>Street Address</label><input id="address" type="text" placeholder="123 Main St"></div>
+    <div class="three-col">
+      <div class="field-group"><label>City</label><input id="city" type="text" placeholder="City"></div>
+      <div class="field-group"><label>State</label><input id="state" type="text" placeholder="TX"></div>
+      <div class="field-group"><label>Zip</label><input id="zip" type="text" placeholder="00000"></div>
+    </div>
 
-    // Handle week selection
-    document.querySelectorAll(".bubble-button").forEach(btn => {
+    <div class="section-divider"><span>Medical / Notes</span></div>
+    <div class="field-group"><label>Allergies, Medical Conditions, or Other Notes</label><input id="notes" type="text" placeholder="None, or describe here…"></div>
+
+    <div class="btn-row">
+      <button class="btn-back" id="back2">← Back</button>
+      <button class="btn-primary" id="next3">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Payment -->
+  <div class="card" id="step4">
+    <h2>Payment Method</h2>
+    <p class="subtitle">How would you like to pay for camp?</p>
+    <div class="payment-cards">
+      <div class="payment-card" data-value="cash or check">
+        <input type="radio" name="payment" value="cash or check">
+        <div class="radio-visual"></div>
+        <div class="payment-icon">💵</div>
+        <div>
+          <div class="payment-name">Cash or Check</div>
+          <div class="payment-desc">Bring payment on the first day of camp</div>
+        </div>
+      </div>
+      <div class="payment-card" data-value="venmo">
+        <input type="radio" name="payment" value="venmo">
+        <div class="radio-visual"></div>
+        <div class="payment-icon">📱</div>
+        <div>
+          <div class="payment-name">Venmo</div>
+          <div class="payment-desc">Details will be emailed after registration</div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" id="back3">← Back</button>
+      <button class="btn-primary" id="next4" disabled>Add to Cart →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: Review -->
+  <div class="card" id="step5">
+    <h2>Review & Submit</h2>
+    <p class="subtitle" id="reviewSubtitle">Confirm all registrations before submitting</p>
+    <div class="cart-list" id="cartList"></div>
+    <div class="total-box" id="totalBox"></div>
+    <div class="btn-row" style="flex-wrap:wrap;gap:0.6rem;">
+      <button class="btn-back" id="back4">← Edit Last</button>
+      <button class="btn-ghost" id="addAnotherBtn">+ Add Camper</button>
+      <button class="btn-primary" id="submitBtn">Submit All →</button>
+    </div>
+  </div>
+
+  <!-- STEP 6: Done -->
+  <div class="card" id="step6">
+    <div class="success-wrap">
+      <div class="success-icon">✓</div>
+      <h2>You're Registered!</h2>
+      <div class="registration-cards" id="successCards"></div>
+      <p>Confirmation emails will be sent to each address provided.<br>We can't wait to see you at camp! 🤖</p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const PRICE_PER_WEEK = 60;
+  const BUNDLE_PRICE = 150;
+
+  let registrations = [];
+  let currentCamper = {};
+  let selectedWeeks = [];
+  let selectedShirt = null;
+  let selectedTime = null;
+  let selectedPayment = null;
+
+  // ── Week multi-select ──
+  document.querySelectorAll(".week-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const val = card.dataset.value;
+      if (selectedWeeks.includes(val)) {
+        selectedWeeks = selectedWeeks.filter(w => w !== val);
+        card.classList.remove("selected");
+      } else {
+        selectedWeeks.push(val);
+        card.classList.add("selected");
+      }
+      updatePriceDisplay();
+      document.getElementById("next1").disabled = selectedWeeks.length === 0;
+    });
+  });
+
+  function calcPrice(count) {
+    return count === 3 ? BUNDLE_PRICE : count * PRICE_PER_WEEK;
+  }
+
+  function updatePriceDisplay() {
+    const count = selectedWeeks.length;
+    const price = calcPrice(count);
+    const bundle = count === 3;
+    document.getElementById("bundleBanner").classList.toggle("hidden", !bundle);
+    document.getElementById("displayPrice").textContent = count ? `$${price}` : "$0";
+    const orig = document.getElementById("originalPrice");
+    if (bundle) {
+      orig.style.display = "inline";
+      orig.textContent = `$${count * PRICE_PER_WEEK}`;
+    } else {
+      orig.style.display = "none";
+    }
+  }
+
+  // ── Time ──
+  document.querySelectorAll(".time-card").forEach(card => {
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".time-card").forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      selectedTime = card.dataset.value;
+      document.getElementById("next2").disabled = false;
+    });
+  });
+
+  // ── Shirt size ──
+  document.querySelectorAll(".size-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedShirt = btn.dataset.size;
+    });
+  });
+
+  // ── Payment ──
+  document.querySelectorAll(".payment-card").forEach(card => {
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".payment-card").forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      selectedPayment = card.dataset.value;
+      document.getElementById("next4").disabled = false;
+    });
+  });
+
+  // ── Navigation ──
+  document.getElementById("next1").addEventListener("click", () => {
+    currentCamper.weeks = [...selectedWeeks];
+    currentCamper.price = calcPrice(selectedWeeks.length);
+    currentCamper.bundle = selectedWeeks.length === 3;
+    showStep(1);
+  });
+
+  document.getElementById("back1").addEventListener("click", () => showStep(0));
+
+  document.getElementById("next2").addEventListener("click", () => {
+    currentCamper.time = selectedTime;
+    showStep(2);
+  });
+
+  document.getElementById("back2").addEventListener("click", () => showStep(1));
+
+  document.getElementById("next3").addEventListener("click", () => {
+    const fields = ["studentName","age","parentName","phone","email","address","city","state","zip","notes"];
+    for (let f of fields) {
+      const el = document.getElementById(f);
+      if (!el.value.trim()) {
+        el.style.borderColor = "var(--gold)";
+        el.focus();
+        setTimeout(() => el.style.borderColor = "", 1500);
+        return;
+      }
+      currentCamper[f] = el.value.trim();
+    }
+    currentCamper.shirtSize = selectedShirt || "Not selected";
+    showStep(3);
+  });
+
+  document.getElementById("back3").addEventListener("click", () => showStep(2));
+
+  document.getElementById("next4").addEventListener("click", () => {
+    currentCamper.payment = selectedPayment;
+    registrations.push({ ...currentCamper });
+    renderCart();
+    showStep(4);
+  });
+
+  document.getElementById("back4").addEventListener("click", () => {
+    // Pop last camper and restore their state
+    const last = registrations.pop();
+    currentCamper = { ...last };
+    showStep(3);
+  });
+
+  document.getElementById("addAnotherBtn").addEventListener("click", () => {
+    resetCamperForm();
+    showStep(0);
+  });
+
+  document.getElementById("submitBtn").addEventListener("click", () => {
+    sendAllForms();
+    renderSuccessCards();
+    showStep(5);
+  });
+
+  // ── Render cart ──
+  function renderCart() {
+    const list = document.getElementById("cartList");
+    list.innerHTML = "";
+    let grandTotal = 0;
+    let grandOriginal = 0;
+
+    registrations.forEach((r, i) => {
+      grandTotal += r.price;
+      grandOriginal += r.weeks.length * PRICE_PER_WEEK;
+
+      const item = document.createElement("div");
+      item.className = "cart-item";
+      item.innerHTML = `
+        <div class="cart-item-info">
+          <div class="ci-name">${escHtml(r.studentName)}</div>
+          <div class="ci-detail">
+            ${r.weeks.map(w => escHtml(w)).join(", ")}<br>
+            ${escHtml(r.time.split(" (")[0])} · Shirt: ${escHtml(r.shirtSize)}<br>
+            Payment: ${escHtml(r.payment)}
+          </div>
+        </div>
+        <div class="cart-item-right">
+          <div class="cart-item-price">$${r.price}${r.bundle ? '&nbsp;<span style="font-size:0.6rem;color:var(--green);vertical-align:middle;">BUNDLE</span>' : ''}</div>
+          <button class="remove-btn" data-index="${i}">✕ Remove</button>
+        </div>
+      `;
+      list.appendChild(item);
+    });
+
+    // Remove buttons
+    list.querySelectorAll(".remove-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        formData.week = btn.dataset.value;
-        document.getElementById("next1").disabled = false;
+        registrations.splice(parseInt(btn.dataset.index), 1);
+        if (registrations.length === 0) {
+          resetCamperForm();
+          showStep(0);
+          return;
+        }
+        renderCart();
       });
     });
 
-    // Next and back buttons
-    document.getElementById("next1").addEventListener("click", () => showStep(1));
-    document.getElementById("back1").addEventListener("click", () => showStep(0));
-    document.getElementById("back2").addEventListener("click", () => showStep(1));
-    document.getElementById("back3").addEventListener("click", () => showStep(2));
-
-    // Time form
-    document.getElementById("timeForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const time = document.querySelector('input[name="time"]:checked');
-      if (time) {
-        formData.time = time.value;
-        showStep(2);
-      }
-    });
-
-    // Info form
-    document.getElementById("infoForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const infoForm = document.getElementById("infoForm");
-      new FormData(infoForm).forEach((v, k) => formData[k] = v);
-      showStep(3);
-    });
-
-    // Payment form
-    document.getElementById("paymentForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const payment = document.querySelector("input[name='payment']:checked")?.value;
-      if (payment) {
-        formData.payment = payment;
-        sendForm();
-        showStep(4);
-      }
-    });
-
-    // Show step function
-    function showStep(index) {
-      document.querySelectorAll(".card").forEach((card, i) =>
-        card.classList.toggle("active", i === index)
-      );
+    // Total box
+    const savings = grandOriginal - grandTotal;
+    const totalBox = document.getElementById("totalBox");
+    let html = "";
+    if (registrations.length > 1) {
+      html += `<div class="total-line"><span>${registrations.length} campers · ${grandOriginal !== grandTotal ? `<span style="text-decoration:line-through;opacity:0.5;">$${grandOriginal}</span>` : ''}</span><span></span></div>`;
     }
+    if (savings > 0) {
+      html += `<div class="total-line"><span class="savings-text">🎉 Bundle savings</span><span class="savings-text">−$${savings}</span></div>`;
+    }
+    html += `<div class="total-line grand"><span>Total Due</span><span>$${grandTotal}</span></div>`;
+    totalBox.innerHTML = html;
 
-    // Submit the form data
-    function sendForm() {
+    document.getElementById("reviewSubtitle").textContent =
+      registrations.length === 1
+        ? "Confirm the registration below or add another camper"
+        : `${registrations.length} campers registered — confirm or add more`;
+
+    document.getElementById("submitBtn").disabled = registrations.length === 0;
+  }
+
+  function renderSuccessCards() {
+    const wrap = document.getElementById("successCards");
+    wrap.innerHTML = "";
+    registrations.forEach(r => {
+      const chip = document.createElement("div");
+      chip.className = "reg-chip";
+      chip.innerHTML = `<span>${escHtml(r.studentName)}</span> ${r.weeks.join(", ")} · $${r.price}`;
+      wrap.appendChild(chip);
+    });
+  }
+
+  // ── Reset for next camper ──
+  function resetCamperForm() {
+    currentCamper = {};
+    selectedWeeks = [];
+    selectedTime = null;
+    selectedShirt = null;
+    selectedPayment = null;
+
+    document.querySelectorAll(".week-card").forEach(c => c.classList.remove("selected"));
+    document.querySelectorAll(".time-card").forEach(c => c.classList.remove("selected"));
+    document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
+    document.querySelectorAll(".payment-card").forEach(c => c.classList.remove("selected"));
+    document.getElementById("bundleBanner").classList.add("hidden");
+    document.getElementById("displayPrice").textContent = "$0";
+    document.getElementById("originalPrice").style.display = "none";
+    document.getElementById("next1").disabled = true;
+    document.getElementById("next2").disabled = true;
+    document.getElementById("next4").disabled = true;
+    ["studentName","age","parentName","phone","email","address","city","state","zip","notes"].forEach(id => {
+      document.getElementById(id).value = "";
+    });
+  }
+
+  // ── Show step ──
+  function showStep(index) {
+    document.querySelectorAll(".card").forEach((card, i) =>
+      card.classList.toggle("active", i === index)
+    );
+    document.querySelectorAll(".step-dot").forEach((dot, i) => {
+      dot.classList.remove("active", "done");
+      if (i === index) dot.classList.add("active");
+      else if (i < index) dot.classList.add("done");
+    });
+    document.querySelectorAll(".step-line").forEach((line, i) => {
+      line.classList.toggle("done", i < index);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ── Submit all ──
+  function sendAllForms() {
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzS67UdQdOeYvSn2oawppqnD9pbAwymLjvS77sniqRilrpMGGQWjAl0cdmhHYij5gKxjQ/exec";
+    registrations.forEach(r => {
       const data = new FormData();
-      for (let key in formData) {
-        data.append(key, formData[key]);
-      }
+      data.append("week", r.weeks.join(", "));
+      data.append("bundleDeal", r.bundle ? "Yes — $150 bundle" : "No");
+      data.append("price", `$${r.price}`);
+      data.append("time", r.time);
+      data.append("studentName", r.studentName);
+      data.append("age", r.age);
+      data.append("shirtSize", r.shirtSize);
+      data.append("parentName", r.parentName);
+      data.append("phone", r.phone);
+      data.append("email", r.email);
+      data.append("address", r.address);
+      data.append("city", r.city);
+      data.append("state", r.state);
+      data.append("zip", r.zip);
+      data.append("notes", r.notes);
+      data.append("payment", r.payment);
+      fetch(SHEET_URL, { method: "POST", body: data });
+    });
+  }
 
-      fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
-        method: "POST",
-        body: data
-      });
-
-      formData = {}; // Clear formData
-    }
-  </script>
+  function escHtml(str) {
+    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+</script>
 </body>
 </html>
