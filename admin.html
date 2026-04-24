@@ -1,287 +1,538 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>4717 Robotics Camp Signup</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Team 4717 · Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #d4af37;
-      --background-color: #1a1a1a;
-      --text-color: #f0f0f0;
-      --inactive-button: #555;
+      --gold: #d4af37; --gold-light: #f0cc55; --gold-dim: rgba(212,175,55,0.13);
+      --bg: #0e0f11; --surface: #1a1b1e; --surface2: #222428; --surface3: #2a2c31;
+      --border: rgba(212,175,55,0.18); --text: #f0f0f0; --muted: #777;
+      --green: #4caf7d; --green-dim: rgba(76,175,125,0.12);
+      --red: #e05555; --red-dim: rgba(224,85,85,0.12);
+      --blue: #5b9bd5; --blue-dim: rgba(91,155,213,0.12);
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
-    body {
-      margin: 0;
-      background-color: var(--background-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', sans-serif;
+    /* Auth screen */
+    #authScreen {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1.5rem; padding: 2rem;
     }
+    .auth-logo { width: 60px; height: 60px; border: 2.5px solid var(--gold); border-radius: 50%; display: grid; place-items: center; }
+    .auth-logo svg { width: 28px; height: 28px; fill: var(--gold); }
+    .auth-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold); text-align: center; }
+    .auth-sub { font-size: 0.8rem; color: var(--muted); text-align: center; margin-top: -0.75rem; }
+    .auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; max-width: 380px; width: 100%; text-align: center; }
+    .auth-card p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+    .google-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      background: white; color: #333; border: none; border-radius: 8px;
+      padding: 0.8rem 1.5rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      font-weight: 500; cursor: pointer; width: 100%; transition: all 0.2s;
+    }
+    .google-btn:hover { background: #f5f5f5; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .auth-error { background: var(--red-dim); border: 1px solid var(--red); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--red); margin-top: 1rem; display: none; }
+
+    /* Main app */
+    #appScreen { display: none; }
 
     header {
-      background-color: var(--primary-color);
-      color: black;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
     }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .logo-ring { width: 38px; height: 38px; border: 2.5px solid var(--gold); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+    .logo-ring svg { width: 18px; height: 18px; fill: var(--gold); }
+    .header-text h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); line-height: 1; }
+    .header-text p { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .user-chip { display: flex; align-items: center; gap: 0.5rem; background: var(--surface2); border: 1px solid #333; border-radius: 20px; padding: 0.35rem 0.85rem 0.35rem 0.45rem; }
+    .user-avatar { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--gold); object-fit: cover; }
+    .user-name { font-size: 0.75rem; color: var(--text); }
+    .signout-btn { font-size: 0.72rem; color: var(--muted); background: none; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.07em; transition: color 0.2s; }
+    .signout-btn:hover { color: var(--red); }
 
-    main {
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
+    /* Last synced bar */
+    .sync-bar {
+      background: var(--surface2); border-bottom: 1px solid #222;
+      padding: 0.5rem 2rem; display: flex; align-items: center; justify-content: space-between;
     }
+    .sync-bar span { font-size: 0.72rem; color: var(--muted); }
+    .refresh-btn { font-size: 0.72rem; color: var(--gold); background: none; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.07em; display: flex; align-items: center; gap: 0.4rem; transition: opacity 0.2s; }
+    .refresh-btn:hover { opacity: 0.7; }
+    .refresh-btn.spinning svg { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .card {
-      background-color: #2c2c2c;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-      max-width: 600px;
-      width: 100%;
-      display: none;
+    main { padding: 2rem; max-width: 960px; margin: 0 auto; }
+
+    /* Stats row */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; }
+    .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem; }
+    .stat-value { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: var(--gold); line-height: 1; }
+    .stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+
+    /* Section header */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text); }
+
+    /* Week control cards */
+    .weeks-grid { display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2.5rem; }
+
+    .week-control {
+      background: var(--surface); border: 1px solid #2e2e30;
+      border-radius: 14px; padding: 1.25rem 1.5rem;
+      display: grid; grid-template-columns: 1fr auto; gap: 1rem;
+      align-items: center; transition: border-color 0.2s;
     }
+    .week-control.is-open { border-color: rgba(76,175,125,0.3); }
+    .week-control.is-closed { border-color: rgba(224,85,85,0.2); }
+    .week-control.is-full { border-color: rgba(212,175,55,0.3); }
 
-    .card.active {
-      display: block;
+    .wc-left { display: flex; flex-direction: column; gap: 0.6rem; }
+    .wc-top { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .wc-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; font-weight: 800; letter-spacing: 0.03em; }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.25rem 0.7rem; border-radius: 20px;
+      font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
     }
+    .badge-open { background: var(--green-dim); color: var(--green); border: 1px solid rgba(76,175,125,0.3); }
+    .badge-closed { background: var(--red-dim); color: var(--red); border: 1px solid rgba(224,85,85,0.3); }
+    .badge-full { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-    .bubble-button {
-      display: inline-block;
-      background-color: #444;
-      color: white;
-      border: 2px solid var(--primary-color);
-      border-radius: 2rem;
-      padding: 1rem 1.5rem;
-      margin: 0.5rem;
-      cursor: pointer;
+    .wc-progress { display: flex; align-items: center; gap: 0.85rem; }
+    .progress-track { flex: 1; max-width: 280px; height: 6px; background: #2e2e30; border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; background: var(--green); }
+    .progress-fill.warn { background: var(--gold); }
+    .progress-fill.full { background: var(--red); }
+    .wc-count { font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+    .wc-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem; }
+
+    /* Limit input */
+    .limit-row { display: flex; align-items: center; gap: 0.5rem; }
+    .limit-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .limit-input {
+      width: 68px; background: var(--surface2); border: 1.5px solid #3a3a3a;
+      color: var(--text); border-radius: 7px; padding: 0.4rem 0.6rem;
+      font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700;
+      text-align: center; transition: border-color 0.2s;
     }
+    .limit-input:focus { outline: none; border-color: var(--gold); }
+    .limit-save { background: var(--gold); color: #111; border: none; border-radius: 6px; padding: 0.4rem 0.75rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+    .limit-save:hover { background: var(--gold-light); }
 
-    .bubble-button.selected {
-      background-color: var(--primary-color);
-      color: black;
+    /* Toggle switch */
+    .toggle-row { display: flex; align-items: center; gap: 0.6rem; }
+    .toggle-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+    .toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute; inset: 0; background: #3a3a3a; border-radius: 12px;
+      cursor: pointer; transition: background 0.25s;
     }
-
-    button {
-      background-color: var(--primary-color);
-      color: black;
-      border: none;
-      padding: 0.7rem 1.5rem;
-      margin-top: 1rem;
-      font-size: 1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
+    .toggle-track::after {
+      content: ''; position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px; background: white; border-radius: 50%;
+      transition: transform 0.25s; box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
+    .toggle input:checked + .toggle-track { background: var(--green); }
+    .toggle input:checked + .toggle-track::after { transform: translateX(18px); }
+    .toggle input:disabled + .toggle-track { opacity: 0.4; cursor: not-allowed; }
 
-    button:disabled {
-      background-color: var(--inactive-button);
-      cursor: not-allowed;
+    /* Recent signups table */
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    thead { background: var(--surface2); }
+    thead th { padding: 0.75rem 1rem; text-align: left; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 500; border-bottom: 1px solid #2a2a2a; }
+    tbody tr { border-bottom: 1px solid #1e1e1e; transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td { padding: 0.8rem 1rem; color: var(--text); vertical-align: middle; }
+    .td-name { font-weight: 500; }
+    .td-week { font-size: 0.75rem; color: var(--muted); }
+    .td-price { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: var(--gold); }
+    .td-pay { font-size: 0.72rem; }
+    .empty-row td { text-align: center; color: var(--muted); padding: 2.5rem; font-size: 0.85rem; }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.85rem 1.25rem;
+      font-size: 0.82rem; color: var(--text);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      transform: translateY(20px); opacity: 0;
+      transition: all 0.25s ease; pointer-events: none; z-index: 999;
+      display: flex; align-items: center; gap: 0.6rem;
     }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    #toast.success { border-color: var(--green); }
+    #toast.error { border-color: var(--red); }
 
-    input, select {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border-radius: 0.3rem;
-      border: none;
+    .loading-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      display: grid; place-items: center; z-index: 50;
     }
+    .spinner { width: 36px; height: 36px; border: 3px solid #333; border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
 
-    #previewSection {
-      background-color: #111;
-      padding: 1rem 2rem;
-      border-top: 2px solid var(--primary-color);
-    }
-
-    #previewSection h3 {
-      margin-top: 0;
-    }
-
-    #registrationsList li {
-      margin: 0.3rem 0;
+    @media (max-width: 700px) {
+      main { padding: 1.25rem 1rem; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .week-control { grid-template-columns: 1fr; }
+      .wc-right { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+      header { padding: 0.9rem 1rem; }
+      .sync-bar { padding: 0.5rem 1rem; }
     }
   </style>
 </head>
 <body>
-  <header>4717 Robotics Camp Signup</header>
 
-  <main>
-    <div class="card active" id="step1">
-      <h2>Select a Camp Week</h2>
-      <div>
-       <!-- <div class="bubble-button" data-value="June 10-11">June 10–11</div> -->
-       <!-- <div class="bubble-button" data-value="June 17-18">June 17–18</div> -->
-        <div class="bubble-button" data-value="June 24-25">June 24–25</div>
+<!-- AUTH SCREEN -->
+<div id="authScreen">
+  <div class="auth-logo">
+    <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5 2.5 2.5 0 0 0 7.5 18 2.5 2.5 0 0 0 10 15.5 2.5 2.5 0 0 0 7.5 13m9 0A2.5 2.5 0 0 0 14 15.5a2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5z"/></svg>
+  </div>
+  <div class="auth-title">Team 4717 Admin</div>
+  <div class="auth-sub">Camp Registration Control Panel</div>
+  <div class="auth-card">
+    <p>Sign in with the Google account that owns the registration spreadsheet to access the admin panel.</p>
+    <button class="google-btn" id="googleSignInBtn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Sign in with Google
+    </button>
+    <div class="auth-error" id="authError"></div>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="appScreen">
+  <header>
+    <div class="header-left">
+      <div class="logo-ring">
+        <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5 2.5 2.5 0 0 0 7.5 18 2.5 2.5 0 0 0 10 15.5 2.5 2.5 0 0 0 7.5 13m9 0A2.5 2.5 0 0 0 14 15.5a2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5z"/></svg>
       </div>
-      <button id="next1" disabled>Next</button>
+      <div class="header-text">
+        <h1>Admin Panel</h1>
+        <p>Team 4717 · Camp Registration</p>
+      </div>
     </div>
-
-    <div class="card" id="step2">
-      <h2>Select a Time Slot</h2>
-      <form id="timeForm">
-        <label><input type="radio" name="time" value="Morning (4th–6th Grade)" required> Morning (4th–6th Grade)</label><br>
-        <label><input type="radio" name="time" value="Afternoon (7th–12th Grade)"> Afternoon (7th–12th Grade)</label><br>
-        <button type="button" onclick="showStep(0)">Back</button>
-        <button type="submit">Next</button>
-      </form>
+    <div class="header-right">
+      <div class="user-chip">
+        <img class="user-avatar" id="userAvatar" src="" alt="">
+        <span class="user-name" id="userName"></span>
+      </div>
+      <button class="signout-btn" id="signOutBtn">Sign Out</button>
     </div>
+  </header>
 
-    <div class="card" id="step3">
-      <h2>Camper & Parent Info</h2>
-      <form id="infoForm">
-        <input name="studentName" type="text" placeholder="Student Name" required>
-        <input name="age" type="number" placeholder="Student Age" required>
-        <input name="parentName" type="text" placeholder="Parent Name" required>
-        <input name="phone" type="tel" placeholder="Phone Number" required>
-        <input name="email" type="email" placeholder="Email Address" required>
-        <input name="address" type="text" placeholder="Street Address" required>
-        <input name="city" type="text" placeholder="City" required>
-        <input name="state" type="text" placeholder="State" required>
-        <input name="zip" type="text" placeholder="ZIP Code" required>
-        <button type="button" onclick="showStep(1)">Back</button>
-        <button type="submit">Next</button>
-      </form>
-    </div>
-
-    <div class="card" id="step4">
-      <h2>Choose Payment Method</h2>
-      <form id="paymentForm">
-        <label><input type="radio" name="payment" value="cash" required> Cash</label><br>
-        <label><input type="radio" name="payment" value="venmo"> Venmo</label><br>
-        <button type="button" onclick="showStep(2)">Back</button>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-
-    <div class="card" id="step5">
-      <h2>Thank You!</h2>
-      <p>Your registration has been received. You'll get a confirmation email shortly.</p>
-    </div>
-  </main>
-
-  <!-- Preview Section at bottom -->
-  <div id="previewSection">
-    <h3>Registrations:</h3>
-    <ul id="registrationsList"></ul>
-    <button id="addBtn" type="button" onclick="addRegistration()">Add Another Week/Kid</button>
+  <div class="sync-bar">
+    <span id="lastSynced">Loading data…</span>
+    <button class="refresh-btn" id="refreshBtn">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Refresh
+    </button>
   </div>
 
-  <script>
-    let formData = { week: "" };
-    let registrations = [];
+  <main>
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Signups</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-sub">all weeks combined</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Weeks Open</div>
+        <div class="stat-value" id="statOpen">—</div>
+        <div class="stat-sub">of 3 total weeks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Spots Remaining</div>
+        <div class="stat-value" id="statRemaining">—</div>
+        <div class="stat-sub">across open weeks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Revenue</div>
+        <div class="stat-value" id="statRevenue">—</div>
+        <div class="stat-sub">total registered</div>
+      </div>
+    </div>
 
-    document.querySelectorAll(".bubble-button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        formData.week = btn.dataset.value;
-        document.getElementById("next1").disabled = false;
-        updatePreview();
+    <!-- Week controls -->
+    <div class="section-header">
+      <div class="section-title">Week Controls</div>
+    </div>
+    <div class="weeks-grid" id="weeksGrid">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- Recent signups -->
+    <div class="section-header" style="margin-top:0.5rem;">
+      <div class="section-title">Recent Signups</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Parent</th>
+            <th>Week(s)</th>
+            <th>Time</th>
+            <th>Shirt</th>
+            <th>Price</th>
+            <th>Payment</th>
+          </tr>
+        </thead>
+        <tbody id="signupsTable">
+          <tr class="empty-row"><td colspan="7">Loading signups…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  // ─────────────────────────────────────────────
+  // CONFIGURATION — update these two values
+  // ─────────────────────────────────────────────
+  const SHEET_URL   = "https://script.google.com/macros/s/AKfycby3Cfitq39PP5c54dIQZcNby55qS_y5qaL0HuQeIZP23ClOxbRAfYhVatUbNA9OPJThXg/exec";
+  const ALLOWED_EMAIL = "lhsrobo@gmail.com"; // ← Replace with your Google account email
+  const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID"; // ← Replace with your OAuth Client ID (see setup guide)
+
+  // ─────────────────────────────────────────────
+
+  const WEEKS = ["June 1-3", "June 8-10", "June 15-17"];
+  let weekData = {}; // { "June 1-3": { count:0, limit:20, open:true } }
+  let signups = [];
+  let googleUser = null;
+
+  // ── Google Sign-In ──
+  window.onload = () => {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleCredential,
+      auto_select: false,
+    });
+  };
+
+  document.getElementById("googleSignInBtn").addEventListener("click", () => {
+    google.accounts.id.prompt();
+  });
+
+  function handleCredential(response) {
+    const payload = parseJwt(response.credential);
+    if (payload.email !== ALLOWED_EMAIL) {
+      const err = document.getElementById("authError");
+      err.textContent = `Access denied. This panel is restricted to the account owner. (Signed in as: ${payload.email})`;
+      err.style.display = "block";
+      return;
+    }
+    googleUser = payload;
+    document.getElementById("userName").textContent = payload.name || payload.email;
+    const avatar = document.getElementById("userAvatar");
+    if (payload.picture) { avatar.src = payload.picture; } else { avatar.style.display = "none"; }
+    document.getElementById("authScreen").style.display = "none";
+    document.getElementById("appScreen").style.display = "block";
+    loadData();
+  }
+
+  function parseJwt(token) {
+    const base64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return JSON.parse(atob(base64));
+  }
+
+  document.getElementById("signOutBtn").addEventListener("click", () => {
+    google.accounts.id.disableAutoSelect();
+    googleUser = null;
+    document.getElementById("appScreen").style.display = "none";
+    document.getElementById("authScreen").style.display = "flex";
+  });
+
+  // ── Load data from Apps Script ──
+  async function loadData() {
+    document.getElementById("refreshBtn").classList.add("spinning");
+    document.getElementById("lastSynced").textContent = "Syncing…";
+    try {
+      const res = await fetch(`${SHEET_URL}?action=getAdminData`);
+      const data = await res.json();
+      weekData = data.weekData || {};
+      signups  = data.signups  || [];
+      renderWeeks();
+      renderStats();
+      renderTable();
+      const now = new Date();
+      document.getElementById("lastSynced").textContent = `Last synced: ${now.toLocaleTimeString()}`;
+    } catch(e) {
+      showToast("❌ Could not load data. Check your Apps Script URL.", "error");
+      document.getElementById("lastSynced").textContent = "Sync failed";
+    }
+    document.getElementById("refreshBtn").classList.remove("spinning");
+  }
+
+  document.getElementById("refreshBtn").addEventListener("click", loadData);
+
+  // ── Render week controls ──
+  function renderWeeks() {
+    const grid = document.getElementById("weeksGrid");
+    grid.innerHTML = "";
+
+    WEEKS.forEach((week, i) => {
+      const d = weekData[week] || { count: 0, limit: 0, open: true };
+      const isFull = d.limit > 0 && d.count >= d.limit;
+      const isOpen = d.open && !isFull;
+      const pct = d.limit > 0 ? Math.min(100, (d.count / d.limit) * 100) : 0;
+      const fillClass = pct >= 100 ? "full" : pct >= 75 ? "warn" : "";
+      const stateClass = isFull ? "is-full" : isOpen ? "is-open" : "is-closed";
+      const badgeClass = isFull ? "badge-full" : isOpen ? "badge-open" : "badge-closed";
+      const badgeText  = isFull ? "Full" : isOpen ? "Open" : "Closed";
+
+      const card = document.createElement("div");
+      card.className = `week-control ${stateClass}`;
+      card.innerHTML = `
+        <div class="wc-left">
+          <div class="wc-top">
+            <span class="wc-name">Week ${i+1} · ${week}</span>
+            <span class="status-badge ${badgeClass}"><span class="badge-dot"></span>${badgeText}</span>
+          </div>
+          <div class="wc-progress">
+            <div class="progress-track">
+              <div class="progress-fill ${fillClass}" style="width:${pct}%"></div>
+            </div>
+            <span class="wc-count">${d.count} / ${d.limit > 0 ? d.limit : '∞'} registered</span>
+          </div>
+        </div>
+        <div class="wc-right">
+          <div class="limit-row">
+            <span class="limit-label">Limit</span>
+            <input class="limit-input" type="number" min="0" max="999" value="${d.limit || ''}" placeholder="∞" data-week="${week}">
+            <button class="limit-save" data-week="${week}">Save</button>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Open</span>
+            <label class="toggle">
+              <input type="checkbox" ${isOpen || (!isFull && d.open) ? 'checked' : ''} ${isFull ? 'disabled' : ''} data-week="${week}" class="open-toggle">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Limit save buttons
+    grid.querySelectorAll(".limit-save").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const week = btn.dataset.week;
+        const input = grid.querySelector(`.limit-input[data-week="${week}"]`);
+        const limit = parseInt(input.value) || 0;
+        await updateWeekSetting(week, { limit });
       });
     });
 
-    document.getElementById("next1").addEventListener("click", () => showStep(1));
-
-    document.getElementById("timeForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      formData.time = document.querySelector('input[name="time"]:checked').value;
-      updatePreview();
-      showStep(2);
-    });
-
-    document.getElementById("infoForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const infoForm = document.getElementById("infoForm");
-      new FormData(infoForm).forEach((v, k) => formData[k] = v);
-      updatePreview();
-      showStep(3);
-    });
-
-    document.getElementById("paymentForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      if (registrations.length === 0) {
-        alert("Please add at least one camper before paying.");
-        return;
-      }
-
-      const payment = document.querySelector("input[name='payment']:checked").value;
-
-      registrations.forEach(entry => {
-        const data = new FormData();
-        for (let key in entry) data.append(key, entry[key]);
-        data.append("payment", payment);
-
-        fetch("https://script.google.com/macros/s/AKfycbw4G86YsWDyrrPU8J16k6_dIjXJ89hswDWfkolDEQR4OvfbnMAMaETPEEjxT9bPwhI/exec", {
-          method: "POST",
-          body: data
-        });
+    // Open/close toggles
+    grid.querySelectorAll(".open-toggle").forEach(toggle => {
+      toggle.addEventListener("change", async () => {
+        const week = toggle.dataset.week;
+        await updateWeekSetting(week, { open: toggle.checked });
       });
-
-      registrations = [];
-      document.getElementById("registrationsList").innerHTML = "";
-      showStep(4);
     });
+  }
 
-    function addRegistration() {
-      const infoForm = document.getElementById("infoForm");
-
-      const camper = {
-        week: formData.week,
-        time: formData.time,
-        studentName: infoForm.studentName.value,
-        age: infoForm.age.value,
-        parentName: infoForm.parentName.value,
-        phone: infoForm.phone.value,
-        email: infoForm.email.value,
-        address: infoForm.address.value,
-        city: infoForm.city.value,
-        state: infoForm.state.value,
-        zip: infoForm.zip.value
-      };
-
-      for (let key in camper) {
-        if (!camper[key]) {
-          alert("Please fill out all fields before adding.");
-          return;
-        }
+  // ── Stats ──
+  function renderStats() {
+    let total = 0, openCount = 0, remaining = 0, revenue = 0;
+    WEEKS.forEach(w => {
+      const d = weekData[w] || { count:0, limit:0, open:true };
+      total += d.count;
+      const isFull = d.limit > 0 && d.count >= d.limit;
+      const isOpen = d.open && !isFull;
+      if (isOpen) {
+        openCount++;
+        if (d.limit > 0) remaining += d.limit - d.count;
+        else remaining += 999;
       }
+    });
+    signups.forEach(s => {
+      const p = parseInt((s.price || "").replace("$","")) || 0;
+      revenue += p;
+    });
+    document.getElementById("statTotal").textContent     = total;
+    document.getElementById("statOpen").textContent      = openCount;
+    document.getElementById("statRemaining").textContent = remaining >= 999 ? "∞" : remaining;
+    document.getElementById("statRevenue").textContent   = `$${revenue}`;
+  }
 
-      registrations.push(camper);
-
-      infoForm.reset();
-      document.querySelectorAll(".bubble-button").forEach(b => b.classList.remove("selected"));
-      formData = {};
-      updatePreview();
-      showStep(0);
+  // ── Table ──
+  function renderTable() {
+    const tbody = document.getElementById("signupsTable");
+    if (!signups.length) {
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No signups yet</td></tr>`;
+      return;
     }
+    tbody.innerHTML = signups.slice().reverse().slice(0, 50).map(s => `
+      <tr>
+        <td class="td-name">${esc(s.studentName || "—")}</td>
+        <td>${esc(s.parentName || "—")}</td>
+        <td class="td-week">${esc(s.week || "—")}</td>
+        <td style="font-size:0.75rem;">${esc((s.time||"").split(" (")[0] || "—")}</td>
+        <td style="font-size:0.75rem;">${esc(s.shirtSize || "—")}</td>
+        <td class="td-price">${esc(s.price || "—")}</td>
+        <td class="td-pay">${esc(s.payment || "—")}</td>
+      </tr>
+    `).join("");
+  }
 
-    function updatePreview() {
-      const list = document.getElementById("registrationsList");
-      list.innerHTML = "";
-
-      registrations.forEach(c => {
-        const li = document.createElement("li");
-        li.innerText = `${c.studentName} - ${c.week} (${c.time})`;
-        list.appendChild(li);
-      });
-
-      if (formData.studentName && formData.week && formData.time) {
-        const li = document.createElement("li");
-        li.innerText = `${formData.studentName} - ${formData.week} (${formData.time}) [in progress]`;
-        li.style.opacity = "0.6";
-        list.appendChild(li);
+  // ── Update week setting via Apps Script ──
+  async function updateWeekSetting(week, changes) {
+    try {
+      const fd = new FormData();
+      fd.append("action", "updateWeekSetting");
+      fd.append("week", week);
+      fd.append("adminEmail", googleUser.email);
+      if (changes.limit !== undefined) fd.append("limit", changes.limit);
+      if (changes.open  !== undefined) fd.append("open",  changes.open ? "true" : "false");
+      const res = await fetch(SHEET_URL, { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.result === "success") {
+        showToast(`✅ ${week} updated`, "success");
+        await loadData();
+      } else {
+        showToast("❌ Update failed: " + (data.error || "unknown error"), "error");
       }
+    } catch(e) {
+      showToast("❌ Network error — check your Apps Script", "error");
     }
+  }
 
-    function showStep(index) {
-      document.querySelectorAll(".card").forEach((card, i) =>
-        card.classList.toggle("active", i === index)
-      );
+  // ── Toast ──
+  function showToast(msg, type="success") {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = `show ${type}`;
+    setTimeout(() => t.className = "", 3000);
+  }
 
-      document.getElementById("addBtn").style.display = index === 4 ? "none" : "inline-block";
-      updatePreview();
-    }
-  </script>
+  function esc(s) {
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+</script>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>
