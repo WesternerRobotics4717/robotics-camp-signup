@@ -605,7 +605,7 @@
 
   // ── Submit all ──
   function sendAllForms() {
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzS67UdQdOeYvSn2oawppqnD9pbAwymLjvS77sniqRilrpMGGQWjAl0cdmhHYij5gKxjQ/exec";
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
     registrations.forEach(r => {
       const data = new FormData();
       data.append("week", r.weeks.join(", "));
@@ -631,6 +631,7 @@
   function escHtml(str) {
     return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
+  
 </script>
 </body>
 </html>
