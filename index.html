@@ -631,7 +631,31 @@
   function escHtml(str) {
     return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
-  
+    async function checkWeekAvailability() {
+      try {
+        const res = await fetch(`${SHEET_URL}?action=getWeekStatus`);
+        const status = await res.json();
+        document.querySelectorAll(".week-card").forEach(card => {
+          const week = card.dataset.value;
+          const s = status[week];
+          if (!s) return;
+          if (!s.open || s.isFull) {
+            card.classList.add("disabled");
+            card.style.opacity = "0.45";
+            card.style.cursor = "not-allowed";
+            card.style.pointerEvents = "none";
+            const sub = card.querySelector(".wk-sub");
+            if (sub) sub.textContent = s.isFull ? "FULL" : "CLOSED";
+            const price = card.querySelector(".wk-price");
+            if (price) price.textContent = s.isFull ? "Full" : "Closed";
+          }
+        });
+      } catch(e) {
+        console.warn("Could not check week availability", e);
+      }
+    }
+
+   checkWeekAvailability();  
 </script>
 </body>
 </html>
