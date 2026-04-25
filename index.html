@@ -45,9 +45,9 @@
     .nav-logo svg { width: 16px; height: 16px; fill: var(--gold); }
     .nav-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold); line-height: 1; }
     .nav-links { display: flex; align-items: center; gap: 0.25rem; }
-    .nav-links a { color: var(--muted); font-size: 0.8rem; text-decoration: none; padding: 0.4rem 0.75rem; border-radius: 6px; transition: all 0.2s; letter-spacing: 0.03em; }
+    .nav-links a { color: var(--muted); font-size: 0.8rem; text-decoration: none; padding: 0.4rem 0.75rem; border-radius: 6px; transition: all 0.2s; letter-spacing: 0.03em; cursor: pointer; }
     .nav-links a:hover { color: var(--text); background: var(--surface2); }
-    .nav-cta { background: var(--gold); color: #111; padding: 0.45rem 1.1rem; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; margin-left: 0.5rem; }
+    .nav-cta { background: var(--gold); color: #111; padding: 0.45rem 1.1rem; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; margin-left: 0.5rem; cursor: pointer; }
     .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
 
     /* ══ HERO ══ */
@@ -513,10 +513,10 @@
     <span class="nav-title">Team 4717</span>
   </a>
   <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#schedule">Schedule</a>
-    <a href="#faq">FAQ</a>
-    <a href="#register" class="nav-cta">Register Now</a>
+    <a data-scroll="about">About</a>
+    <a data-scroll="schedule">Schedule</a>
+    <a data-scroll="faq">FAQ</a>
+    <a data-scroll="register" class="nav-cta">Register Now</a>
   </div>
 </nav>
 
@@ -573,8 +573,8 @@
       <div class="pill"><span class="pill-icon">💰</span> From $60/week</div>
     </div>
     <div class="hero-actions">
-      <a href="#register" class="btn-hero-primary">Register Now →</a>
-      <a href="#about" class="btn-hero-secondary">Learn More</a>
+      <a data-scroll="register" class="btn-hero-primary">Register Now →</a>
+      <a data-scroll="about" class="btn-hero-secondary">Learn More</a>
     </div>
     <div class="scroll-hint">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
@@ -583,7 +583,7 @@
   </div>
 
   <!-- STATS BAR -->
-  <div class="stats-bar reveal" id="about">
+  <div class="stats-bar reveal">
     <div class="stats-bar-inner">
       <div class="stat-item"><span class="stat-num">3</span><div class="stat-desc">Camp Weeks Available</div></div>
       <div class="stat-item"><span class="stat-num">2</span><div class="stat-desc">Daily Time Sessions</div></div>
@@ -593,17 +593,16 @@
   </div>
 
   <!-- WHAT TO EXPECT -->
-  <section class="reveal">
-    <div class="section-label">What to Expect</div>
+  <section id="about" class="reveal">
     <h2 class="section-title">Hands-On Robotics Education</h2>
     <p class="section-sub">Each camp week is packed with real engineering challenges led by experienced FRC team members. Campers leave with new skills and a ton of fun stories.</p>
     <div class="expect-grid">
       <div class="expect-card"><span class="expect-icon">🤖</span><div class="expect-title">Build Real Robots</div><div class="expect-desc">Get hands-on with actual FRC-style hardware. Learn mechanical assembly, wiring, and how robots come together from parts to a finished machine.</div></div>
       <div class="expect-card"><span class="expect-icon">💻</span><div class="expect-title">Code & Control</div><div class="expect-desc">Write code that makes robots move. We use beginner-friendly tools that teach real programming concepts used in FRC competitions.</div></div>
-      <div class="expect-card"><span class="expect-icon">🏆</span><div class="expect-title">Mini Competitions</div><div class="expect-desc">Campers put their robots to the test in friendly challenges at the end of each week. Teamwork, strategy, and sportsmanship all count.</div></div>
-      <div class="expect-card"><span class="expect-icon">🔧</span><div class="expect-title">Engineering Mindset</div><div class="expect-desc">We teach the design process — iterate, fail, improve, and succeed. These problem-solving skills go far beyond robotics.</div></div>
-      <div class="expect-card"><span class="expect-icon">🤝</span><div class="expect-title">Mentorship</div><div class="expect-desc">Learn directly from Team 4717 members who compete at the FRC level. Real mentors who've been through it all.</div></div>
-      <div class="expect-card"><span class="expect-icon">🎽</span><div class="expect-title">Camp T-Shirt</div><div class="expect-desc">Every camper gets a Team 4717 camp shirt. You pick your size during registration — it's included in the camp fee.</div></div>
+      <div class="expect-card"><span class="expect-icon">🏆</span><div class="expect-title">Mini Competitions</div><div class="expect-desc">Campers put their robots to the test in friendly challenges. Teamwork, strategy, and sportsmanship all count.</div></div>
+      <div class="expect-card"><span class="expect-icon">📅</span><div class="expect-title">3 Sessions Per Week</div><div class="expect-desc">Each week runs Monday through Wednesday with a different activity theme each week — so returning campers always experience something new.</div></div>
+      <div class="expect-card"><span class="expect-icon">🍕</span><div class="expect-title">Snacks & Drinks Provided</div><div class="expect-desc">We've got food covered! Snacks and drinks are provided for all campers each day. Just bring a water bottle to stay hydrated throughout the session.</div></div>
+      <div class="expect-card"><span class="expect-icon">🎽</span><div class="expect-title">Camp T-Shirt Included</div><div class="expect-desc">Every camper gets a Team 4717 camp shirt included in their registration fee. Pick your size when you sign up.</div></div>
     </div>
   </section>
 
@@ -613,14 +612,19 @@
   <section id="schedule" class="reveal">
     <div class="section-label">Schedule & Pricing</div>
     <h2 class="section-title">Pick Your Week</h2>
-    <p class="section-sub">Three weeks available in June. Each session runs daily during the week. Register for all three and save $30 with our bundle deal.</p>
+    <p class="section-sub">Three weeks in June, each running Monday through Wednesday with 3 sessions per week. Every week features a different activity theme — register for all three and save $30.</p>
 
     <div class="pricing-wrap">
+
       <div class="pricing-card">
         <div>
           <span class="pricing-week">Week 1 — June 1–3</span>
-          <div class="pricing-dates">Monday through Wednesday</div>
-          <div class="pricing-sessions">
+          <div class="pricing-dates">Monday · Tuesday · Wednesday</div>
+          <div style="margin-top:0.6rem;">
+            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:0.4rem;font-weight:600;">This Week's Activity</div>
+            <div style="font-size:0.82rem;color:var(--muted);font-style:italic;">Activity details coming soon — check back closer to registration!</div>
+          </div>
+          <div class="pricing-sessions" style="margin-top:0.65rem;">
             <span class="session-tag">🌅 Morning · 9AM–12PM · Grades 4–6</span>
             <span class="session-tag">🌇 Afternoon · 1:30–4:30PM · Grades 7–12</span>
           </div>
@@ -630,11 +634,16 @@
           <div class="pricing-note">per camper</div>
         </div>
       </div>
+
       <div class="pricing-card">
         <div>
           <span class="pricing-week">Week 2 — June 8–10</span>
-          <div class="pricing-dates">Monday through Wednesday</div>
-          <div class="pricing-sessions">
+          <div class="pricing-dates">Monday · Tuesday · Wednesday</div>
+          <div style="margin-top:0.6rem;">
+            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:0.4rem;font-weight:600;">This Week's Activity</div>
+            <div style="font-size:0.82rem;color:var(--muted);font-style:italic;">Activity details coming soon — check back closer to registration!</div>
+          </div>
+          <div class="pricing-sessions" style="margin-top:0.65rem;">
             <span class="session-tag">🌅 Morning · 9AM–12PM · Grades 4–6</span>
             <span class="session-tag">🌇 Afternoon · 1:30–4:30PM · Grades 7–12</span>
           </div>
@@ -644,11 +653,16 @@
           <div class="pricing-note">per camper</div>
         </div>
       </div>
+
       <div class="pricing-card featured">
         <div>
           <span class="pricing-week">Week 3 — June 15–17</span>
-          <div class="pricing-dates">Monday through Wednesday</div>
-          <div class="pricing-sessions">
+          <div class="pricing-dates">Monday · Tuesday · Wednesday</div>
+          <div style="margin-top:0.6rem;">
+            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:0.4rem;font-weight:600;">This Week's Activity</div>
+            <div style="font-size:0.82rem;color:var(--muted);font-style:italic;">Activity details coming soon — check back closer to registration!</div>
+          </div>
+          <div class="pricing-sessions" style="margin-top:0.65rem;">
             <span class="session-tag">🌅 Morning · 9AM–12PM · Grades 4–6</span>
             <span class="session-tag">🌇 Afternoon · 1:30–4:30PM · Grades 7–12</span>
           </div>
@@ -662,10 +676,11 @@
       <div class="bundle-box">
         <div class="bundle-box-left">
           <strong>🎉 All 3 Weeks Bundle</strong>
-          <span>Register for all three weeks and save $30 per camper</span>
+          <span>Register for all three weeks and save $30 per camper — a new activity each week!</span>
         </div>
         <div class="bundle-price"><small>$180</small>$150</div>
       </div>
+
     </div>
   </section>
 
@@ -697,7 +712,7 @@
           What should my child bring to camp?
           <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
         </button>
-        <div class="faq-answer" data-faq="2">Campers should bring a water bottle, a snack, and closed-toe shoes (required for safety in the build area). We recommend comfortable clothes they don't mind getting a little dirty. We provide all tools, materials, and equipment needed for camp activities.</div>
+        <div class="faq-answer" data-faq="2">We provide snacks and drinks for all campers, so no need to pack those! Campers should bring a water bottle (staying hydrated is important!), and wear closed-toe shoes — these are required for safety in the build area. Comfortable clothes they don't mind getting a little dirty are also a good idea. We provide all tools, materials, and equipment needed for activities.</div>
       </div>
       <div class="faq-item">
         <button class="faq-question" data-faq="3">
@@ -743,7 +758,7 @@
       <div class="section-label">Ready to Join?</div>
       <h2 class="section-title">Register Your Camper</h2>
       <p style="font-size:0.88rem; color:var(--muted); line-height:1.7; margin-bottom:1.75rem;">Spots are limited — secure your camper's place below. The full registration form is just a few steps and takes about 3 minutes.</p>
-      <a href="#signup-form" class="btn-hero-primary">Start Registration →</a>
+      <a data-scroll="signup-form" class="btn-hero-primary">Start Registration →</a>
     </div>
   </div>
 
@@ -871,10 +886,10 @@
       </div>
       <div class="footer-copy">© 2026 Team 4717 · Lubbock, TX · All rights reserved</div>
       <div class="footer-links">
-        <a href="#about">About</a>
-        <a href="#schedule">Schedule</a>
-        <a href="#faq">FAQ</a>
-        <a href="#register">Register</a>
+        <a data-scroll="about">About</a>
+        <a data-scroll="schedule">Schedule</a>
+        <a data-scroll="faq">FAQ</a>
+        <a data-scroll="register">Register</a>
       </div>
     </div>
   </footer>
@@ -890,6 +905,20 @@
   const SHEET_URL      = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
   const PRICE_PER_WEEK = 60;
   const BUNDLE_PRICE   = 150;
+
+  // ── Smooth scroll for all data-scroll links ──
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const offset = 70; // navbar height
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  }
+
+  document.addEventListener("click", e => {
+    const el = e.target.closest("[data-scroll]");
+    if (el) { e.preventDefault(); scrollToSection(el.dataset.scroll); }
+  });
 
   // ── Gate logic ──
   const openDate = new Date(REGISTRATION_OPEN_DATE);
