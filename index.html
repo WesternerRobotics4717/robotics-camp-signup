@@ -30,6 +30,173 @@
     .header-text h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); line-height: 1; }
     .header-text p { font-size: 0.72rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase; }
 
+    /* ── COMING SOON SCREEN ── */
+    #comingSoonScreen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #comingSoonScreen.active { display: flex; }
+
+    /* Decorative background glow */
+    .cs-glow {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.07) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .cs-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--gold-dim); border: 1px solid var(--border);
+      border-radius: 20px; padding: 0.35rem 1rem;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1.75rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .cs-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+    .cs-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .cs-title span { color: var(--gold); display: block; }
+
+    .cs-date {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    .cs-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 440px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    /* Countdown */
+    .countdown {
+      display: flex; gap: 1.25rem; margin-bottom: 2.75rem;
+      animation: fadeUp 0.6s 0.25s ease both;
+    }
+    .cd-unit { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+    .cd-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.8rem; font-weight: 800; line-height: 1;
+      color: var(--gold);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      min-width: 72px;
+      text-align: center;
+    }
+    .cd-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+    /* Notify form */
+    .notify-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      max-width: 480px;
+      width: 100%;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .notify-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--gold); margin-bottom: 0.3rem;
+    }
+    .notify-card p { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
+
+    .notify-field { margin-bottom: 0.85rem; }
+    .notify-field label { display: block; font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 4px; }
+    .notify-field input {
+      width: 100%; background: var(--surface2); border: 1.5px solid #3a3a3a;
+      color: var(--text); border-radius: 8px; padding: 0.6rem 0.85rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      transition: border-color 0.2s;
+    }
+    .notify-field input:focus { outline: none; border-color: var(--gold); }
+    .notify-field input::placeholder { color: #555; }
+
+    .checkbox-group { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+    .checkbox-item { display: flex; align-items: flex-start; gap: 0.65rem; cursor: pointer; }
+    .checkbox-item input[type="checkbox"] { display: none; }
+    .checkbox-box {
+      width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px;
+      border: 1.5px solid #3a3a3a; border-radius: 4px;
+      background: var(--surface2); display: grid; place-items: center;
+      transition: all 0.2s; cursor: pointer;
+    }
+    .checkbox-item input:checked + .checkbox-box {
+      background: var(--gold); border-color: var(--gold);
+    }
+    .checkbox-item input:checked + .checkbox-box::after {
+      content: '✓'; font-size: 0.7rem; color: #111; font-weight: 900;
+    }
+    .checkbox-text { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+    .checkbox-text strong { color: var(--text); font-weight: 500; }
+
+    .btn-notify {
+      width: 100%; background: var(--gold); color: #111; border: none;
+      padding: 0.78rem 1.5rem; font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; border-radius: 8px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-notify:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-notify:disabled { background: #3a3a3a; color: #666; cursor: not-allowed; transform: none; }
+
+    .notify-success {
+      display: none; text-align: center; padding: 1rem 0 0.5rem;
+    }
+    .notify-success .ns-icon {
+      width: 52px; height: 52px; border: 2.5px solid var(--gold);
+      border-radius: 50%; display: grid; place-items: center;
+      margin: 0 auto 1rem; font-size: 1.4rem;
+    }
+    .notify-success h4 {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem;
+      font-weight: 800; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .notify-success p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── REGISTRATION SCREENS ── */
+    #registrationScreen { display: none; flex-direction: column; flex: 1; }
+    #registrationScreen.active { display: flex; }
+
     .progress-wrap { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 2rem; }
     .progress-steps { display: flex; align-items: center; max-width: 640px; margin: 0 auto; }
     .step-dot { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
@@ -45,7 +212,6 @@
     main { flex: 1; display: flex; justify-content: center; padding: 2rem 1.5rem 3rem; }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.25rem; max-width: 620px; width: 100%; display: none; animation: fadeUp 0.3s ease; }
     .card.active { display: block; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     .card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gold); margin-bottom: 0.25rem; }
     .card .subtitle { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; }
 
@@ -59,21 +225,11 @@
     .week-card .wk-price { font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--gold); display: block; margin-top: 6px; }
     .week-card .check-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; background: var(--gold); border-radius: 50%; display: none; place-items: center; font-size: 0.65rem; color: #111; font-weight: 900; }
     .week-card.selected .check-badge { display: grid; }
-
-    /* Unavailable week styles */
-    .week-card.unavailable {
-      opacity: 0.45;
-      cursor: not-allowed;
-      pointer-events: none;
-      border-color: #333 !important;
-      background: var(--surface2) !important;
-    }
+    .week-card.unavailable { opacity: 0.45; cursor: not-allowed; pointer-events: none; border-color: #333 !important; background: var(--surface2) !important; }
     .week-card.unavailable .wk-price { color: var(--red); font-size: 0.8rem; }
     .week-card.unavailable .wk-sub { color: var(--red); }
-
-    /* Availability loading shimmer */
     .week-card.loading { animation: shimmer 1.2s infinite; }
-    @keyframes shimmer { 0%,100% { opacity: 0.5; } 50% { opacity: 0.8; } }
+    @keyframes shimmer { 0%,100%{opacity:0.5} 50%{opacity:0.8} }
 
     .bundle-banner { background: var(--green-dim); border: 1.5px solid var(--green); border-radius: 10px; padding: 0.85rem 1.1rem; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; animation: fadeUp 0.3s ease; }
     .bundle-banner .bb-icon { font-size: 1.3rem; flex-shrink: 0; }
@@ -99,8 +255,8 @@
 
     .field-group { margin-bottom: 0.9rem; }
     .field-group label { display: block; font-size: 0.69rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
-    .field-group input, .field-group select { width: 100%; background: var(--surface2); border: 1.5px solid #3a3a3a; color: var(--text); border-radius: 8px; padding: 0.6rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; transition: border-color 0.2s; appearance: none; }
-    .field-group input:focus, .field-group select:focus { outline: none; border-color: var(--gold); }
+    .field-group input { width: 100%; background: var(--surface2); border: 1.5px solid #3a3a3a; color: var(--text); border-radius: 8px; padding: 0.6rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; transition: border-color 0.2s; appearance: none; }
+    .field-group input:focus { outline: none; border-color: var(--gold); }
     .field-group input::placeholder { color: #555; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .three-col { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; }
@@ -161,6 +317,9 @@
       .week-grid { grid-template-columns: 1fr; }
       .btn-row { flex-wrap: wrap; }
       .btn-primary { order: -1; }
+      .countdown { gap: 0.75rem; }
+      .cd-num { font-size: 2rem; min-width: 56px; padding: 0.4rem 0.7rem; }
+      .notify-card { padding: 1.5rem 1.25rem; }
     }
   </style>
 </head>
@@ -176,461 +335,484 @@
   </div>
 </header>
 
-<div class="progress-wrap">
-  <div class="progress-steps">
-    <div class="step-dot active" data-step="0"><div class="dot">1</div><div class="label">Weeks</div></div>
-    <div class="step-line" data-line="0"></div>
-    <div class="step-dot" data-step="1"><div class="dot">2</div><div class="label">Time</div></div>
-    <div class="step-line" data-line="1"></div>
-    <div class="step-dot" data-step="2"><div class="dot">3</div><div class="label">Info</div></div>
-    <div class="step-line" data-line="2"></div>
-    <div class="step-dot" data-step="3"><div class="dot">4</div><div class="label">Payment</div></div>
-    <div class="step-line" data-line="3"></div>
-    <div class="step-dot" data-step="4"><div class="dot">5</div><div class="label">Review</div></div>
+<!-- ── COMING SOON SCREEN ── -->
+<div id="comingSoonScreen">
+  <div class="cs-glow"></div>
+  <div class="cs-badge"><span class="cs-badge-dot"></span> Coming Soon</div>
+  <div class="cs-title">Registration<span>Opens Soon</span></div>
+  <div class="cs-date" id="csDateLabel">May 1, 2026</div>
+  <p class="cs-desc">Camp registration isn't open just yet. Sign up below to be notified the moment it goes live — and optionally stay in the loop on events we're competing in and hosting.</p>
+
+  <div class="countdown" id="countdown">
+    <div class="cd-unit"><div class="cd-num" id="cdDays">--</div><div class="cd-label">Days</div></div>
+    <div class="cd-unit"><div class="cd-num" id="cdHours">--</div><div class="cd-label">Hours</div></div>
+    <div class="cd-unit"><div class="cd-num" id="cdMins">--</div><div class="cd-label">Mins</div></div>
+    <div class="cd-unit"><div class="cd-num" id="cdSecs">--</div><div class="cd-label">Secs</div></div>
+  </div>
+
+  <div class="notify-card">
+    <div id="notifyForm">
+      <h3>🔔 Notify Me</h3>
+      <p>Enter your info below and we'll reach out as soon as registration opens.</p>
+
+      <div class="notify-field">
+        <label>Your Name</label>
+        <input type="text" id="notifyName" placeholder="First Last">
+      </div>
+      <div class="notify-field">
+        <label>Email Address</label>
+        <input type="email" id="notifyEmail" placeholder="you@example.com">
+      </div>
+      <div class="notify-field">
+        <label>Phone Number <span style="color:#555;font-size:0.65rem;">(optional)</span></label>
+        <input type="tel" id="notifyPhone" placeholder="(555) 000-0000">
+      </div>
+
+      <div class="checkbox-group">
+        <label class="checkbox-item">
+          <input type="checkbox" id="notifyRegCheck" checked>
+          <span class="checkbox-box"></span>
+          <span class="checkbox-text"><strong>Registration reminder</strong> — notify me when camp registration opens</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" id="notifyEventsCheck">
+          <span class="checkbox-box"></span>
+          <span class="checkbox-text"><strong>Team events</strong> — keep me updated on competitions and events Team 4717 is hosting or attending</span>
+        </label>
+      </div>
+
+      <button class="btn-notify" id="notifySubmitBtn">Notify Me →</button>
+    </div>
+
+    <div class="notify-success" id="notifySuccess">
+      <div class="ns-icon">✓</div>
+      <h4>You're on the list!</h4>
+      <p id="notifySuccessMsg">We'll send you an email as soon as registration opens. See you at camp!</p>
+    </div>
   </div>
 </div>
 
-<main>
-
-  <!-- STEP 1: Week -->
-  <div class="card active" id="step1">
-    <h2>Choose Camp Weeks</h2>
-    <p class="subtitle">Pick one or more weeks — register for all 3 and save $30</p>
-
-    <div class="bundle-banner hidden" id="bundleBanner">
-      <div class="bb-icon">🎉</div>
-      <div class="bb-text">
-        <strong>Bundle Discount Applied!</strong>
-        <span>All 3 weeks selected — $150 instead of $180</span>
-      </div>
-    </div>
-
-    <div class="week-grid">
-      <div class="week-card" data-value="June 1-3">
-        <div class="check-badge">✓</div>
-        <span class="wk-label">June 1–3</span>
-        <span class="wk-sub">Week 1</span>
-        <span class="wk-price">$60</span>
-      </div>
-      <div class="week-card" data-value="June 8-10">
-        <div class="check-badge">✓</div>
-        <span class="wk-label">June 8–10</span>
-        <span class="wk-sub">Week 2</span>
-        <span class="wk-price">$60</span>
-      </div>
-      <div class="week-card" data-value="June 15-17">
-        <div class="check-badge">✓</div>
-        <span class="wk-label">June 15–17</span>
-        <span class="wk-sub">Week 3</span>
-        <span class="wk-price">$60</span>
-      </div>
-    </div>
-
-    <div class="price-row">
-      <div>
-        <div class="pr-label">Estimated cost for this camper</div>
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Select all 3 for the $150 bundle deal</div>
-      </div>
-      <div style="display:flex;align-items:baseline;gap:0.4rem;">
-        <span class="pr-original" id="originalPrice" style="display:none;"></span>
-        <span class="pr-total" id="displayPrice">$0</span>
-      </div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn-primary" id="next1" disabled>Continue →</button>
+<!-- ── REGISTRATION SCREEN ── -->
+<div id="registrationScreen">
+  <div class="progress-wrap">
+    <div class="progress-steps">
+      <div class="step-dot active" data-step="0"><div class="dot">1</div><div class="label">Weeks</div></div>
+      <div class="step-line" data-line="0"></div>
+      <div class="step-dot" data-step="1"><div class="dot">2</div><div class="label">Time</div></div>
+      <div class="step-line" data-line="1"></div>
+      <div class="step-dot" data-step="2"><div class="dot">3</div><div class="label">Info</div></div>
+      <div class="step-line" data-line="2"></div>
+      <div class="step-dot" data-step="3"><div class="dot">4</div><div class="label">Payment</div></div>
+      <div class="step-line" data-line="3"></div>
+      <div class="step-dot" data-step="4"><div class="dot">5</div><div class="label">Review</div></div>
     </div>
   </div>
 
-  <!-- STEP 2: Time -->
-  <div class="card" id="step2">
-    <h2>Select Time Slot</h2>
-    <p class="subtitle">Choose the session that fits your camper's grade level</p>
-    <div class="time-cards">
-      <div class="time-card" data-value="Morning 9am-12pm (4th–6th Grade)">
-        <input type="radio" name="time" value="Morning 9am-12pm (4th–6th Grade)">
-        <div class="radio-visual"></div>
-        <div class="time-info">
-          <div class="time-title">Morning · 9:00 AM – 12:00 PM</div>
-          <div class="time-grade">4th – 6th Grade</div>
+  <main>
+    <!-- STEP 1: Week -->
+    <div class="card active" id="step1">
+      <h2>Choose Camp Weeks</h2>
+      <p class="subtitle">Pick one or more weeks — register for all 3 and save $30</p>
+      <div class="bundle-banner hidden" id="bundleBanner">
+        <div class="bb-icon">🎉</div>
+        <div class="bb-text">
+          <strong>Bundle Discount Applied!</strong>
+          <span>All 3 weeks selected — $150 instead of $180</span>
         </div>
       </div>
-      <div class="time-card" data-value="Afternoon 1:30pm-4:30pm (7th–12th Grade)">
-        <input type="radio" name="time" value="Afternoon 1:30pm-4:30pm (7th–12th Grade)">
-        <div class="radio-visual"></div>
-        <div class="time-info">
-          <div class="time-title">Afternoon · 1:30 PM – 4:30 PM</div>
-          <div class="time-grade">7th – 12th Grade</div>
+      <div class="week-grid">
+        <div class="week-card" data-value="June 1-3">
+          <div class="check-badge">✓</div>
+          <span class="wk-label">June 1–3</span>
+          <span class="wk-sub">Week 1</span>
+          <span class="wk-price">$60</span>
+        </div>
+        <div class="week-card" data-value="June 8-10">
+          <div class="check-badge">✓</div>
+          <span class="wk-label">June 8–10</span>
+          <span class="wk-sub">Week 2</span>
+          <span class="wk-price">$60</span>
+        </div>
+        <div class="week-card" data-value="June 15-17">
+          <div class="check-badge">✓</div>
+          <span class="wk-label">June 15–17</span>
+          <span class="wk-sub">Week 3</span>
+          <span class="wk-price">$60</span>
         </div>
       </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn-back" id="back1">← Back</button>
-      <button class="btn-primary" id="next2" disabled>Continue →</button>
-    </div>
-  </div>
-
-  <!-- STEP 3: Info -->
-  <div class="card" id="step3">
-    <h2>Camper Info</h2>
-    <p class="subtitle">Tell us about your camper and how to reach you</p>
-
-    <div class="section-divider"><span>Student</span></div>
-    <div class="two-col">
-      <div class="field-group"><label>Student Name</label><input id="studentName" type="text" placeholder="First Last"></div>
-      <div class="field-group"><label>Age</label><input id="age" type="number" placeholder="e.g. 12"></div>
-    </div>
-    <div class="field-group">
-      <label>T-Shirt Size</label>
-      <div class="size-grid" id="shirtSizes">
-        <div class="size-btn" data-size="SM">SM</div>
-        <div class="size-btn" data-size="MD">MD</div>
-        <div class="size-btn" data-size="LG">LG</div>
-        <div class="size-btn" data-size="XL">XL</div>
-        <div class="size-btn" data-size="XXL">XXL</div>
-      </div>
-    </div>
-
-    <div class="section-divider"><span>Parent / Guardian</span></div>
-    <div class="two-col">
-      <div class="field-group"><label>Parent Name</label><input id="parentName" type="text" placeholder="First Last"></div>
-      <div class="field-group"><label>Phone Number</label><input id="phone" type="tel" placeholder="(555) 000-0000"></div>
-    </div>
-    <div class="field-group"><label>Email Address</label><input id="email" type="email" placeholder="you@example.com"></div>
-
-    <div class="section-divider"><span>Address</span></div>
-    <div class="field-group"><label>Street Address</label><input id="address" type="text" placeholder="123 Main St"></div>
-    <div class="three-col">
-      <div class="field-group"><label>City</label><input id="city" type="text" placeholder="City"></div>
-      <div class="field-group"><label>State</label><input id="state" type="text" placeholder="TX"></div>
-      <div class="field-group"><label>Zip</label><input id="zip" type="text" placeholder="00000"></div>
-    </div>
-
-    <div class="section-divider"><span>Medical / Notes</span></div>
-    <div class="field-group"><label>Allergies, Medical Conditions, or Other Notes</label><input id="notes" type="text" placeholder="None, or describe here…"></div>
-
-    <div class="btn-row">
-      <button class="btn-back" id="back2">← Back</button>
-      <button class="btn-primary" id="next3">Continue →</button>
-    </div>
-  </div>
-
-  <!-- STEP 4: Payment -->
-  <div class="card" id="step4">
-    <h2>Payment Method</h2>
-    <p class="subtitle">How would you like to pay for camp?</p>
-    <div class="payment-cards">
-      <div class="payment-card" data-value="cash or check">
-        <input type="radio" name="payment" value="cash or check">
-        <div class="radio-visual"></div>
-        <div class="payment-icon">💵</div>
+      <div class="price-row">
         <div>
-          <div class="payment-name">Cash or Check</div>
-          <div class="payment-desc">Bring payment on the first day of camp</div>
+          <div class="pr-label">Estimated cost for this camper</div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Select all 3 for the $150 bundle deal</div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:0.4rem;">
+          <span class="pr-original" id="originalPrice" style="display:none;"></span>
+          <span class="pr-total" id="displayPrice">$0</span>
         </div>
       </div>
-      <div class="payment-card" data-value="venmo">
-        <input type="radio" name="payment" value="venmo">
-        <div class="radio-visual"></div>
-        <div class="payment-icon">📱</div>
-        <div>
-          <div class="payment-name">Venmo</div>
-          <div class="payment-desc">Details will be emailed after registration</div>
-        </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="next1" disabled>Continue →</button>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn-back" id="back3">← Back</button>
-      <button class="btn-primary" id="next4" disabled>Add to Cart →</button>
-    </div>
-  </div>
 
-  <!-- STEP 5: Review -->
-  <div class="card" id="step5">
-    <h2>Review & Submit</h2>
-    <p class="subtitle" id="reviewSubtitle">Confirm all registrations before submitting</p>
-    <div class="cart-list" id="cartList"></div>
-    <div class="total-box" id="totalBox"></div>
-    <div class="btn-row" style="flex-wrap:wrap;gap:0.6rem;">
-      <button class="btn-back" id="back4">← Edit Last</button>
-      <button class="btn-ghost" id="addAnotherBtn">+ Add Camper</button>
-      <button class="btn-primary" id="submitBtn">Submit All →</button>
+    <!-- STEP 2: Time -->
+    <div class="card" id="step2">
+      <h2>Select Time Slot</h2>
+      <p class="subtitle">Choose the session that fits your camper's grade level</p>
+      <div class="time-cards">
+        <div class="time-card" data-value="Morning 9am-12pm (4th–6th Grade)">
+          <input type="radio" name="time" value="Morning 9am-12pm (4th–6th Grade)">
+          <div class="radio-visual"></div>
+          <div class="time-info">
+            <div class="time-title">Morning · 9:00 AM – 12:00 PM</div>
+            <div class="time-grade">4th – 6th Grade</div>
+          </div>
+        </div>
+        <div class="time-card" data-value="Afternoon 1:30pm-4:30pm (7th–12th Grade)">
+          <input type="radio" name="time" value="Afternoon 1:30pm-4:30pm (7th–12th Grade)">
+          <div class="radio-visual"></div>
+          <div class="time-info">
+            <div class="time-title">Afternoon · 1:30 PM – 4:30 PM</div>
+            <div class="time-grade">7th – 12th Grade</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-back" id="back1">← Back</button>
+        <button class="btn-primary" id="next2" disabled>Continue →</button>
+      </div>
     </div>
-  </div>
 
-  <!-- STEP 6: Done -->
-  <div class="card" id="step6">
-    <div class="success-wrap">
-      <div class="success-icon">✓</div>
-      <h2>You're Registered!</h2>
-      <div class="registration-cards" id="successCards"></div>
-      <p>Confirmation emails will be sent to each address provided.<br>We can't wait to see you at camp! 🤖</p>
+    <!-- STEP 3: Info -->
+    <div class="card" id="step3">
+      <h2>Camper Info</h2>
+      <p class="subtitle">Tell us about your camper and how to reach you</p>
+      <div class="section-divider"><span>Student</span></div>
+      <div class="two-col">
+        <div class="field-group"><label>Student Name</label><input id="studentName" type="text" placeholder="First Last"></div>
+        <div class="field-group"><label>Age</label><input id="age" type="number" placeholder="e.g. 12"></div>
+      </div>
+      <div class="field-group">
+        <label>T-Shirt Size</label>
+        <div class="size-grid" id="shirtSizes">
+          <div class="size-btn" data-size="SM">SM</div>
+          <div class="size-btn" data-size="MD">MD</div>
+          <div class="size-btn" data-size="LG">LG</div>
+          <div class="size-btn" data-size="XL">XL</div>
+          <div class="size-btn" data-size="XXL">XXL</div>
+        </div>
+      </div>
+      <div class="section-divider"><span>Parent / Guardian</span></div>
+      <div class="two-col">
+        <div class="field-group"><label>Parent Name</label><input id="parentName" type="text" placeholder="First Last"></div>
+        <div class="field-group"><label>Phone Number</label><input id="phone" type="tel" placeholder="(555) 000-0000"></div>
+      </div>
+      <div class="field-group"><label>Email Address</label><input id="email" type="email" placeholder="you@example.com"></div>
+      <div class="section-divider"><span>Address</span></div>
+      <div class="field-group"><label>Street Address</label><input id="address" type="text" placeholder="123 Main St"></div>
+      <div class="three-col">
+        <div class="field-group"><label>City</label><input id="city" type="text" placeholder="City"></div>
+        <div class="field-group"><label>State</label><input id="state" type="text" placeholder="TX"></div>
+        <div class="field-group"><label>Zip</label><input id="zip" type="text" placeholder="00000"></div>
+      </div>
+      <div class="section-divider"><span>Medical / Notes</span></div>
+      <div class="field-group"><label>Allergies, Medical Conditions, or Other Notes</label><input id="notes" type="text" placeholder="None, or describe here…"></div>
+      <div class="btn-row">
+        <button class="btn-back" id="back2">← Back</button>
+        <button class="btn-primary" id="next3">Continue →</button>
+      </div>
     </div>
-  </div>
 
-</main>
+    <!-- STEP 4: Payment -->
+    <div class="card" id="step4">
+      <h2>Payment Method</h2>
+      <p class="subtitle">How would you like to pay for camp?</p>
+      <div class="payment-cards">
+        <div class="payment-card" data-value="cash or check">
+          <input type="radio" name="payment" value="cash or check">
+          <div class="radio-visual"></div>
+          <div class="payment-icon">💵</div>
+          <div><div class="payment-name">Cash or Check</div><div class="payment-desc">Bring payment on the first day of camp</div></div>
+        </div>
+        <div class="payment-card" data-value="venmo">
+          <input type="radio" name="payment" value="venmo">
+          <div class="radio-visual"></div>
+          <div class="payment-icon">📱</div>
+          <div><div class="payment-name">Venmo</div><div class="payment-desc">Details will be emailed after registration</div></div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-back" id="back3">← Back</button>
+        <button class="btn-primary" id="next4" disabled>Add to Cart →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Review -->
+    <div class="card" id="step5">
+      <h2>Review & Submit</h2>
+      <p class="subtitle" id="reviewSubtitle">Confirm all registrations before submitting</p>
+      <div class="cart-list" id="cartList"></div>
+      <div class="total-box" id="totalBox"></div>
+      <div class="btn-row" style="flex-wrap:wrap;gap:0.6rem;">
+        <button class="btn-back" id="back4">← Edit Last</button>
+        <button class="btn-ghost" id="addAnotherBtn">+ Add Camper</button>
+        <button class="btn-primary" id="submitBtn">Submit All →</button>
+      </div>
+    </div>
+
+    <!-- STEP 6: Done -->
+    <div class="card" id="step6">
+      <div class="success-wrap">
+        <div class="success-icon">✓</div>
+        <h2>You're Registered!</h2>
+        <div class="registration-cards" id="successCards"></div>
+        <p>Confirmation emails will be sent to each address provided.<br>We can't wait to see you at camp! 🤖</p>
+      </div>
+    </div>
+  </main>
+</div>
 
 <script>
-  // ── SHEET URL — defined at the top so all functions can use it ──
-  const SHEET_URL = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
+  // ─────────────────────────────────────────────────────────────
+  // ⬇ CHANGE THIS DATE to control when registration opens
+  // Format: "Month Day, Year"  e.g.  "May 1, 2026"
+  const REGISTRATION_OPEN_DATE = "May 1, 2026";
+  // ─────────────────────────────────────────────────────────────
 
+  const SHEET_URL      = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
   const PRICE_PER_WEEK = 60;
-  const BUNDLE_PRICE = 150;
+  const BUNDLE_PRICE   = 150;
 
-  let registrations = [];
-  let currentCamper = {};
-  let selectedWeeks = [];
-  let selectedShirt = null;
-  let selectedTime = null;
-  let selectedPayment = null;
+  // ── Decide which screen to show ──
+  const openDate = new Date(REGISTRATION_OPEN_DATE);
+  const now      = new Date();
+  const isOpen   = now >= openDate;
 
-  // ── Check week availability from Apps Script ──
-  async function checkWeekAvailability() {
-    // Show loading shimmer
-    document.querySelectorAll(".week-card").forEach(c => c.classList.add("loading"));
+  document.getElementById("csDateLabel").textContent = REGISTRATION_OPEN_DATE;
+
+  if (isOpen) {
+    document.getElementById("registrationScreen").classList.add("active");
+    checkWeekAvailability();
+  } else {
+    document.getElementById("comingSoonScreen").classList.add("active");
+    startCountdown(openDate);
+  }
+
+  // ── Countdown timer ──
+  function startCountdown(target) {
+    function tick() {
+      const diff = target - new Date();
+      if (diff <= 0) {
+        // Time's up — swap to registration
+        document.getElementById("comingSoonScreen").classList.remove("active");
+        document.getElementById("registrationScreen").classList.add("active");
+        checkWeekAvailability();
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000)  / 60000);
+      const s = Math.floor((diff % 60000)    / 1000);
+      document.getElementById("cdDays").textContent  = String(d).padStart(2,"0");
+      document.getElementById("cdHours").textContent = String(h).padStart(2,"0");
+      document.getElementById("cdMins").textContent  = String(m).padStart(2,"0");
+      document.getElementById("cdSecs").textContent  = String(s).padStart(2,"0");
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  // ── Notify Me form ──
+  document.getElementById("notifySubmitBtn").addEventListener("click", async () => {
+    const name   = document.getElementById("notifyName").value.trim();
+    const email  = document.getElementById("notifyEmail").value.trim();
+    const phone  = document.getElementById("notifyPhone").value.trim();
+    const wantsReg    = document.getElementById("notifyRegCheck").checked;
+    const wantsEvents = document.getElementById("notifyEventsCheck").checked;
+
+    if (!name) { highlight("notifyName"); return; }
+    if (!email || !email.includes("@")) { highlight("notifyEmail"); return; }
+    if (!wantsReg && !wantsEvents) {
+      alert("Please check at least one notification option.");
+      return;
+    }
+
+    const btn = document.getElementById("notifySubmitBtn");
+    btn.disabled = true;
+    btn.textContent = "Submitting…";
 
     try {
-      const res = await fetch(`${SHEET_URL}?action=getWeekStatus`);
-      const status = await res.json();
+      const fd = new FormData();
+      fd.append("action",      "addNotifySignup");
+      fd.append("name",        name);
+      fd.append("email",       email);
+      fd.append("phone",       phone);
+      fd.append("wantsReg",    wantsReg    ? "Yes" : "No");
+      fd.append("wantsEvents", wantsEvents ? "Yes" : "No");
+      await fetch(SHEET_URL, { method: "POST", body: fd });
+    } catch(e) {
+      console.warn("Notify submit error:", e);
+    }
 
+    // Show success regardless (avoid blocking user on network error)
+    document.getElementById("notifyForm").style.display = "none";
+    document.getElementById("notifySuccess").style.display = "block";
+
+    let msg = "We'll send you an email as soon as registration opens.";
+    if (wantsEvents) msg += " You'll also get updates on Team 4717 events.";
+    msg += " See you at camp! 🤖";
+    document.getElementById("notifySuccessMsg").textContent = msg;
+  });
+
+  function highlight(id) {
+    const el = document.getElementById(id);
+    el.style.borderColor = "var(--gold)";
+    el.focus();
+    setTimeout(() => el.style.borderColor = "", 1500);
+  }
+
+  // ── Checkbox visual clicks ──
+  document.querySelectorAll(".checkbox-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const cb = item.querySelector("input[type='checkbox']");
+      cb.checked = !cb.checked;
+    });
+  });
+
+  // ─────────────────────────────────────────────
+  // REGISTRATION FORM LOGIC (unchanged)
+  // ─────────────────────────────────────────────
+  let registrations = [], currentCamper = {}, selectedWeeks = [],
+      selectedShirt = null, selectedTime = null, selectedPayment = null;
+
+  async function checkWeekAvailability() {
+    document.querySelectorAll(".week-card").forEach(c => c.classList.add("loading"));
+    try {
+      const res    = await fetch(`${SHEET_URL}?action=getWeekStatus`);
+      const status = await res.json();
       document.querySelectorAll(".week-card").forEach(card => {
         card.classList.remove("loading");
         const week = card.dataset.value;
-        const s = status[week];
+        const s    = status[week];
         if (!s) return;
-
         if (!s.open || s.isFull) {
-          // Mark unavailable — remove any previous selection too
           card.classList.add("unavailable");
           card.classList.remove("selected");
-          const sub   = card.querySelector(".wk-sub");
-          const price = card.querySelector(".wk-price");
+          const sub = card.querySelector(".wk-sub"), price = card.querySelector(".wk-price");
           if (sub)   sub.textContent   = s.isFull ? "FULL" : "CLOSED";
           if (price) price.textContent = s.isFull ? "Full" : "Closed";
-
-          // If this week was already selected, deselect it
           selectedWeeks = selectedWeeks.filter(w => w !== week);
         } else {
-          // Make sure previously-closed weeks become available again if re-opened
           card.classList.remove("unavailable");
-          const sub   = card.querySelector(".wk-sub");
-          const price = card.querySelector(".wk-price");
+          const sub = card.querySelector(".wk-sub"), price = card.querySelector(".wk-price");
           const wkNum = ["June 1-3","June 8-10","June 15-17"].indexOf(week) + 1;
           if (sub)   sub.textContent   = `Week ${wkNum}`;
           if (price) price.textContent = "$60";
         }
       });
-
-      // Recalculate price in case a selected week just became unavailable
       updatePriceDisplay();
       document.getElementById("next1").disabled = selectedWeeks.length === 0;
-
     } catch(e) {
-      // If the check fails, just remove shimmer and let all weeks stay clickable
       document.querySelectorAll(".week-card").forEach(c => c.classList.remove("loading"));
-      console.warn("Could not check week availability:", e);
     }
   }
 
-  // ── Week multi-select (skips unavailable cards) ──
   document.querySelectorAll(".week-card").forEach(card => {
     card.addEventListener("click", () => {
       if (card.classList.contains("unavailable")) return;
       const val = card.dataset.value;
-      if (selectedWeeks.includes(val)) {
-        selectedWeeks = selectedWeeks.filter(w => w !== val);
-        card.classList.remove("selected");
-      } else {
-        selectedWeeks.push(val);
-        card.classList.add("selected");
-      }
+      if (selectedWeeks.includes(val)) { selectedWeeks = selectedWeeks.filter(w => w !== val); card.classList.remove("selected"); }
+      else { selectedWeeks.push(val); card.classList.add("selected"); }
       updatePriceDisplay();
       document.getElementById("next1").disabled = selectedWeeks.length === 0;
     });
   });
 
-  function calcPrice(count) {
-    return count === 3 ? BUNDLE_PRICE : count * PRICE_PER_WEEK;
-  }
+  function calcPrice(count) { return count === 3 ? BUNDLE_PRICE : count * PRICE_PER_WEEK; }
 
   function updatePriceDisplay() {
-    const count  = selectedWeeks.length;
-    const price  = calcPrice(count);
-    const bundle = count === 3;
+    const count = selectedWeeks.length, price = calcPrice(count), bundle = count === 3;
     document.getElementById("bundleBanner").classList.toggle("hidden", !bundle);
     document.getElementById("displayPrice").textContent = count ? `$${price}` : "$0";
     const orig = document.getElementById("originalPrice");
-    if (bundle) {
-      orig.style.display = "inline";
-      orig.textContent = `$${count * PRICE_PER_WEEK}`;
-    } else {
-      orig.style.display = "none";
-    }
+    if (bundle) { orig.style.display = "inline"; orig.textContent = `$${count * PRICE_PER_WEEK}`; }
+    else orig.style.display = "none";
   }
 
-  // ── Time ──
   document.querySelectorAll(".time-card").forEach(card => {
     card.addEventListener("click", () => {
       document.querySelectorAll(".time-card").forEach(c => c.classList.remove("selected"));
-      card.classList.add("selected");
-      selectedTime = card.dataset.value;
+      card.classList.add("selected"); selectedTime = card.dataset.value;
       document.getElementById("next2").disabled = false;
     });
   });
 
-  // ── Shirt size ──
   document.querySelectorAll(".size-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      selectedShirt = btn.dataset.size;
+      btn.classList.add("selected"); selectedShirt = btn.dataset.size;
     });
   });
 
-  // ── Payment ──
   document.querySelectorAll(".payment-card").forEach(card => {
     card.addEventListener("click", () => {
       document.querySelectorAll(".payment-card").forEach(c => c.classList.remove("selected"));
-      card.classList.add("selected");
-      selectedPayment = card.dataset.value;
+      card.classList.add("selected"); selectedPayment = card.dataset.value;
       document.getElementById("next4").disabled = false;
     });
   });
 
-  // ── Navigation ──
   document.getElementById("next1").addEventListener("click", () => {
-    currentCamper.weeks  = [...selectedWeeks];
-    currentCamper.price  = calcPrice(selectedWeeks.length);
-    currentCamper.bundle = selectedWeeks.length === 3;
-    showStep(1);
+    currentCamper.weeks = [...selectedWeeks]; currentCamper.price = calcPrice(selectedWeeks.length); currentCamper.bundle = selectedWeeks.length === 3; showStep(1);
   });
-
   document.getElementById("back1").addEventListener("click", () => showStep(0));
-
-  document.getElementById("next2").addEventListener("click", () => {
-    currentCamper.time = selectedTime;
-    showStep(2);
-  });
-
+  document.getElementById("next2").addEventListener("click", () => { currentCamper.time = selectedTime; showStep(2); });
   document.getElementById("back2").addEventListener("click", () => showStep(1));
-
   document.getElementById("next3").addEventListener("click", () => {
     const fields = ["studentName","age","parentName","phone","email","address","city","state","zip","notes"];
     for (let f of fields) {
       const el = document.getElementById(f);
-      if (!el.value.trim()) {
-        el.style.borderColor = "var(--gold)";
-        el.focus();
-        setTimeout(() => el.style.borderColor = "", 1500);
-        return;
-      }
+      if (!el.value.trim()) { el.style.borderColor = "var(--gold)"; el.focus(); setTimeout(() => el.style.borderColor = "", 1500); return; }
       currentCamper[f] = el.value.trim();
     }
-    currentCamper.shirtSize = selectedShirt || "Not selected";
-    showStep(3);
+    currentCamper.shirtSize = selectedShirt || "Not selected"; showStep(3);
   });
-
   document.getElementById("back3").addEventListener("click", () => showStep(2));
+  document.getElementById("next4").addEventListener("click", () => { currentCamper.payment = selectedPayment; registrations.push({...currentCamper}); renderCart(); showStep(4); });
+  document.getElementById("back4").addEventListener("click", () => { const last = registrations.pop(); currentCamper = {...last}; showStep(3); });
+  document.getElementById("addAnotherBtn").addEventListener("click", () => { resetCamperForm(); showStep(0); });
+  document.getElementById("submitBtn").addEventListener("click", () => { sendAllForms(); renderSuccessCards(); showStep(5); });
 
-  document.getElementById("next4").addEventListener("click", () => {
-    currentCamper.payment = selectedPayment;
-    registrations.push({ ...currentCamper });
-    renderCart();
-    showStep(4);
-  });
-
-  document.getElementById("back4").addEventListener("click", () => {
-    const last = registrations.pop();
-    currentCamper = { ...last };
-    showStep(3);
-  });
-
-  document.getElementById("addAnotherBtn").addEventListener("click", () => {
-    resetCamperForm();
-    showStep(0); // showStep(0) will trigger checkWeekAvailability via the step handler below
-  });
-
-  document.getElementById("submitBtn").addEventListener("click", () => {
-    sendAllForms();
-    renderSuccessCards();
-    showStep(5);
-  });
-
-  // ── Render cart ──
   function renderCart() {
     const list = document.getElementById("cartList");
     list.innerHTML = "";
     let grandTotal = 0, grandOriginal = 0;
-
     registrations.forEach((r, i) => {
-      grandTotal    += r.price;
-      grandOriginal += r.weeks.length * PRICE_PER_WEEK;
-      const item = document.createElement("div");
-      item.className = "cart-item";
-      item.innerHTML = `
-        <div class="cart-item-info">
-          <div class="ci-name">${escHtml(r.studentName)}</div>
-          <div class="ci-detail">
-            ${r.weeks.map(w => escHtml(w)).join(", ")}<br>
-            ${escHtml(r.time.split(" (")[0])} · Shirt: ${escHtml(r.shirtSize)}<br>
-            Payment: ${escHtml(r.payment)}
-          </div>
-        </div>
-        <div class="cart-item-right">
-          <div class="cart-item-price">$${r.price}${r.bundle ? '&nbsp;<span style="font-size:0.6rem;color:var(--green);vertical-align:middle;">BUNDLE</span>' : ''}</div>
-          <button class="remove-btn" data-index="${i}">✕ Remove</button>
-        </div>
-      `;
+      grandTotal += r.price; grandOriginal += r.weeks.length * PRICE_PER_WEEK;
+      const item = document.createElement("div"); item.className = "cart-item";
+      item.innerHTML = `<div class="cart-item-info"><div class="ci-name">${escHtml(r.studentName)}</div><div class="ci-detail">${r.weeks.map(w=>escHtml(w)).join(", ")}<br>${escHtml(r.time.split(" (")[0])} · Shirt: ${escHtml(r.shirtSize)}<br>Payment: ${escHtml(r.payment)}</div></div><div class="cart-item-right"><div class="cart-item-price">$${r.price}${r.bundle?'&nbsp;<span style="font-size:0.6rem;color:var(--green);">BUNDLE</span>':''}</div><button class="remove-btn" data-index="${i}">✕ Remove</button></div>`;
       list.appendChild(item);
     });
-
     list.querySelectorAll(".remove-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        registrations.splice(parseInt(btn.dataset.index), 1);
-        if (registrations.length === 0) { resetCamperForm(); showStep(0); return; }
-        renderCart();
-      });
+      btn.addEventListener("click", () => { registrations.splice(parseInt(btn.dataset.index),1); if(!registrations.length){resetCamperForm();showStep(0);return;} renderCart(); });
     });
-
     const savings = grandOriginal - grandTotal;
-    const totalBox = document.getElementById("totalBox");
     let html = "";
-    if (registrations.length > 1) {
-      html += `<div class="total-line"><span>${registrations.length} campers${grandOriginal !== grandTotal ? ` · <span style="text-decoration:line-through;opacity:0.5;">$${grandOriginal}</span>` : ''}</span><span></span></div>`;
-    }
-    if (savings > 0) {
-      html += `<div class="total-line"><span class="savings-text">🎉 Bundle savings</span><span class="savings-text">−$${savings}</span></div>`;
-    }
+    if (registrations.length > 1) html += `<div class="total-line"><span>${registrations.length} campers</span><span></span></div>`;
+    if (savings > 0) html += `<div class="total-line"><span class="savings-text">🎉 Bundle savings</span><span class="savings-text">−$${savings}</span></div>`;
     html += `<div class="total-line grand"><span>Total Due</span><span>$${grandTotal}</span></div>`;
-    totalBox.innerHTML = html;
-
-    document.getElementById("reviewSubtitle").textContent =
-      registrations.length === 1
-        ? "Confirm the registration below or add another camper"
-        : `${registrations.length} campers registered — confirm or add more`;
-
+    document.getElementById("totalBox").innerHTML = html;
+    document.getElementById("reviewSubtitle").textContent = registrations.length === 1 ? "Confirm the registration below or add another camper" : `${registrations.length} campers registered — confirm or add more`;
     document.getElementById("submitBtn").disabled = registrations.length === 0;
   }
 
   function renderSuccessCards() {
-    const wrap = document.getElementById("successCards");
-    wrap.innerHTML = "";
-    registrations.forEach(r => {
-      const chip = document.createElement("div");
-      chip.className = "reg-chip";
-      chip.innerHTML = `<span>${escHtml(r.studentName)}</span> ${r.weeks.join(", ")} · $${r.price}`;
-      wrap.appendChild(chip);
-    });
+    const wrap = document.getElementById("successCards"); wrap.innerHTML = "";
+    registrations.forEach(r => { const chip = document.createElement("div"); chip.className = "reg-chip"; chip.innerHTML = `<span>${escHtml(r.studentName)}</span> ${r.weeks.join(", ")} · $${r.price}`; wrap.appendChild(chip); });
   }
 
-  // ── Reset for next camper ──
   function resetCamperForm() {
-    currentCamper  = {};
-    selectedWeeks  = [];
-    selectedTime   = null;
-    selectedShirt  = null;
-    selectedPayment = null;
-
+    currentCamper = {}; selectedWeeks = []; selectedTime = null; selectedShirt = null; selectedPayment = null;
     document.querySelectorAll(".week-card").forEach(c => c.classList.remove("selected"));
     document.querySelectorAll(".time-card").forEach(c => c.classList.remove("selected"));
     document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
@@ -641,59 +823,31 @@
     document.getElementById("next1").disabled = true;
     document.getElementById("next2").disabled = true;
     document.getElementById("next4").disabled = true;
-    ["studentName","age","parentName","phone","email","address","city","state","zip","notes"]
-      .forEach(id => { document.getElementById(id).value = ""; });
+    ["studentName","age","parentName","phone","email","address","city","state","zip","notes"].forEach(id => { document.getElementById(id).value = ""; });
   }
 
-  // ── Show step — re-checks availability every time step 1 is shown ──
   function showStep(index) {
-    document.querySelectorAll(".card").forEach((card, i) =>
-      card.classList.toggle("active", i === index)
-    );
-    document.querySelectorAll(".step-dot").forEach((dot, i) => {
-      dot.classList.remove("active", "done");
-      if (i === index) dot.classList.add("active");
-      else if (i < index) dot.classList.add("done");
-    });
-    document.querySelectorAll(".step-line").forEach((line, i) => {
-      line.classList.toggle("done", i < index);
-    });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
-    // Re-fetch availability every time the week selection screen is shown
+    document.querySelectorAll(".card").forEach((card, i) => card.classList.toggle("active", i === index));
+    document.querySelectorAll(".step-dot").forEach((dot, i) => { dot.classList.remove("active","done"); if(i===index)dot.classList.add("active"); else if(i<index)dot.classList.add("done"); });
+    document.querySelectorAll(".step-line").forEach((line, i) => line.classList.toggle("done", i < index));
+    window.scrollTo({top:0,behavior:"smooth"});
     if (index === 0) checkWeekAvailability();
   }
 
-  // ── Submit all ──
   function sendAllForms() {
     registrations.forEach(r => {
       const data = new FormData();
-      data.append("week",       r.weeks.join(", "));
-      data.append("bundleDeal", r.bundle ? "Yes — $150 bundle" : "No");
-      data.append("price",      `$${r.price}`);
-      data.append("time",       r.time);
-      data.append("studentName",r.studentName);
-      data.append("age",        r.age);
-      data.append("shirtSize",  r.shirtSize);
-      data.append("parentName", r.parentName);
-      data.append("phone",      r.phone);
-      data.append("email",      r.email);
-      data.append("address",    r.address);
-      data.append("city",       r.city);
-      data.append("state",      r.state);
-      data.append("zip",        r.zip);
-      data.append("notes",      r.notes);
-      data.append("payment",    r.payment);
-      fetch(SHEET_URL, { method: "POST", body: data });
+      data.append("week",r.weeks.join(", ")); data.append("bundleDeal",r.bundle?"Yes — $150 bundle":"No");
+      data.append("price",`$${r.price}`); data.append("time",r.time); data.append("studentName",r.studentName);
+      data.append("age",r.age); data.append("shirtSize",r.shirtSize); data.append("parentName",r.parentName);
+      data.append("phone",r.phone); data.append("email",r.email); data.append("address",r.address);
+      data.append("city",r.city); data.append("state",r.state); data.append("zip",r.zip);
+      data.append("notes",r.notes); data.append("payment",r.payment);
+      fetch(SHEET_URL, { method:"POST", body:data });
     });
   }
 
-  function escHtml(str) {
-    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-  }
-
-  // ── Run on page load ──
-  checkWeekAvailability();
+  function escHtml(str) { return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 </script>
 </body>
 </html>
