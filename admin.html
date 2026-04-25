@@ -17,7 +17,6 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
-    /* Auth screen */
     #authScreen {
       min-height: 100vh; display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 1.5rem; padding: 2rem;
@@ -38,7 +37,6 @@
     .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
     .auth-error { background: var(--red-dim); border: 1px solid var(--red); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--red); margin-top: 1rem; display: none; }
 
-    /* Main app */
     #appScreen { display: none; }
 
     header {
@@ -57,7 +55,6 @@
     .signout-btn { font-size: 0.72rem; color: var(--muted); background: none; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.07em; transition: color 0.2s; }
     .signout-btn:hover { color: var(--red); }
 
-    /* Last synced bar */
     .sync-bar {
       background: var(--surface2); border-bottom: 1px solid #222;
       padding: 0.5rem 2rem; display: flex; align-items: center; justify-content: space-between;
@@ -70,18 +67,15 @@
 
     main { padding: 2rem; max-width: 960px; margin: 0 auto; }
 
-    /* Stats row */
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 2rem; }
     .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; }
     .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem; }
     .stat-value { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: var(--gold); line-height: 1; }
     .stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
 
-    /* Section header */
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
     .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text); }
 
-    /* Week control cards */
     .weeks-grid { display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2.5rem; }
 
     .week-control {
@@ -116,7 +110,6 @@
 
     .wc-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem; }
 
-    /* Limit input */
     .limit-row { display: flex; align-items: center; gap: 0.5rem; }
     .limit-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
     .limit-input {
@@ -129,7 +122,6 @@
     .limit-save { background: var(--gold); color: #111; border: none; border-radius: 6px; padding: 0.4rem 0.75rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
     .limit-save:hover { background: var(--gold-light); }
 
-    /* Toggle switch */
     .toggle-row { display: flex; align-items: center; gap: 0.6rem; }
     .toggle-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
     .toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
@@ -147,7 +139,6 @@
     .toggle input:checked + .toggle-track::after { transform: translateX(18px); }
     .toggle input:disabled + .toggle-track { opacity: 0.4; cursor: not-allowed; }
 
-    /* Recent signups table */
     .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
     thead { background: var(--surface2); }
@@ -162,7 +153,6 @@
     .td-pay { font-size: 0.72rem; }
     .empty-row td { text-align: center; color: var(--muted); padding: 2.5rem; font-size: 0.85rem; }
 
-    /* Toast */
     #toast {
       position: fixed; bottom: 1.5rem; right: 1.5rem;
       background: var(--surface); border: 1px solid var(--border);
@@ -176,12 +166,6 @@
     #toast.show { transform: translateY(0); opacity: 1; }
     #toast.success { border-color: var(--green); }
     #toast.error { border-color: var(--red); }
-
-    .loading-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-      display: grid; place-items: center; z-index: 50;
-    }
-    .spinner { width: 36px; height: 36px; border: 3px solid #333; border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
 
     @media (max-width: 700px) {
       main { padding: 1.25rem 1rem; }
@@ -247,7 +231,6 @@
   </div>
 
   <main>
-    <!-- Stats -->
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-label">Total Signups</div>
@@ -269,17 +252,18 @@
         <div class="stat-value" id="statRevenue">—</div>
         <div class="stat-sub">total registered</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-label">Notify List</div>
+        <div class="stat-value" id="statNotify">—</div>
+        <div class="stat-sub">waiting for registration</div>
+      </div>
     </div>
 
-    <!-- Week controls -->
     <div class="section-header">
       <div class="section-title">Week Controls</div>
     </div>
-    <div class="weeks-grid" id="weeksGrid">
-      <!-- populated by JS -->
-    </div>
+    <div class="weeks-grid" id="weeksGrid"></div>
 
-    <!-- Recent signups -->
     <div class="section-header" style="margin-top:0.5rem;">
       <div class="section-title">Recent Signups</div>
     </div>
@@ -287,13 +271,8 @@
       <table>
         <thead>
           <tr>
-            <th>Student</th>
-            <th>Parent</th>
-            <th>Week(s)</th>
-            <th>Time</th>
-            <th>Shirt</th>
-            <th>Price</th>
-            <th>Payment</th>
+            <th>Student</th><th>Parent</th><th>Week(s)</th>
+            <th>Time</th><th>Shirt</th><th>Price</th><th>Payment</th>
           </tr>
         </thead>
         <tbody id="signupsTable">
@@ -308,17 +287,16 @@
 
 <script>
   // ─────────────────────────────────────────────
-  // CONFIGURATION — update these two values
+  // CONFIGURATION
   // ─────────────────────────────────────────────
-  const SHEET_URL   = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
-  const ALLOWED_EMAIL = "lhsrobo@gmail.com"; // ← Replace with your Google account email
-  const GOOGLE_CLIENT_ID = "957529469568-cel81nirpkbgjsgr3n61oq9muv7eqe0a.apps.googleusercontent.com"; // ← Replace with your OAuth Client ID (see setup guide)
-
+  const SHEET_URL      = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
+  const ALLOWED_EMAIL  = "lhsrobo@gmail.com";
+  const GOOGLE_CLIENT_ID = "957529469568-cel81nirpkbgjsgr3n61oq9muv7eqe0a.apps.googleusercontent.com";
   // ─────────────────────────────────────────────
 
   const WEEKS = ["June 1-3", "June 8-10", "June 15-17"];
-  let weekData = {}; // { "June 1-3": { count:0, limit:20, open:true } }
-  let signups = [];
+  let weekData = {};
+  let signups  = [];
   let googleUser = null;
 
   // ── Google Sign-In ──
@@ -336,9 +314,9 @@
 
   function handleCredential(response) {
     const payload = parseJwt(response.credential);
-    if (payload.email !== ALLOWED_EMAIL) {
+    if (payload.email.toLowerCase() !== ALLOWED_EMAIL.toLowerCase()) {
       const err = document.getElementById("authError");
-      err.textContent = `Access denied. This panel is restricted to the account owner. (Signed in as: ${payload.email})`;
+      err.textContent = `Access denied. Signed in as: ${payload.email}`;
       err.style.display = "block";
       return;
     }
@@ -363,20 +341,19 @@
     document.getElementById("authScreen").style.display = "flex";
   });
 
-  // ── Load data from Apps Script ──
+  // ── Load data ──
   async function loadData() {
     document.getElementById("refreshBtn").classList.add("spinning");
     document.getElementById("lastSynced").textContent = "Syncing…";
     try {
-      const res = await fetch(`${SHEET_URL}?action=getAdminData`);
+      const res  = await fetch(`${SHEET_URL}?action=getAdminData`);
       const data = await res.json();
       weekData = data.weekData || {};
       signups  = data.signups  || [];
       renderWeeks();
-      renderStats();
+      renderStats(data);
       renderTable();
-      const now = new Date();
-      document.getElementById("lastSynced").textContent = `Last synced: ${now.toLocaleTimeString()}`;
+      document.getElementById("lastSynced").textContent = `Last synced: ${new Date().toLocaleTimeString()}`;
     } catch(e) {
       showToast("❌ Could not load data. Check your Apps Script URL.", "error");
       document.getElementById("lastSynced").textContent = "Sync failed";
@@ -393,10 +370,10 @@
 
     WEEKS.forEach((week, i) => {
       const d = weekData[week] || { count: 0, limit: 0, open: true };
-      const isFull = d.limit > 0 && d.count >= d.limit;
-      const isOpen = d.open && !isFull;
-      const pct = d.limit > 0 ? Math.min(100, (d.count / d.limit) * 100) : 0;
-      const fillClass = pct >= 100 ? "full" : pct >= 75 ? "warn" : "";
+      const isFull     = d.limit > 0 && d.count >= d.limit;
+      const isOpen     = d.open && !isFull;
+      const pct        = d.limit > 0 ? Math.min(100, (d.count / d.limit) * 100) : 0;
+      const fillClass  = pct >= 100 ? "full" : pct >= 75 ? "warn" : "";
       const stateClass = isFull ? "is-full" : isOpen ? "is-open" : "is-closed";
       const badgeClass = isFull ? "badge-full" : isOpen ? "badge-open" : "badge-closed";
       const badgeText  = isFull ? "Full" : isOpen ? "Open" : "Closed";
@@ -419,13 +396,17 @@
         <div class="wc-right">
           <div class="limit-row">
             <span class="limit-label">Limit</span>
-            <input class="limit-input" type="number" min="0" max="999" value="${d.limit || ''}" placeholder="∞" data-week="${week}">
+            <input class="limit-input" type="number" min="0" max="999"
+              value="${d.limit || ''}" placeholder="∞" data-week="${week}">
             <button class="limit-save" data-week="${week}">Save</button>
           </div>
           <div class="toggle-row">
             <span class="toggle-label">Open</span>
             <label class="toggle">
-              <input type="checkbox" ${isOpen || (!isFull && d.open) ? 'checked' : ''} ${isFull ? 'disabled' : ''} data-week="${week}" class="open-toggle">
+              <input type="checkbox"
+                ${d.open && !isFull ? 'checked' : ''}
+                ${isFull ? 'disabled' : ''}
+                data-week="${week}" class="open-toggle">
               <span class="toggle-track"></span>
             </label>
           </div>
@@ -434,47 +415,41 @@
       grid.appendChild(card);
     });
 
-    // Limit save buttons
     grid.querySelectorAll(".limit-save").forEach(btn => {
       btn.addEventListener("click", async () => {
-        const week = btn.dataset.week;
+        const week  = btn.dataset.week;
         const input = grid.querySelector(`.limit-input[data-week="${week}"]`);
         const limit = parseInt(input.value) || 0;
         await updateWeekSetting(week, { limit });
       });
     });
 
-    // Open/close toggles
     grid.querySelectorAll(".open-toggle").forEach(toggle => {
       toggle.addEventListener("change", async () => {
-        const week = toggle.dataset.week;
-        await updateWeekSetting(week, { open: toggle.checked });
+        await updateWeekSetting(toggle.dataset.week, { open: toggle.checked });
       });
     });
   }
 
   // ── Stats ──
-  function renderStats() {
+  function renderStats(data = {}) {
     let total = 0, openCount = 0, remaining = 0, revenue = 0;
     WEEKS.forEach(w => {
-      const d = weekData[w] || { count:0, limit:0, open:true };
-      total += d.count;
+      const d      = weekData[w] || { count:0, limit:0, open:true };
+      total       += d.count;
       const isFull = d.limit > 0 && d.count >= d.limit;
       const isOpen = d.open && !isFull;
       if (isOpen) {
         openCount++;
-        if (d.limit > 0) remaining += d.limit - d.count;
-        else remaining += 999;
+        remaining += d.limit > 0 ? (d.limit - d.count) : 999;
       }
     });
-    signups.forEach(s => {
-      const p = parseInt((s.price || "").replace("$","")) || 0;
-      revenue += p;
-    });
+    signups.forEach(s => { revenue += parseInt((s.price||"").replace("$","")) || 0; });
     document.getElementById("statTotal").textContent     = total;
     document.getElementById("statOpen").textContent      = openCount;
     document.getElementById("statRemaining").textContent = remaining >= 999 ? "∞" : remaining;
     document.getElementById("statRevenue").textContent   = `$${revenue}`;
+    document.getElementById("statNotify").textContent    = typeof data.notifyCount !== "undefined" ? data.notifyCount : "—";
   }
 
   // ── Table ──
@@ -484,20 +459,20 @@
       tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No signups yet</td></tr>`;
       return;
     }
-    tbody.innerHTML = signups.slice().reverse().slice(0, 50).map(s => `
+    tbody.innerHTML = signups.slice().reverse().slice(0,50).map(s => `
       <tr>
-        <td class="td-name">${esc(s.studentName || "—")}</td>
-        <td>${esc(s.parentName || "—")}</td>
-        <td class="td-week">${esc(s.week || "—")}</td>
-        <td style="font-size:0.75rem;">${esc((s.time||"").split(" (")[0] || "—")}</td>
-        <td style="font-size:0.75rem;">${esc(s.shirtSize || "—")}</td>
-        <td class="td-price">${esc(s.price || "—")}</td>
-        <td class="td-pay">${esc(s.payment || "—")}</td>
+        <td class="td-name">${esc(s.studentName||"—")}</td>
+        <td>${esc(s.parentName||"—")}</td>
+        <td class="td-week">${esc(s.week||"—")}</td>
+        <td style="font-size:0.75rem;">${esc((s.time||"").split(" (")[0]||"—")}</td>
+        <td style="font-size:0.75rem;">${esc(s.shirtSize||"—")}</td>
+        <td class="td-price">${esc(s.price||"—")}</td>
+        <td class="td-pay">${esc(s.payment||"—")}</td>
       </tr>
     `).join("");
   }
 
-  // ── Update week setting via Apps Script ──
+  // ── Update week setting — NO adminEmail sent, no server-side check ──
   async function updateWeekSetting(week, changes) {
     try {
       const fd = new FormData();
@@ -505,8 +480,10 @@
       fd.append("week", week);
       if (changes.limit !== undefined) fd.append("limit", changes.limit);
       if (changes.open  !== undefined) fd.append("open",  changes.open ? "true" : "false");
-      const res = await fetch(SHEET_URL, { method: "POST", body: fd });
+
+      const res  = await fetch(SHEET_URL, { method: "POST", body: fd });
       const data = await res.json();
+
       if (data.result === "success") {
         showToast(`✅ ${week} updated`, "success");
         await loadData();
@@ -531,7 +508,6 @@
   }
 </script>
 
-<!-- Google Identity Services -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>
