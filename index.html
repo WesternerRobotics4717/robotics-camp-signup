@@ -3,684 +3,987 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Team 4717 Robotics Camp Signup</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <meta name="description" content="Team 4717 Robotics Camp — Summer 2026. A hands-on robotics experience for 4th–12th graders. Register now for June camps in Lubbock, TX.">
+  <title>Team 4717 Robotics Camp · Summer 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --gold: #d4af37;
       --gold-light: #f0cc55;
       --gold-dim: rgba(212,175,55,0.13);
-      --bg: #111214;
-      --surface: #1c1d20;
-      --surface2: #242629;
-      --border: rgba(212,175,55,0.2);
+      --gold-glow: rgba(212,175,55,0.07);
+      --bg: #0d0e10;
+      --surface: #141517;
+      --surface2: #1c1d20;
+      --surface3: #242629;
+      --border: rgba(212,175,55,0.15);
+      --border2: rgba(255,255,255,0.06);
       --text: #f0f0f0;
       --muted: #888;
+      --muted2: #555;
       --green: #4caf7d;
       --green-dim: rgba(76,175,125,0.12);
       --red: #e05555;
       --radius: 12px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.1rem 2rem; display: flex; align-items: center; gap: 1rem; }
-    .logo-ring { width: 40px; height: 40px; border: 2.5px solid var(--gold); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
-    .logo-ring svg { width: 20px; height: 20px; fill: var(--gold); }
-    .header-text h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); line-height: 1; }
-    .header-text p { font-size: 0.72rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase; }
+    /* ══ NAVBAR ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,14,16,0.85); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border2);
+      padding: 0.9rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-color: var(--border); }
+    .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .nav-logo { width: 34px; height: 34px; border: 2px solid var(--gold); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+    .nav-logo svg { width: 16px; height: 16px; fill: var(--gold); }
+    .nav-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold); line-height: 1; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+    .nav-links a { color: var(--muted); font-size: 0.8rem; text-decoration: none; padding: 0.4rem 0.75rem; border-radius: 6px; transition: all 0.2s; letter-spacing: 0.03em; }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-cta { background: var(--gold); color: #111; padding: 0.45rem 1.1rem; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; margin-left: 0.5rem; }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
 
-    /* ── COMING SOON SCREEN ── */
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 8rem 2rem 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(212,175,55,0.04) 0%, transparent 60%);
+    }
+    /* Subtle grid overlay */
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(212,175,55,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(212,175,55,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--gold-dim); border: 1px solid var(--border);
+      border-radius: 20px; padding: 0.35rem 1rem;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 1.75rem;
+      animation: fadeUp 0.7s ease both;
+    }
+    .hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+    .hero-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3.5rem, 10vw, 7.5rem);
+      font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.02em; line-height: 0.9;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .hero-title .line2 { color: var(--gold); font-style: italic; display: block; }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted); max-width: 540px; line-height: 1.7;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-pills {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center;
+      margin-bottom: 2.75rem;
+      animation: fadeUp 0.7s 0.25s ease both;
+    }
+    .pill {
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 20px; padding: 0.4rem 1rem;
+      font-size: 0.78rem; color: var(--muted);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .pill-icon { font-size: 0.9rem; }
+    .hero-actions {
+      display: flex; gap: 0.85rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+    .btn-hero-primary {
+      background: var(--gold); color: #111; border: none;
+      padding: 0.9rem 2.25rem; font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.05rem; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; border-radius: 8px; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: all 0.2s; box-shadow: 0 0 30px rgba(212,175,55,0.2);
+    }
+    .btn-hero-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 0 40px rgba(212,175,55,0.35); }
+    .btn-hero-secondary {
+      background: transparent; color: var(--text);
+      border: 1.5px solid var(--border2); padding: 0.9rem 2rem;
+      font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem;
+      font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block;
+      transition: all 0.2s;
+    }
+    .btn-hero-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      color: var(--muted2); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      animation: fadeUp 1s 0.8s ease both;
+    }
+    .scroll-hint svg { animation: bounce 2s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+
+    /* ══ SECTIONS ══ */
+    section { padding: 5rem 2rem; max-width: 1000px; margin: 0 auto; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gold); font-weight: 600; margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem); font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.03em; line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+    .section-sub { font-size: 0.92rem; color: var(--muted); line-height: 1.75; max-width: 560px; }
+
+    /* Divider */
+    .section-divider-full {
+      border: none; border-top: 1px solid var(--border2);
+      max-width: 1000px; margin: 0 auto;
+    }
+
+    /* ══ STATS BAR ══ */
+    .stats-bar {
+      background: var(--surface); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);
+      padding: 2rem;
+    }
+    .stats-bar-inner {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.8rem; font-weight: 800; color: var(--gold); line-height: 1; display: block;
+    }
+    .stat-desc { font-size: 0.75rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.04em; }
+
+    /* ══ WHAT TO EXPECT ══ */
+    .expect-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem; margin-top: 2.5rem;
+    }
+    .expect-card {
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 14px; padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .expect-card:hover { border-color: var(--border); transform: translateY(-3px); }
+    .expect-icon { font-size: 1.75rem; margin-bottom: 0.85rem; display: block; }
+    .expect-title {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem;
+      font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--text); margin-bottom: 0.4rem;
+    }
+    .expect-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.65; }
+
+    /* ══ SCHEDULE / PRICING ══ */
+    .pricing-wrap { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .pricing-card {
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 14px; padding: 1.5rem 1.75rem;
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .pricing-card:hover { border-color: var(--border); }
+    .pricing-card.featured { border-color: var(--gold); background: linear-gradient(135deg, var(--surface) 0%, rgba(212,175,55,0.05) 100%); }
+    .pricing-week {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem;
+      font-weight: 800; letter-spacing: 0.03em; color: var(--text); display: block;
+    }
+    .pricing-dates { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+    .pricing-sessions { display: flex; gap: 0.5rem; margin-top: 0.65rem; flex-wrap: wrap; }
+    .session-tag {
+      background: var(--surface3); border: 1px solid var(--border2);
+      border-radius: 6px; padding: 0.25rem 0.6rem;
+      font-size: 0.68rem; color: var(--muted); white-space: nowrap;
+    }
+    .pricing-right { text-align: right; }
+    .pricing-amount {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem; font-weight: 800; color: var(--gold); display: block; line-height: 1;
+    }
+    .pricing-note { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+    .bundle-box {
+      background: var(--green-dim); border: 1.5px solid rgba(76,175,125,0.3);
+      border-radius: 12px; padding: 1.25rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+    .bundle-box-left strong {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem;
+      font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--green); display: block;
+    }
+    .bundle-box-left span { font-size: 0.78rem; color: var(--muted); margin-top: 2px; display: block; }
+    .bundle-price {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 2.2rem;
+      font-weight: 800; color: var(--green); white-space: nowrap;
+    }
+    .bundle-price small { font-size: 1rem; text-decoration: line-through; color: var(--muted); margin-right: 0.4rem; }
+
+    /* ══ FAQ ══ */
+    .faq-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .faq-item {
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
+    }
+    .faq-item:hover { border-color: var(--border); }
+    .faq-question {
+      width: 100%; background: none; border: none; color: var(--text);
+      padding: 1.1rem 1.4rem; text-align: left; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--gold); }
+    .faq-question.open { color: var(--gold); }
+    .faq-chevron {
+      width: 18px; height: 18px; flex-shrink: 0; color: var(--muted);
+      transition: transform 0.3s; border: 1.5px solid var(--border2); border-radius: 50%;
+      display: grid; place-items: center;
+    }
+    .faq-question.open .faq-chevron { transform: rotate(180deg); border-color: var(--gold); color: var(--gold); }
+    .faq-answer {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.2s;
+      padding: 0 1.4rem; font-size: 0.85rem; color: var(--muted); line-height: 1.75;
+    }
+    .faq-answer.open { max-height: 300px; padding: 0 1.4rem 1.1rem; }
+
+    /* ══ COMING SOON SCREEN ══ */
     #comingSoonScreen {
-      display: none;
-      flex: 1;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem 1.5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+      display: none; min-height: 100vh;
+      flex-direction: column; align-items: center; justify-content: center;
+      padding: 7rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
     }
     #comingSoonScreen.active { display: flex; }
-
-    /* Decorative background glow */
     .cs-glow {
-      position: absolute;
-      width: 500px; height: 500px;
-      border-radius: 50%;
+      position: absolute; width: 600px; height: 600px; border-radius: 50%;
       background: radial-gradient(circle, rgba(212,175,55,0.07) 0%, transparent 70%);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
+      top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
     }
-
     .cs-badge {
       display: inline-flex; align-items: center; gap: 0.5rem;
       background: var(--gold-dim); border: 1px solid var(--border);
       border-radius: 20px; padding: 0.35rem 1rem;
       font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--gold);
-      margin-bottom: 1.75rem;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 1.75rem;
       animation: fadeUp 0.6s ease both;
     }
     .cs-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
-
     .cs-title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(2.8rem, 8vw, 5.5rem);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      line-height: 0.95;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-      animation: fadeUp 0.6s 0.1s ease both;
+      font-size: clamp(2.8rem, 8vw, 5.5rem); font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.03em; line-height: 0.95;
+      margin-bottom: 0.5rem; animation: fadeUp 0.6s 0.1s ease both;
     }
     .cs-title span { color: var(--gold); display: block; }
-
-    .cs-date {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(1.1rem, 3vw, 1.5rem);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      animation: fadeUp 0.6s 0.15s ease both;
-    }
-
-    .cs-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      max-width: 440px;
-      line-height: 1.7;
-      margin-bottom: 2.5rem;
-      animation: fadeUp 0.6s 0.2s ease both;
-    }
-
-    /* Countdown */
-    .countdown {
-      display: flex; gap: 1.25rem; margin-bottom: 2.75rem;
-      animation: fadeUp 0.6s 0.25s ease both;
-    }
+    .cs-date { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; animation: fadeUp 0.6s 0.15s ease both; }
+    .cs-desc { font-size: 0.9rem; color: var(--muted); max-width: 440px; line-height: 1.7; margin-bottom: 2.5rem; animation: fadeUp 0.6s 0.2s ease both; }
+    .countdown { display: flex; gap: 1.25rem; margin-bottom: 2.75rem; animation: fadeUp 0.6s 0.25s ease both; flex-wrap: wrap; justify-content: center; }
     .cd-unit { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
-    .cd-num {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 2.8rem; font-weight: 800; line-height: 1;
-      color: var(--gold);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.5rem 1rem;
-      min-width: 72px;
-      text-align: center;
-    }
+    .cd-num { font-family: 'Barlow Condensed', sans-serif; font-size: 2.8rem; font-weight: 800; line-height: 1; color: var(--gold); background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 1rem; min-width: 72px; text-align: center; }
     .cd-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
-
-    /* Notify form */
-    .notify-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem 2.25rem;
-      max-width: 480px;
-      width: 100%;
-      animation: fadeUp 0.6s 0.3s ease both;
-    }
-    .notify-card h3 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.3rem; font-weight: 800;
-      text-transform: uppercase; letter-spacing: 0.04em;
-      color: var(--gold); margin-bottom: 0.3rem;
-    }
+    .notify-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem 2.25rem; max-width: 480px; width: 100%; animation: fadeUp 0.6s 0.3s ease both; }
+    .notify-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gold); margin-bottom: 0.3rem; }
     .notify-card p { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
-
     .notify-field { margin-bottom: 0.85rem; }
     .notify-field label { display: block; font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 4px; }
-    .notify-field input {
-      width: 100%; background: var(--surface2); border: 1.5px solid #3a3a3a;
-      color: var(--text); border-radius: 8px; padding: 0.6rem 0.85rem;
-      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
-      transition: border-color 0.2s;
-    }
+    .notify-field input { width: 100%; background: var(--surface2); border: 1.5px solid #3a3a3a; color: var(--text); border-radius: 8px; padding: 0.6rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; transition: border-color 0.2s; }
     .notify-field input:focus { outline: none; border-color: var(--gold); }
     .notify-field input::placeholder { color: #555; }
-
     .checkbox-group { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
     .checkbox-item { display: flex; align-items: flex-start; gap: 0.65rem; cursor: pointer; }
     .checkbox-item input[type="checkbox"] { display: none; }
-    .checkbox-box {
-      width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px;
-      border: 1.5px solid #3a3a3a; border-radius: 4px;
-      background: var(--surface2); display: grid; place-items: center;
-      transition: all 0.2s; cursor: pointer;
-    }
-    .checkbox-item input:checked + .checkbox-box {
-      background: var(--gold); border-color: var(--gold);
-    }
-    .checkbox-item input:checked + .checkbox-box::after {
-      content: '✓'; font-size: 0.7rem; color: #111; font-weight: 900;
-    }
+    .checkbox-box { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; border: 1.5px solid #3a3a3a; border-radius: 4px; background: var(--surface2); display: grid; place-items: center; transition: all 0.2s; cursor: pointer; }
+    .checkbox-item input:checked + .checkbox-box { background: var(--gold); border-color: var(--gold); }
+    .checkbox-item input:checked + .checkbox-box::after { content: '✓'; font-size: 0.7rem; color: #111; font-weight: 900; }
     .checkbox-text { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
     .checkbox-text strong { color: var(--text); font-weight: 500; }
-
-    .btn-notify {
-      width: 100%; background: var(--gold); color: #111; border: none;
-      padding: 0.78rem 1.5rem; font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1rem; font-weight: 800; letter-spacing: 0.08em;
-      text-transform: uppercase; border-radius: 8px; cursor: pointer;
-      transition: all 0.2s;
-    }
+    .btn-notify { width: 100%; background: var(--gold); color: #111; border: none; padding: 0.78rem 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
     .btn-notify:hover { background: var(--gold-light); transform: translateY(-1px); }
     .btn-notify:disabled { background: #3a3a3a; color: #666; cursor: not-allowed; transform: none; }
-
-    .notify-success {
-      display: none; text-align: center; padding: 1rem 0 0.5rem;
-    }
-    .notify-success .ns-icon {
-      width: 52px; height: 52px; border: 2.5px solid var(--gold);
-      border-radius: 50%; display: grid; place-items: center;
-      margin: 0 auto 1rem; font-size: 1.4rem;
-    }
-    .notify-success h4 {
-      font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem;
-      font-weight: 800; text-transform: uppercase; color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
+    .notify-success { display: none; text-align: center; padding: 1rem 0 0.5rem; }
+    .notify-success .ns-icon { width: 52px; height: 52px; border: 2.5px solid var(--gold); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 1rem; font-size: 1.4rem; }
+    .notify-success h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
     .notify-success p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
 
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* ── REGISTRATION SCREENS ── */
-    #registrationScreen { display: none; flex-direction: column; flex: 1; }
+    /* ══ REGISTRATION SCREENS ══ */
+    #registrationScreen { display: none; flex-direction: column; }
     #registrationScreen.active { display: flex; }
 
-    .progress-wrap { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 2rem; }
+    /* Sticky progress */
+    .progress-wrap { background: rgba(20,21,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border2); padding: 0.9rem 2rem; position: sticky; top: 57px; z-index: 50; }
     .progress-steps { display: flex; align-items: center; max-width: 640px; margin: 0 auto; }
     .step-dot { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
-    .step-dot .dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #444; display: grid; place-items: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem; color: var(--muted); transition: all 0.3s; background: var(--bg); }
+    .step-dot .dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #333; display: grid; place-items: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem; color: var(--muted); transition: all 0.3s; background: var(--bg); }
     .step-dot .label { font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; transition: color 0.3s; }
     .step-dot.active .dot { border-color: var(--gold); background: var(--gold); color: #111; }
     .step-dot.active .label { color: var(--gold); }
     .step-dot.done .dot { border-color: var(--gold); background: transparent; color: var(--gold); }
     .step-dot.done .label { color: var(--gold); opacity: 0.6; }
-    .step-line { flex: 1; height: 2px; background: #333; margin-bottom: 20px; transition: background 0.3s; }
+    .step-line { flex: 1; height: 2px; background: #2a2a2a; margin-bottom: 20px; transition: background 0.3s; }
     .step-line.done { background: var(--gold); }
 
-    main { flex: 1; display: flex; justify-content: center; padding: 2rem 1.5rem 3rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.25rem; max-width: 620px; width: 100%; display: none; animation: fadeUp 0.3s ease; }
+    .form-area { flex: 1; display: flex; justify-content: center; padding: 2.5rem 1.5rem 4rem; }
+    .card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 2.25rem; max-width: 640px; width: 100%; display: none; animation: fadeUp 0.3s ease; }
     .card.active { display: block; }
     .card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gold); margin-bottom: 0.25rem; }
     .card .subtitle { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; }
 
+    /* Week cards */
     .week-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
-    .week-card { background: var(--surface2); border: 1.5px solid #3a3a3a; border-radius: var(--radius); padding: 1rem 0.5rem; cursor: pointer; text-align: center; transition: all 0.2s; user-select: none; position: relative; }
+    .week-card { background: var(--surface2); border: 1.5px solid #2e2e2e; border-radius: var(--radius); padding: 1.1rem 0.5rem; cursor: pointer; text-align: center; transition: all 0.2s; user-select: none; position: relative; }
     .week-card:hover:not(.unavailable) { border-color: var(--gold); background: var(--gold-dim); }
-    .week-card.selected { border-color: var(--gold); background: var(--gold-dim); }
+    .week-card.selected { border-color: var(--gold); background: var(--gold-dim); box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
     .week-card.selected .wk-label { color: var(--gold-light); }
     .week-card .wk-label { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; display: block; margin-bottom: 2px; }
     .week-card .wk-sub { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; display: block; }
     .week-card .wk-price { font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--gold); display: block; margin-top: 6px; }
     .week-card .check-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; background: var(--gold); border-radius: 50%; display: none; place-items: center; font-size: 0.65rem; color: #111; font-weight: 900; }
     .week-card.selected .check-badge { display: grid; }
-    .week-card.unavailable { opacity: 0.45; cursor: not-allowed; pointer-events: none; border-color: #333 !important; background: var(--surface2) !important; }
+    .week-card.unavailable { opacity: 0.4; cursor: not-allowed; pointer-events: none; border-color: #252525 !important; background: var(--surface2) !important; }
     .week-card.unavailable .wk-price { color: var(--red); font-size: 0.8rem; }
     .week-card.unavailable .wk-sub { color: var(--red); }
     .week-card.loading { animation: shimmer 1.2s infinite; }
-    @keyframes shimmer { 0%,100%{opacity:0.5} 50%{opacity:0.8} }
+    @keyframes shimmer { 0%,100%{opacity:0.5} 50%{opacity:0.85} }
 
-    .bundle-banner { background: var(--green-dim); border: 1.5px solid var(--green); border-radius: 10px; padding: 0.85rem 1.1rem; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; animation: fadeUp 0.3s ease; }
+    /* Bundle banner */
+    .bundle-banner { background: var(--green-dim); border: 1.5px solid rgba(76,175,125,0.3); border-radius: 10px; padding: 0.85rem 1.1rem; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; animation: fadeUp 0.3s ease; }
     .bundle-banner .bb-icon { font-size: 1.3rem; flex-shrink: 0; }
     .bundle-banner .bb-text strong { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; color: var(--green); letter-spacing: 0.03em; display: block; }
-    .bundle-banner .bb-text span { font-size: 0.75rem; color: #aaa; }
+    .bundle-banner .bb-text span { font-size: 0.75rem; color: #999; }
     .bundle-banner.hidden { display: none; }
 
-    .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2e2e2e; padding-top: 0.9rem; margin-top: 0.75rem; }
+    /* Price row */
+    .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #242424; padding-top: 0.9rem; margin-top: 0.75rem; }
     .price-row .pr-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
     .price-row .pr-total { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gold); }
     .price-row .pr-original { font-size: 0.85rem; color: var(--muted); text-decoration: line-through; margin-right: 0.5rem; }
 
+    /* Time slots */
     .time-cards { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.5rem; }
-    .time-card { display: flex; align-items: center; gap: 1rem; background: var(--surface2); border: 1.5px solid #3a3a3a; border-radius: var(--radius); padding: 1rem 1.2rem; cursor: pointer; transition: all 0.2s; }
+    .time-card { display: flex; align-items: center; gap: 1rem; background: var(--surface2); border: 1.5px solid #2e2e2e; border-radius: var(--radius); padding: 1.1rem 1.2rem; cursor: pointer; transition: all 0.2s; }
     .time-card:hover { border-color: var(--gold); background: var(--gold-dim); }
     .time-card.selected { border-color: var(--gold); background: var(--gold-dim); }
     .time-card input[type="radio"] { display: none; }
-    .radio-visual { width: 18px; height: 18px; border: 2px solid #555; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; transition: all 0.2s; }
+    .radio-visual { width: 18px; height: 18px; border: 2px solid #444; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; transition: all 0.2s; }
     .time-card.selected .radio-visual { border-color: var(--gold); }
     .time-card.selected .radio-visual::after { content: ''; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
     .time-info .time-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.04em; }
     .time-info .time-grade { font-size: 0.73rem; color: var(--muted); margin-top: 2px; }
 
+    /* Form fields */
     .field-group { margin-bottom: 0.9rem; }
     .field-group label { display: block; font-size: 0.69rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
-    .field-group input { width: 100%; background: var(--surface2); border: 1.5px solid #3a3a3a; color: var(--text); border-radius: 8px; padding: 0.6rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; transition: border-color 0.2s; appearance: none; }
-    .field-group input:focus { outline: none; border-color: var(--gold); }
-    .field-group input::placeholder { color: #555; }
+    .field-group input { width: 100%; background: var(--surface2); border: 1.5px solid #2e2e2e; color: var(--text); border-radius: 8px; padding: 0.65rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; transition: border-color 0.2s; }
+    .field-group input:focus { outline: none; border-color: var(--gold); background: var(--surface3); }
+    .field-group input::placeholder { color: var(--muted2); }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .three-col { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; }
 
+    /* Size buttons */
     .size-grid { display: flex; gap: 0.55rem; flex-wrap: wrap; }
-    .size-btn { background: var(--surface2); border: 1.5px solid #3a3a3a; color: var(--muted); border-radius: 8px; padding: 0.45rem 0.8rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s; user-select: none; }
+    .size-btn { background: var(--surface2); border: 1.5px solid #2e2e2e; color: var(--muted); border-radius: 8px; padding: 0.45rem 0.85rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s; user-select: none; }
     .size-btn:hover { border-color: var(--gold); color: var(--text); }
     .size-btn.selected { border-color: var(--gold); background: var(--gold-dim); color: var(--gold-light); }
 
+    /* Payment */
     .payment-cards { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.5rem; }
-    .payment-card { display: flex; align-items: center; gap: 1rem; background: var(--surface2); border: 1.5px solid #3a3a3a; border-radius: var(--radius); padding: 1rem 1.2rem; cursor: pointer; transition: all 0.2s; }
+    .payment-card { display: flex; align-items: center; gap: 1rem; background: var(--surface2); border: 1.5px solid #2e2e2e; border-radius: var(--radius); padding: 1.1rem 1.2rem; cursor: pointer; transition: all 0.2s; }
     .payment-card:hover { border-color: var(--gold); background: var(--gold-dim); }
     .payment-card.selected { border-color: var(--gold); background: var(--gold-dim); }
     .payment-card input[type="radio"] { display: none; }
-    .payment-icon { width: 34px; height: 34px; border-radius: 8px; background: #333; display: grid; place-items: center; font-size: 1rem; flex-shrink: 0; }
+    .payment-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--surface3); display: grid; place-items: center; font-size: 1.05rem; flex-shrink: 0; }
     .payment-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.03em; }
     .payment-desc { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
 
+    /* Buttons */
     .btn-row { display: flex; gap: 0.7rem; margin-top: 1.5rem; align-items: center; }
-    .btn-primary { background: var(--gold); color: #111; border: none; padding: 0.72rem 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; flex: 1; }
-    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
-    .btn-primary:disabled { background: #3a3a3a; color: #666; cursor: not-allowed; transform: none; }
-    .btn-back { background: transparent; color: var(--muted); border: 1.5px solid #3a3a3a; padding: 0.72rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-    .btn-back:hover { border-color: #666; color: var(--text); }
-    .btn-ghost { background: transparent; color: var(--gold); border: 1.5px solid var(--border); padding: 0.72rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-primary { background: var(--gold); color: #111; border: none; padding: 0.78rem 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; flex: 1; }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(212,175,55,0.2); }
+    .btn-primary:disabled { background: #2e2e2e; color: #555; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-back { background: transparent; color: var(--muted); border: 1.5px solid #2e2e2e; padding: 0.78rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-back:hover { border-color: #555; color: var(--text); }
+    .btn-ghost { background: transparent; color: var(--gold); border: 1.5px solid var(--border); padding: 0.78rem 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .btn-ghost:hover { background: var(--gold-dim); }
 
-    .section-divider { display: flex; align-items: center; gap: 0.75rem; margin: 1.25rem 0 0.85rem; }
-    .section-divider span { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap; }
-    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: #2e2e2e; }
+    /* Form section dividers */
+    .form-section-divider { display: flex; align-items: center; gap: 0.75rem; margin: 1.35rem 0 0.9rem; }
+    .form-section-divider span { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap; }
+    .form-section-divider::before, .form-section-divider::after { content: ''; flex: 1; height: 1px; background: #242424; }
 
+    /* Cart */
     .cart-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
-    .cart-item { background: var(--surface2); border: 1px solid #333; border-radius: 10px; padding: 0.9rem 1rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
-    .cart-item-info .ci-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.03em; }
-    .cart-item-info .ci-detail { font-size: 0.72rem; color: var(--muted); margin-top: 3px; line-height: 1.6; }
+    .cart-item { background: var(--surface2); border: 1px solid #242424; border-radius: 10px; padding: 0.9rem 1rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
+    .ci-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.03em; }
+    .ci-detail { font-size: 0.72rem; color: var(--muted); margin-top: 3px; line-height: 1.6; }
     .cart-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
     .cart-item-price { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--gold); }
-    .remove-btn { font-size: 0.65rem; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 0.07em; border: none; background: none; padding: 0; transition: color 0.2s; }
-    .remove-btn:hover { color: #e07070; }
-
+    .remove-btn { font-size: 0.65rem; color: #555; cursor: pointer; text-transform: uppercase; letter-spacing: 0.07em; border: none; background: none; padding: 0; transition: color 0.2s; }
+    .remove-btn:hover { color: var(--red); }
     .total-box { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; }
     .total-line { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--muted); padding: 0.2rem 0; }
-    .total-line.grand { border-top: 1px solid #333; margin-top: 0.5rem; padding-top: 0.65rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text); }
+    .total-line.grand { border-top: 1px solid #2a2a2a; margin-top: 0.5rem; padding-top: 0.65rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text); }
     .total-line.grand span:last-child { color: var(--gold); }
     .savings-text { color: var(--green); }
 
+    /* Success */
     .success-wrap { text-align: center; padding: 1rem 0 0.5rem; }
-    .success-icon { width: 68px; height: 68px; border: 3px solid var(--gold); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 1.4rem; font-size: 1.8rem; }
-    .success-wrap h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .success-icon { width: 72px; height: 72px; border: 3px solid var(--gold); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 1.5rem; font-size: 2rem; box-shadow: 0 0 30px rgba(212,175,55,0.2); }
+    .success-wrap h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
     .success-wrap p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
     .registration-cards { display: flex; flex-direction: column; gap: 0.5rem; margin: 1.25rem 0; }
-    .reg-chip { background: var(--surface2); border: 1px solid #333; border-radius: 8px; padding: 0.65rem 0.9rem; font-size: 0.8rem; color: var(--text); display: flex; justify-content: space-between; align-items: center; }
+    .reg-chip { background: var(--surface2); border: 1px solid #2a2a2a; border-radius: 8px; padding: 0.65rem 0.9rem; font-size: 0.8rem; color: var(--text); display: flex; justify-content: space-between; align-items: center; }
     .reg-chip span { color: var(--gold); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.95rem; }
 
-    @media (max-width: 520px) {
-      .card { padding: 1.5rem 1rem; }
+    /* ══ FOOTER ══ */
+    footer {
+      background: var(--surface); border-top: 1px solid var(--border2);
+      padding: 2rem; text-align: center;
+    }
+    .footer-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: 0.6rem; }
+    .footer-brand-logo { width: 28px; height: 28px; border: 1.5px solid var(--gold); border-radius: 50%; display: grid; place-items: center; }
+    .footer-brand-logo svg { width: 13px; height: 13px; fill: var(--gold); }
+    .footer-brand-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold); }
+    .footer-copy { font-size: 0.72rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.72rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ══ ANIMATIONS ══ */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 700px) {
+      nav { padding: 0.8rem 1.25rem; }
+      .nav-links { display: none; }
+      .hero { padding: 6rem 1.5rem 4rem; }
+      .stats-bar-inner { grid-template-columns: 1fr 1fr; }
+      .expect-grid { grid-template-columns: 1fr; }
+      .pricing-card { grid-template-columns: 1fr; gap: 0.75rem; }
+      .pricing-right { text-align: left; }
+      section { padding: 3.5rem 1.25rem; }
+      .form-area { padding: 1.75rem 1rem 3rem; }
+      .card { padding: 1.5rem 1.1rem; }
       .two-col, .three-col { grid-template-columns: 1fr; }
       .week-grid { grid-template-columns: 1fr; }
       .btn-row { flex-wrap: wrap; }
       .btn-primary { order: -1; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
       .countdown { gap: 0.75rem; }
       .cd-num { font-size: 2rem; min-width: 56px; padding: 0.4rem 0.7rem; }
-      .notify-card { padding: 1.5rem 1.25rem; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-ring">
-    <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5 2.5 2.5 0 0 0 7.5 18 2.5 2.5 0 0 0 10 15.5 2.5 2.5 0 0 0 7.5 13m9 0A2.5 2.5 0 0 0 14 15.5a2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5z"/></svg>
+<!-- ══ NAVBAR ══ -->
+<nav id="navbar">
+  <a class="nav-brand" href="#">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5 2.5 2.5 0 0 0 7.5 18 2.5 2.5 0 0 0 10 15.5 2.5 2.5 0 0 0 7.5 13m9 0A2.5 2.5 0 0 0 14 15.5a2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5z"/></svg>
+    </div>
+    <span class="nav-title">Team 4717</span>
+  </a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#faq">FAQ</a>
+    <a href="#register" class="nav-cta">Register Now</a>
   </div>
-  <div class="header-text">
-    <h1>Team 4717 Robotics Camp</h1>
-    <p>Registration · Summer 2026</p>
-  </div>
-</header>
+</nav>
 
-<!-- ── COMING SOON SCREEN ── -->
+<!-- ══ COMING SOON (shown before open date) ══ -->
 <div id="comingSoonScreen">
   <div class="cs-glow"></div>
   <div class="cs-badge"><span class="cs-badge-dot"></span> Coming Soon</div>
   <div class="cs-title">Registration<span>Opens Soon</span></div>
   <div class="cs-date" id="csDateLabel">May 1, 2026</div>
   <p class="cs-desc">Camp registration isn't open just yet. Sign up below to be notified the moment it goes live — and optionally stay in the loop on events we're competing in and hosting.</p>
-
   <div class="countdown" id="countdown">
     <div class="cd-unit"><div class="cd-num" id="cdDays">--</div><div class="cd-label">Days</div></div>
     <div class="cd-unit"><div class="cd-num" id="cdHours">--</div><div class="cd-label">Hours</div></div>
     <div class="cd-unit"><div class="cd-num" id="cdMins">--</div><div class="cd-label">Mins</div></div>
     <div class="cd-unit"><div class="cd-num" id="cdSecs">--</div><div class="cd-label">Secs</div></div>
   </div>
-
   <div class="notify-card">
     <div id="notifyForm">
       <h3>🔔 Notify Me</h3>
-      <p>Enter your info below and we'll reach out as soon as registration opens.</p>
-
-      <div class="notify-field">
-        <label>Your Name</label>
-        <input type="text" id="notifyName" placeholder="First Last">
-      </div>
-      <div class="notify-field">
-        <label>Email Address</label>
-        <input type="email" id="notifyEmail" placeholder="you@example.com">
-      </div>
-      <div class="notify-field">
-        <label>Phone Number <span style="color:#555;font-size:0.65rem;">(optional)</span></label>
-        <input type="tel" id="notifyPhone" placeholder="(555) 000-0000">
-      </div>
-
+      <p>Enter your info and we'll reach out as soon as registration opens.</p>
+      <div class="notify-field"><label>Your Name</label><input type="text" id="notifyName" placeholder="First Last"></div>
+      <div class="notify-field"><label>Email Address</label><input type="email" id="notifyEmail" placeholder="you@example.com"></div>
+      <div class="notify-field"><label>Phone Number <span style="color:#444;font-size:0.65rem;">(optional)</span></label><input type="tel" id="notifyPhone" placeholder="(555) 000-0000"></div>
       <div class="checkbox-group">
-        <label class="checkbox-item">
-          <input type="checkbox" id="notifyRegCheck" checked>
-          <span class="checkbox-box"></span>
-          <span class="checkbox-text"><strong>Registration reminder</strong> — notify me when camp registration opens</span>
-        </label>
-        <label class="checkbox-item">
-          <input type="checkbox" id="notifyEventsCheck">
-          <span class="checkbox-box"></span>
-          <span class="checkbox-text"><strong>Team events</strong> — keep me updated on competitions and events Team 4717 is hosting or attending</span>
-        </label>
+        <label class="checkbox-item"><input type="checkbox" id="notifyRegCheck" checked><span class="checkbox-box"></span><span class="checkbox-text"><strong>Registration reminder</strong> — notify me when camp registration opens</span></label>
+        <label class="checkbox-item"><input type="checkbox" id="notifyEventsCheck"><span class="checkbox-box"></span><span class="checkbox-text"><strong>Team events</strong> — updates on competitions and events Team 4717 is hosting or attending</span></label>
       </div>
-
       <button class="btn-notify" id="notifySubmitBtn">Notify Me →</button>
     </div>
-
     <div class="notify-success" id="notifySuccess">
       <div class="ns-icon">✓</div>
       <h4>You're on the list!</h4>
-      <p id="notifySuccessMsg">We'll send you an email as soon as registration opens. See you at camp!</p>
+      <p id="notifySuccessMsg">We'll send you an email as soon as registration opens.</p>
     </div>
   </div>
 </div>
 
-<!-- ── REGISTRATION SCREEN ── -->
+<!-- ══ REGISTRATION SCREEN (shown after open date) ══ -->
 <div id="registrationScreen">
-  <div class="progress-wrap">
-    <div class="progress-steps">
-      <div class="step-dot active" data-step="0"><div class="dot">1</div><div class="label">Weeks</div></div>
-      <div class="step-line" data-line="0"></div>
-      <div class="step-dot" data-step="1"><div class="dot">2</div><div class="label">Time</div></div>
-      <div class="step-line" data-line="1"></div>
-      <div class="step-dot" data-step="2"><div class="dot">3</div><div class="label">Info</div></div>
-      <div class="step-line" data-line="2"></div>
-      <div class="step-dot" data-step="3"><div class="dot">4</div><div class="label">Payment</div></div>
-      <div class="step-line" data-line="3"></div>
-      <div class="step-dot" data-step="4"><div class="dot">5</div><div class="label">Review</div></div>
+
+  <!-- HERO -->
+  <div class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span> Registration Open — Summer 2026</div>
+    <h1 class="hero-title">
+      Team 4717<span class="line2">Robotics Camp</span>
+    </h1>
+    <p class="hero-subtitle">A hands-on robotics experience for 4th–12th graders. Build, code, and compete alongside real FRC team members in Lubbock, TX.</p>
+    <div class="hero-pills">
+      <div class="pill"><span class="pill-icon">📍</span> Lubbock, TX</div>
+      <div class="pill"><span class="pill-icon">📅</span> June 2026</div>
+      <div class="pill"><span class="pill-icon">👾</span> Grades 4–12</div>
+      <div class="pill"><span class="pill-icon">💰</span> From $60/week</div>
+    </div>
+    <div class="hero-actions">
+      <a href="#register" class="btn-hero-primary">Register Now →</a>
+      <a href="#about" class="btn-hero-secondary">Learn More</a>
+    </div>
+    <div class="scroll-hint">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      Scroll
     </div>
   </div>
 
-  <main>
-    <!-- STEP 1: Week -->
-    <div class="card active" id="step1">
-      <h2>Choose Camp Weeks</h2>
-      <p class="subtitle">Pick one or more weeks — register for all 3 and save $30</p>
-      <div class="bundle-banner hidden" id="bundleBanner">
-        <div class="bb-icon">🎉</div>
-        <div class="bb-text">
-          <strong>Bundle Discount Applied!</strong>
-          <span>All 3 weeks selected — $150 instead of $180</span>
-        </div>
-      </div>
-      <div class="week-grid">
-        <div class="week-card" data-value="June 1-3">
-          <div class="check-badge">✓</div>
-          <span class="wk-label">June 1–3</span>
-          <span class="wk-sub">Week 1</span>
-          <span class="wk-price">$60</span>
-        </div>
-        <div class="week-card" data-value="June 8-10">
-          <div class="check-badge">✓</div>
-          <span class="wk-label">June 8–10</span>
-          <span class="wk-sub">Week 2</span>
-          <span class="wk-price">$60</span>
-        </div>
-        <div class="week-card" data-value="June 15-17">
-          <div class="check-badge">✓</div>
-          <span class="wk-label">June 15–17</span>
-          <span class="wk-sub">Week 3</span>
-          <span class="wk-price">$60</span>
-        </div>
-      </div>
-      <div class="price-row">
+  <!-- STATS BAR -->
+  <div class="stats-bar reveal" id="about">
+    <div class="stats-bar-inner">
+      <div class="stat-item"><span class="stat-num">3</span><div class="stat-desc">Camp Weeks Available</div></div>
+      <div class="stat-item"><span class="stat-num">2</span><div class="stat-desc">Daily Time Sessions</div></div>
+      <div class="stat-item"><span class="stat-num">$60</span><div class="stat-desc">Per Week — $150 Bundle</div></div>
+      <div class="stat-item"><span class="stat-num">4717</span><div class="stat-desc">FRC Team Number</div></div>
+    </div>
+  </div>
+
+  <!-- WHAT TO EXPECT -->
+  <section class="reveal">
+    <div class="section-label">What to Expect</div>
+    <h2 class="section-title">Hands-On Robotics Education</h2>
+    <p class="section-sub">Each camp week is packed with real engineering challenges led by experienced FRC team members. Campers leave with new skills and a ton of fun stories.</p>
+    <div class="expect-grid">
+      <div class="expect-card"><span class="expect-icon">🤖</span><div class="expect-title">Build Real Robots</div><div class="expect-desc">Get hands-on with actual FRC-style hardware. Learn mechanical assembly, wiring, and how robots come together from parts to a finished machine.</div></div>
+      <div class="expect-card"><span class="expect-icon">💻</span><div class="expect-title">Code & Control</div><div class="expect-desc">Write code that makes robots move. We use beginner-friendly tools that teach real programming concepts used in FRC competitions.</div></div>
+      <div class="expect-card"><span class="expect-icon">🏆</span><div class="expect-title">Mini Competitions</div><div class="expect-desc">Campers put their robots to the test in friendly challenges at the end of each week. Teamwork, strategy, and sportsmanship all count.</div></div>
+      <div class="expect-card"><span class="expect-icon">🔧</span><div class="expect-title">Engineering Mindset</div><div class="expect-desc">We teach the design process — iterate, fail, improve, and succeed. These problem-solving skills go far beyond robotics.</div></div>
+      <div class="expect-card"><span class="expect-icon">🤝</span><div class="expect-title">Mentorship</div><div class="expect-desc">Learn directly from Team 4717 members who compete at the FRC level. Real mentors who've been through it all.</div></div>
+      <div class="expect-card"><span class="expect-icon">🎽</span><div class="expect-title">Camp T-Shirt</div><div class="expect-desc">Every camper gets a Team 4717 camp shirt. You pick your size during registration — it's included in the camp fee.</div></div>
+    </div>
+  </section>
+
+  <hr class="section-divider-full">
+
+  <!-- SCHEDULE & PRICING -->
+  <section id="schedule" class="reveal">
+    <div class="section-label">Schedule & Pricing</div>
+    <h2 class="section-title">Pick Your Week</h2>
+    <p class="section-sub">Three weeks available in June. Each session runs daily during the week. Register for all three and save $30 with our bundle deal.</p>
+
+    <div class="pricing-wrap">
+      <div class="pricing-card">
         <div>
-          <div class="pr-label">Estimated cost for this camper</div>
-          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Select all 3 for the $150 bundle deal</div>
-        </div>
-        <div style="display:flex;align-items:baseline;gap:0.4rem;">
-          <span class="pr-original" id="originalPrice" style="display:none;"></span>
-          <span class="pr-total" id="displayPrice">$0</span>
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-primary" id="next1" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <!-- STEP 2: Time -->
-    <div class="card" id="step2">
-      <h2>Select Time Slot</h2>
-      <p class="subtitle">Choose the session that fits your camper's grade level</p>
-      <div class="time-cards">
-        <div class="time-card" data-value="Morning 9am-12pm (4th–6th Grade)">
-          <input type="radio" name="time" value="Morning 9am-12pm (4th–6th Grade)">
-          <div class="radio-visual"></div>
-          <div class="time-info">
-            <div class="time-title">Morning · 9:00 AM – 12:00 PM</div>
-            <div class="time-grade">4th – 6th Grade</div>
+          <span class="pricing-week">Week 1 — June 1–3</span>
+          <div class="pricing-dates">Monday through Wednesday</div>
+          <div class="pricing-sessions">
+            <span class="session-tag">🌅 Morning · 9AM–12PM · Grades 4–6</span>
+            <span class="session-tag">🌇 Afternoon · 1:30–4:30PM · Grades 7–12</span>
           </div>
         </div>
-        <div class="time-card" data-value="Afternoon 1:30pm-4:30pm (7th–12th Grade)">
-          <input type="radio" name="time" value="Afternoon 1:30pm-4:30pm (7th–12th Grade)">
-          <div class="radio-visual"></div>
-          <div class="time-info">
-            <div class="time-title">Afternoon · 1:30 PM – 4:30 PM</div>
-            <div class="time-grade">7th – 12th Grade</div>
+        <div class="pricing-right">
+          <span class="pricing-amount">$60</span>
+          <div class="pricing-note">per camper</div>
+        </div>
+      </div>
+      <div class="pricing-card">
+        <div>
+          <span class="pricing-week">Week 2 — June 8–10</span>
+          <div class="pricing-dates">Monday through Wednesday</div>
+          <div class="pricing-sessions">
+            <span class="session-tag">🌅 Morning · 9AM–12PM · Grades 4–6</span>
+            <span class="session-tag">🌇 Afternoon · 1:30–4:30PM · Grades 7–12</span>
           </div>
         </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-back" id="back1">← Back</button>
-        <button class="btn-primary" id="next2" disabled>Continue →</button>
-      </div>
-    </div>
-
-    <!-- STEP 3: Info -->
-    <div class="card" id="step3">
-      <h2>Camper Info</h2>
-      <p class="subtitle">Tell us about your camper and how to reach you</p>
-      <div class="section-divider"><span>Student</span></div>
-      <div class="two-col">
-        <div class="field-group"><label>Student Name</label><input id="studentName" type="text" placeholder="First Last"></div>
-        <div class="field-group"><label>Age</label><input id="age" type="number" placeholder="e.g. 12"></div>
-      </div>
-      <div class="field-group">
-        <label>T-Shirt Size</label>
-        <div class="size-grid" id="shirtSizes">
-          <div class="size-btn" data-size="SM">SM</div>
-          <div class="size-btn" data-size="MD">MD</div>
-          <div class="size-btn" data-size="LG">LG</div>
-          <div class="size-btn" data-size="XL">XL</div>
-          <div class="size-btn" data-size="XXL">XXL</div>
+        <div class="pricing-right">
+          <span class="pricing-amount">$60</span>
+          <div class="pricing-note">per camper</div>
         </div>
       </div>
-      <div class="section-divider"><span>Parent / Guardian</span></div>
-      <div class="two-col">
-        <div class="field-group"><label>Parent Name</label><input id="parentName" type="text" placeholder="First Last"></div>
-        <div class="field-group"><label>Phone Number</label><input id="phone" type="tel" placeholder="(555) 000-0000"></div>
-      </div>
-      <div class="field-group"><label>Email Address</label><input id="email" type="email" placeholder="you@example.com"></div>
-      <div class="section-divider"><span>Address</span></div>
-      <div class="field-group"><label>Street Address</label><input id="address" type="text" placeholder="123 Main St"></div>
-      <div class="three-col">
-        <div class="field-group"><label>City</label><input id="city" type="text" placeholder="City"></div>
-        <div class="field-group"><label>State</label><input id="state" type="text" placeholder="TX"></div>
-        <div class="field-group"><label>Zip</label><input id="zip" type="text" placeholder="00000"></div>
-      </div>
-      <div class="section-divider"><span>Medical / Notes</span></div>
-      <div class="field-group"><label>Allergies, Medical Conditions, or Other Notes</label><input id="notes" type="text" placeholder="None, or describe here…"></div>
-      <div class="btn-row">
-        <button class="btn-back" id="back2">← Back</button>
-        <button class="btn-primary" id="next3">Continue →</button>
-      </div>
-    </div>
-
-    <!-- STEP 4: Payment -->
-    <div class="card" id="step4">
-      <h2>Payment Method</h2>
-      <p class="subtitle">How would you like to pay for camp?</p>
-      <div class="payment-cards">
-        <div class="payment-card" data-value="cash or check">
-          <input type="radio" name="payment" value="cash or check">
-          <div class="radio-visual"></div>
-          <div class="payment-icon">💵</div>
-          <div><div class="payment-name">Cash or Check</div><div class="payment-desc">Bring payment on the first day of camp</div></div>
+      <div class="pricing-card featured">
+        <div>
+          <span class="pricing-week">Week 3 — June 15–17</span>
+          <div class="pricing-dates">Monday through Wednesday</div>
+          <div class="pricing-sessions">
+            <span class="session-tag">🌅 Morning · 9AM–12PM · Grades 4–6</span>
+            <span class="session-tag">🌇 Afternoon · 1:30–4:30PM · Grades 7–12</span>
+          </div>
         </div>
-        <div class="payment-card" data-value="venmo">
-          <input type="radio" name="payment" value="venmo">
-          <div class="radio-visual"></div>
-          <div class="payment-icon">📱</div>
-          <div><div class="payment-name">Venmo</div><div class="payment-desc">Details will be emailed after registration</div></div>
+        <div class="pricing-right">
+          <span class="pricing-amount">$60</span>
+          <div class="pricing-note">per camper</div>
         </div>
       </div>
-      <div class="btn-row">
-        <button class="btn-back" id="back3">← Back</button>
-        <button class="btn-primary" id="next4" disabled>Add to Cart →</button>
+
+      <div class="bundle-box">
+        <div class="bundle-box-left">
+          <strong>🎉 All 3 Weeks Bundle</strong>
+          <span>Register for all three weeks and save $30 per camper</span>
+        </div>
+        <div class="bundle-price"><small>$180</small>$150</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider-full">
+
+  <!-- FAQ -->
+  <section id="faq" class="reveal">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Common Questions</h2>
+    <p class="section-sub">Everything you need to know before registering. Don't see your question? Reach out to us directly.</p>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" data-faq="0">
+          What grades can attend robotics camp?
+          <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="faq-answer" data-faq="0">Camp is open to students in 4th through 12th grade. The morning session (9AM–12PM) is designed for 4th–6th graders, and the afternoon session (1:30–4:30PM) is tailored for 7th–12th graders. Each session is age-appropriate in its pacing and complexity.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" data-faq="1">
+          Does my child need any prior robotics experience?
+          <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="faq-answer" data-faq="1">Absolutely not! Camp is designed for all experience levels from complete beginners to students who've done some robotics before. Our mentors meet campers where they are and make sure everyone is challenged and learning throughout the week.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" data-faq="2">
+          What should my child bring to camp?
+          <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="faq-answer" data-faq="2">Campers should bring a water bottle, a snack, and closed-toe shoes (required for safety in the build area). We recommend comfortable clothes they don't mind getting a little dirty. We provide all tools, materials, and equipment needed for camp activities.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" data-faq="3">
+          How does payment work?
+          <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="faq-answer" data-faq="3">You can pay by cash, check (made out to Team 4717), or Venmo. If you choose Venmo, we'll send you payment details via email after registration. If paying by cash or check, bring it on the first day of camp. No payment is collected through the registration form itself.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" data-faq="4">
+          Can I register multiple children?
+          <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="faq-answer" data-faq="4">Yes! You can add multiple campers in a single registration session. After filling out the first child's information and choosing their payment method, you'll be taken to a review screen where you can add another camper. Each camper gets their own entry in our system and their own confirmation email.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" data-faq="5">
+          What is the bundle discount?
+          <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="faq-answer" data-faq="5">If you register a camper for all three weeks, the price drops from $180 ($60 × 3) to $150 — saving you $30. The discount applies per camper, so registering two kids for all three weeks saves $60 total. The discount is applied automatically when you select all three weeks in the form.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" data-faq="6">
+          What if I need to cancel or change weeks?
+          <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="faq-answer" data-faq="6">If you need to make changes to your registration, reply to your confirmation email and we'll take care of it. We understand things come up — just let us know as early as possible so we can manage our camper numbers for each week.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" data-faq="7">
+          Is Team 4717 an FRC team?
+          <span class="faq-chevron"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="faq-answer" data-faq="7">Yes! Team 4717 is a FIRST Robotics Competition (FRC) team based in Lubbock, TX. FRC is an international high school robotics program where teams of students design, build, and compete with robots. Our camp is run by real team members who compete at the regional and sometimes national level each season.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER CTA BAND -->
+  <div style="background: var(--surface); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); padding: 3rem 2rem; text-align: center;" id="register" class="reveal">
+    <div style="max-width:600px; margin:0 auto;">
+      <div class="section-label">Ready to Join?</div>
+      <h2 class="section-title">Register Your Camper</h2>
+      <p style="font-size:0.88rem; color:var(--muted); line-height:1.7; margin-bottom:1.75rem;">Spots are limited — secure your camper's place below. The full registration form is just a few steps and takes about 3 minutes.</p>
+      <a href="#signup-form" class="btn-hero-primary">Start Registration →</a>
+    </div>
+  </div>
+
+  <!-- FORM STEPS -->
+  <div id="signup-form">
+    <div class="progress-wrap">
+      <div class="progress-steps">
+        <div class="step-dot active" data-step="0"><div class="dot">1</div><div class="label">Weeks</div></div>
+        <div class="step-line" data-line="0"></div>
+        <div class="step-dot" data-step="1"><div class="dot">2</div><div class="label">Time</div></div>
+        <div class="step-line" data-line="1"></div>
+        <div class="step-dot" data-step="2"><div class="dot">3</div><div class="label">Info</div></div>
+        <div class="step-line" data-line="2"></div>
+        <div class="step-dot" data-step="3"><div class="dot">4</div><div class="label">Payment</div></div>
+        <div class="step-line" data-line="3"></div>
+        <div class="step-dot" data-step="4"><div class="dot">5</div><div class="label">Review</div></div>
       </div>
     </div>
 
-    <!-- STEP 5: Review -->
-    <div class="card" id="step5">
-      <h2>Review & Submit</h2>
-      <p class="subtitle" id="reviewSubtitle">Confirm all registrations before submitting</p>
-      <div class="cart-list" id="cartList"></div>
-      <div class="total-box" id="totalBox"></div>
-      <div class="btn-row" style="flex-wrap:wrap;gap:0.6rem;">
-        <button class="btn-back" id="back4">← Edit Last</button>
-        <button class="btn-ghost" id="addAnotherBtn">+ Add Camper</button>
-        <button class="btn-primary" id="submitBtn">Submit All →</button>
+    <div class="form-area">
+      <!-- STEP 1 -->
+      <div class="card active" id="step1">
+        <h2>Choose Camp Weeks</h2>
+        <p class="subtitle">Pick one or more weeks — select all 3 and save $30</p>
+        <div class="bundle-banner hidden" id="bundleBanner">
+          <div class="bb-icon">🎉</div>
+          <div class="bb-text"><strong>Bundle Discount Applied!</strong><span>All 3 weeks selected — $150 instead of $180</span></div>
+        </div>
+        <div class="week-grid">
+          <div class="week-card" data-value="June 1-3"><div class="check-badge">✓</div><span class="wk-label">June 1–3</span><span class="wk-sub">Week 1</span><span class="wk-price">$60</span></div>
+          <div class="week-card" data-value="June 8-10"><div class="check-badge">✓</div><span class="wk-label">June 8–10</span><span class="wk-sub">Week 2</span><span class="wk-price">$60</span></div>
+          <div class="week-card" data-value="June 15-17"><div class="check-badge">✓</div><span class="wk-label">June 15–17</span><span class="wk-sub">Week 3</span><span class="wk-price">$60</span></div>
+        </div>
+        <div class="price-row">
+          <div><div class="pr-label">Estimated cost for this camper</div><div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Select all 3 for the $150 bundle</div></div>
+          <div style="display:flex;align-items:baseline;gap:0.4rem;"><span class="pr-original" id="originalPrice" style="display:none;"></span><span class="pr-total" id="displayPrice">$0</span></div>
+        </div>
+        <div class="btn-row"><button class="btn-primary" id="next1" disabled>Continue →</button></div>
       </div>
-    </div>
 
-    <!-- STEP 6: Done -->
-    <div class="card" id="step6">
-      <div class="success-wrap">
-        <div class="success-icon">✓</div>
-        <h2>You're Registered!</h2>
-        <div class="registration-cards" id="successCards"></div>
-        <p>Confirmation emails will be sent to each address provided.<br>We can't wait to see you at camp! 🤖</p>
+      <!-- STEP 2 -->
+      <div class="card" id="step2">
+        <h2>Select Time Slot</h2>
+        <p class="subtitle">Choose the session that fits your camper's grade level</p>
+        <div class="time-cards">
+          <div class="time-card" data-value="Morning 9am-12pm (4th–6th Grade)"><input type="radio" name="time"><div class="radio-visual"></div><div class="time-info"><div class="time-title">Morning · 9:00 AM – 12:00 PM</div><div class="time-grade">4th – 6th Grade</div></div></div>
+          <div class="time-card" data-value="Afternoon 1:30pm-4:30pm (7th–12th Grade)"><input type="radio" name="time"><div class="radio-visual"></div><div class="time-info"><div class="time-title">Afternoon · 1:30 PM – 4:30 PM</div><div class="time-grade">7th – 12th Grade</div></div></div>
+        </div>
+        <div class="btn-row"><button class="btn-back" id="back1">← Back</button><button class="btn-primary" id="next2" disabled>Continue →</button></div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="card" id="step3">
+        <h2>Camper Info</h2>
+        <p class="subtitle">Tell us about your camper and how to reach you</p>
+        <div class="form-section-divider"><span>Student</span></div>
+        <div class="two-col">
+          <div class="field-group"><label>Student Name</label><input id="studentName" type="text" placeholder="First Last"></div>
+          <div class="field-group"><label>Age</label><input id="age" type="number" placeholder="e.g. 12"></div>
+        </div>
+        <div class="field-group">
+          <label>T-Shirt Size</label>
+          <div class="size-grid"><div class="size-btn" data-size="SM">SM</div><div class="size-btn" data-size="MD">MD</div><div class="size-btn" data-size="LG">LG</div><div class="size-btn" data-size="XL">XL</div><div class="size-btn" data-size="XXL">XXL</div></div>
+        </div>
+        <div class="form-section-divider"><span>Parent / Guardian</span></div>
+        <div class="two-col">
+          <div class="field-group"><label>Parent Name</label><input id="parentName" type="text" placeholder="First Last"></div>
+          <div class="field-group"><label>Phone Number</label><input id="phone" type="tel" placeholder="(555) 000-0000"></div>
+        </div>
+        <div class="field-group"><label>Email Address</label><input id="email" type="email" placeholder="you@example.com"></div>
+        <div class="form-section-divider"><span>Address</span></div>
+        <div class="field-group"><label>Street Address</label><input id="address" type="text" placeholder="123 Main St"></div>
+        <div class="three-col">
+          <div class="field-group"><label>City</label><input id="city" type="text" placeholder="City"></div>
+          <div class="field-group"><label>State</label><input id="state" type="text" placeholder="TX"></div>
+          <div class="field-group"><label>Zip</label><input id="zip" type="text" placeholder="00000"></div>
+        </div>
+        <div class="form-section-divider"><span>Medical / Notes</span></div>
+        <div class="field-group"><label>Allergies, Medical Conditions, or Other Notes</label><input id="notes" type="text" placeholder="None, or describe here…"></div>
+        <div class="btn-row"><button class="btn-back" id="back2">← Back</button><button class="btn-primary" id="next3">Continue →</button></div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="card" id="step4">
+        <h2>Payment Method</h2>
+        <p class="subtitle">How would you like to pay for camp?</p>
+        <div class="payment-cards">
+          <div class="payment-card" data-value="cash or check"><input type="radio" name="payment"><div class="radio-visual"></div><div class="payment-icon">💵</div><div><div class="payment-name">Cash or Check</div><div class="payment-desc">Bring payment on the first day of camp</div></div></div>
+          <div class="payment-card" data-value="venmo"><input type="radio" name="payment"><div class="radio-visual"></div><div class="payment-icon">📱</div><div><div class="payment-name">Venmo</div><div class="payment-desc">Details will be emailed after registration</div></div></div>
+        </div>
+        <div class="btn-row"><button class="btn-back" id="back3">← Back</button><button class="btn-primary" id="next4" disabled>Add to Cart →</button></div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="card" id="step5">
+        <h2>Review & Submit</h2>
+        <p class="subtitle" id="reviewSubtitle">Confirm all registrations before submitting</p>
+        <div class="cart-list" id="cartList"></div>
+        <div class="total-box" id="totalBox"></div>
+        <div class="btn-row" style="flex-wrap:wrap;gap:0.6rem;">
+          <button class="btn-back" id="back4">← Edit Last</button>
+          <button class="btn-ghost" id="addAnotherBtn">+ Add Camper</button>
+          <button class="btn-primary" id="submitBtn">Submit All →</button>
+        </div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="card" id="step6">
+        <div class="success-wrap">
+          <div class="success-icon">✓</div>
+          <h2>You're Registered!</h2>
+          <div class="registration-cards" id="successCards"></div>
+          <p>Confirmation emails will be sent to each address provided.<br>We can't wait to see you at camp! 🤖</p>
+        </div>
       </div>
     </div>
-  </main>
-</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-logo"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5 2.5 2.5 0 0 0 7.5 18 2.5 2.5 0 0 0 10 15.5 2.5 2.5 0 0 0 7.5 13m9 0A2.5 2.5 0 0 0 14 15.5a2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5z"/></svg></div>
+        <span class="footer-brand-name">Team 4717 Robotics</span>
+      </div>
+      <div class="footer-copy">© 2026 Team 4717 · Lubbock, TX · All rights reserved</div>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#schedule">Schedule</a>
+        <a href="#faq">FAQ</a>
+        <a href="#register">Register</a>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- end registrationScreen -->
 
 <script>
-  // ─────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────
   // ⬇ CHANGE THIS DATE to control when registration opens
-  // Format: "Month Day, Year"  e.g.  "May 1, 2026"
   const REGISTRATION_OPEN_DATE = "May 1, 2026";
-  // ─────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────
 
   const SHEET_URL      = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
   const PRICE_PER_WEEK = 60;
   const BUNDLE_PRICE   = 150;
 
-  // ── Decide which screen to show ──
+  // ── Gate logic ──
   const openDate = new Date(REGISTRATION_OPEN_DATE);
-  const now      = new Date();
-  const isOpen   = now >= openDate;
+  const isOpen   = new Date() >= openDate;
 
   document.getElementById("csDateLabel").textContent = REGISTRATION_OPEN_DATE;
 
   if (isOpen) {
     document.getElementById("registrationScreen").classList.add("active");
     checkWeekAvailability();
+    initScrollEffects();
   } else {
     document.getElementById("comingSoonScreen").classList.add("active");
     startCountdown(openDate);
   }
 
-  // ── Countdown timer ──
+  // ── Navbar scroll effect ──
+  window.addEventListener("scroll", () => {
+    document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 20);
+  });
+
+  // ── Reveal on scroll ──
+  function initScrollEffects() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+  }
+
+  // ── FAQ accordion ──
+  document.querySelectorAll(".faq-question").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx    = btn.dataset.faq;
+      const answer = document.querySelector(`.faq-answer[data-faq="${idx}"]`);
+      const isOpenFaq = btn.classList.contains("open");
+      document.querySelectorAll(".faq-question").forEach(b => b.classList.remove("open"));
+      document.querySelectorAll(".faq-answer").forEach(a => a.classList.remove("open"));
+      if (!isOpenFaq) { btn.classList.add("open"); answer.classList.add("open"); }
+    });
+  });
+
+  // ── Countdown ──
   function startCountdown(target) {
     function tick() {
       const diff = target - new Date();
       if (diff <= 0) {
-        // Time's up — swap to registration
         document.getElementById("comingSoonScreen").classList.remove("active");
         document.getElementById("registrationScreen").classList.add("active");
-        checkWeekAvailability();
-        return;
+        checkWeekAvailability(); initScrollEffects(); return;
       }
-      const d = Math.floor(diff / 86400000);
-      const h = Math.floor((diff % 86400000) / 3600000);
-      const m = Math.floor((diff % 3600000)  / 60000);
-      const s = Math.floor((diff % 60000)    / 1000);
-      document.getElementById("cdDays").textContent  = String(d).padStart(2,"0");
-      document.getElementById("cdHours").textContent = String(h).padStart(2,"0");
-      document.getElementById("cdMins").textContent  = String(m).padStart(2,"0");
-      document.getElementById("cdSecs").textContent  = String(s).padStart(2,"0");
+      document.getElementById("cdDays").textContent  = String(Math.floor(diff/86400000)).padStart(2,"0");
+      document.getElementById("cdHours").textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,"0");
+      document.getElementById("cdMins").textContent  = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+      document.getElementById("cdSecs").textContent  = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
     }
-    tick();
-    setInterval(tick, 1000);
+    tick(); setInterval(tick, 1000);
   }
 
-  // ── Notify Me form ──
-  document.getElementById("notifySubmitBtn").addEventListener("click", async () => {
-    const name   = document.getElementById("notifyName").value.trim();
-    const email  = document.getElementById("notifyEmail").value.trim();
-    const phone  = document.getElementById("notifyPhone").value.trim();
+  // ── Notify Me ──
+  document.querySelectorAll(".checkbox-item").forEach(item => {
+    item.addEventListener("click", () => { const cb = item.querySelector("input[type='checkbox']"); cb.checked = !cb.checked; });
+  });
+
+  document.getElementById("notifySubmitBtn")?.addEventListener("click", async () => {
+    const name = document.getElementById("notifyName").value.trim();
+    const email = document.getElementById("notifyEmail").value.trim();
+    const phone = document.getElementById("notifyPhone").value.trim();
     const wantsReg    = document.getElementById("notifyRegCheck").checked;
     const wantsEvents = document.getElementById("notifyEventsCheck").checked;
-
-    if (!name) { highlight("notifyName"); return; }
-    if (!email || !email.includes("@")) { highlight("notifyEmail"); return; }
-    if (!wantsReg && !wantsEvents) {
-      alert("Please check at least one notification option.");
-      return;
-    }
-
+    if (!name) { hlField("notifyName"); return; }
+    if (!email || !email.includes("@")) { hlField("notifyEmail"); return; }
     const btn = document.getElementById("notifySubmitBtn");
-    btn.disabled = true;
-    btn.textContent = "Submitting…";
-
+    btn.disabled = true; btn.textContent = "Submitting…";
     try {
       const fd = new FormData();
-      fd.append("action",      "addNotifySignup");
-      fd.append("name",        name);
-      fd.append("email",       email);
-      fd.append("phone",       phone);
-      fd.append("wantsReg",    wantsReg    ? "Yes" : "No");
-      fd.append("wantsEvents", wantsEvents ? "Yes" : "No");
-      await fetch(SHEET_URL, { method: "POST", body: fd });
-    } catch(e) {
-      console.warn("Notify submit error:", e);
-    }
-
-    // Show success regardless (avoid blocking user on network error)
+      fd.append("action","addNotifySignup"); fd.append("name",name); fd.append("email",email);
+      fd.append("phone",phone); fd.append("wantsReg",wantsReg?"Yes":"No"); fd.append("wantsEvents",wantsEvents?"Yes":"No");
+      await fetch(SHEET_URL, { method:"POST", body:fd });
+    } catch(e) {}
     document.getElementById("notifyForm").style.display = "none";
     document.getElementById("notifySuccess").style.display = "block";
-
-    let msg = "We'll send you an email as soon as registration opens.";
-    if (wantsEvents) msg += " You'll also get updates on Team 4717 events.";
-    msg += " See you at camp! 🤖";
+    let msg = "We'll email you as soon as registration opens.";
+    if (wantsEvents) msg += " You'll also get Team 4717 event updates.";
     document.getElementById("notifySuccessMsg").textContent = msg;
   });
 
-  function highlight(id) {
+  function hlField(id) {
     const el = document.getElementById(id);
-    el.style.borderColor = "var(--gold)";
-    el.focus();
+    el.style.borderColor = "var(--gold)"; el.focus();
     setTimeout(() => el.style.borderColor = "", 1500);
   }
 
-  // ── Checkbox visual clicks ──
-  document.querySelectorAll(".checkbox-item").forEach(item => {
-    item.addEventListener("click", () => {
-      const cb = item.querySelector("input[type='checkbox']");
-      cb.checked = !cb.checked;
-    });
-  });
-
   // ─────────────────────────────────────────────
-  // REGISTRATION FORM LOGIC (unchanged)
+  // REGISTRATION FORM
   // ─────────────────────────────────────────────
   let registrations = [], currentCamper = {}, selectedWeeks = [],
       selectedShirt = null, selectedTime = null, selectedPayment = null;
@@ -688,60 +991,55 @@
   async function checkWeekAvailability() {
     document.querySelectorAll(".week-card").forEach(c => c.classList.add("loading"));
     try {
-      const res    = await fetch(`${SHEET_URL}?action=getWeekStatus`);
+      const res = await fetch(`${SHEET_URL}?action=getWeekStatus`);
       const status = await res.json();
       document.querySelectorAll(".week-card").forEach(card => {
         card.classList.remove("loading");
-        const week = card.dataset.value;
-        const s    = status[week];
+        const s = status[card.dataset.value];
         if (!s) return;
         if (!s.open || s.isFull) {
-          card.classList.add("unavailable");
-          card.classList.remove("selected");
+          card.classList.add("unavailable"); card.classList.remove("selected");
           const sub = card.querySelector(".wk-sub"), price = card.querySelector(".wk-price");
-          if (sub)   sub.textContent   = s.isFull ? "FULL" : "CLOSED";
+          if (sub) sub.textContent = s.isFull ? "FULL" : "CLOSED";
           if (price) price.textContent = s.isFull ? "Full" : "Closed";
-          selectedWeeks = selectedWeeks.filter(w => w !== week);
+          selectedWeeks = selectedWeeks.filter(w => w !== card.dataset.value);
         } else {
           card.classList.remove("unavailable");
           const sub = card.querySelector(".wk-sub"), price = card.querySelector(".wk-price");
-          const wkNum = ["June 1-3","June 8-10","June 15-17"].indexOf(week) + 1;
-          if (sub)   sub.textContent   = `Week ${wkNum}`;
+          const wkNum = ["June 1-3","June 8-10","June 15-17"].indexOf(card.dataset.value)+1;
+          if (sub) sub.textContent = `Week ${wkNum}`;
           if (price) price.textContent = "$60";
         }
       });
       updatePriceDisplay();
       document.getElementById("next1").disabled = selectedWeeks.length === 0;
-    } catch(e) {
-      document.querySelectorAll(".week-card").forEach(c => c.classList.remove("loading"));
-    }
+    } catch(e) { document.querySelectorAll(".week-card").forEach(c => c.classList.remove("loading")); }
   }
 
   document.querySelectorAll(".week-card").forEach(card => {
     card.addEventListener("click", () => {
       if (card.classList.contains("unavailable")) return;
       const val = card.dataset.value;
-      if (selectedWeeks.includes(val)) { selectedWeeks = selectedWeeks.filter(w => w !== val); card.classList.remove("selected"); }
+      if (selectedWeeks.includes(val)) { selectedWeeks = selectedWeeks.filter(w=>w!==val); card.classList.remove("selected"); }
       else { selectedWeeks.push(val); card.classList.add("selected"); }
       updatePriceDisplay();
       document.getElementById("next1").disabled = selectedWeeks.length === 0;
     });
   });
 
-  function calcPrice(count) { return count === 3 ? BUNDLE_PRICE : count * PRICE_PER_WEEK; }
+  function calcPrice(n) { return n === 3 ? BUNDLE_PRICE : n * PRICE_PER_WEEK; }
 
   function updatePriceDisplay() {
     const count = selectedWeeks.length, price = calcPrice(count), bundle = count === 3;
     document.getElementById("bundleBanner").classList.toggle("hidden", !bundle);
     document.getElementById("displayPrice").textContent = count ? `$${price}` : "$0";
     const orig = document.getElementById("originalPrice");
-    if (bundle) { orig.style.display = "inline"; orig.textContent = `$${count * PRICE_PER_WEEK}`; }
-    else orig.style.display = "none";
+    if (bundle) { orig.style.display = "inline"; orig.textContent = `$${count*PRICE_PER_WEEK}`; } else orig.style.display = "none";
   }
 
   document.querySelectorAll(".time-card").forEach(card => {
     card.addEventListener("click", () => {
-      document.querySelectorAll(".time-card").forEach(c => c.classList.remove("selected"));
+      document.querySelectorAll(".time-card").forEach(c=>c.classList.remove("selected"));
       card.classList.add("selected"); selectedTime = card.dataset.value;
       document.getElementById("next2").disabled = false;
     });
@@ -749,105 +1047,98 @@
 
   document.querySelectorAll(".size-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
+      document.querySelectorAll(".size-btn").forEach(b=>b.classList.remove("selected"));
       btn.classList.add("selected"); selectedShirt = btn.dataset.size;
     });
   });
 
   document.querySelectorAll(".payment-card").forEach(card => {
     card.addEventListener("click", () => {
-      document.querySelectorAll(".payment-card").forEach(c => c.classList.remove("selected"));
+      document.querySelectorAll(".payment-card").forEach(c=>c.classList.remove("selected"));
       card.classList.add("selected"); selectedPayment = card.dataset.value;
       document.getElementById("next4").disabled = false;
     });
   });
 
-  document.getElementById("next1").addEventListener("click", () => {
-    currentCamper.weeks = [...selectedWeeks]; currentCamper.price = calcPrice(selectedWeeks.length); currentCamper.bundle = selectedWeeks.length === 3; showStep(1);
-  });
+  document.getElementById("next1").addEventListener("click", () => { currentCamper.weeks=[...selectedWeeks]; currentCamper.price=calcPrice(selectedWeeks.length); currentCamper.bundle=selectedWeeks.length===3; showStep(1); });
   document.getElementById("back1").addEventListener("click", () => showStep(0));
-  document.getElementById("next2").addEventListener("click", () => { currentCamper.time = selectedTime; showStep(2); });
+  document.getElementById("next2").addEventListener("click", () => { currentCamper.time=selectedTime; showStep(2); });
   document.getElementById("back2").addEventListener("click", () => showStep(1));
   document.getElementById("next3").addEventListener("click", () => {
     const fields = ["studentName","age","parentName","phone","email","address","city","state","zip","notes"];
     for (let f of fields) {
       const el = document.getElementById(f);
-      if (!el.value.trim()) { el.style.borderColor = "var(--gold)"; el.focus(); setTimeout(() => el.style.borderColor = "", 1500); return; }
+      if (!el.value.trim()) { el.style.borderColor="var(--gold)"; el.focus(); setTimeout(()=>el.style.borderColor="",1500); return; }
       currentCamper[f] = el.value.trim();
     }
     currentCamper.shirtSize = selectedShirt || "Not selected"; showStep(3);
   });
   document.getElementById("back3").addEventListener("click", () => showStep(2));
-  document.getElementById("next4").addEventListener("click", () => { currentCamper.payment = selectedPayment; registrations.push({...currentCamper}); renderCart(); showStep(4); });
-  document.getElementById("back4").addEventListener("click", () => { const last = registrations.pop(); currentCamper = {...last}; showStep(3); });
+  document.getElementById("next4").addEventListener("click", () => { currentCamper.payment=selectedPayment; registrations.push({...currentCamper}); renderCart(); showStep(4); });
+  document.getElementById("back4").addEventListener("click", () => { const last=registrations.pop(); currentCamper={...last}; showStep(3); });
   document.getElementById("addAnotherBtn").addEventListener("click", () => { resetCamperForm(); showStep(0); });
   document.getElementById("submitBtn").addEventListener("click", () => { sendAllForms(); renderSuccessCards(); showStep(5); });
 
   function renderCart() {
-    const list = document.getElementById("cartList");
-    list.innerHTML = "";
-    let grandTotal = 0, grandOriginal = 0;
-    registrations.forEach((r, i) => {
-      grandTotal += r.price; grandOriginal += r.weeks.length * PRICE_PER_WEEK;
-      const item = document.createElement("div"); item.className = "cart-item";
-      item.innerHTML = `<div class="cart-item-info"><div class="ci-name">${escHtml(r.studentName)}</div><div class="ci-detail">${r.weeks.map(w=>escHtml(w)).join(", ")}<br>${escHtml(r.time.split(" (")[0])} · Shirt: ${escHtml(r.shirtSize)}<br>Payment: ${escHtml(r.payment)}</div></div><div class="cart-item-right"><div class="cart-item-price">$${r.price}${r.bundle?'&nbsp;<span style="font-size:0.6rem;color:var(--green);">BUNDLE</span>':''}</div><button class="remove-btn" data-index="${i}">✕ Remove</button></div>`;
+    const list = document.getElementById("cartList"); list.innerHTML = "";
+    let gTotal=0, gOrig=0;
+    registrations.forEach((r,i)=>{
+      gTotal+=r.price; gOrig+=r.weeks.length*PRICE_PER_WEEK;
+      const item=document.createElement("div"); item.className="cart-item";
+      item.innerHTML=`<div><div class="ci-name">${esc(r.studentName)}</div><div class="ci-detail">${r.weeks.map(w=>esc(w)).join(", ")}<br>${esc(r.time.split(" (")[0])} · Shirt: ${esc(r.shirtSize)}<br>Payment: ${esc(r.payment)}</div></div><div class="cart-item-right"><div class="cart-item-price">$${r.price}${r.bundle?'&nbsp;<span style="font-size:0.6rem;color:var(--green);">BUNDLE</span>':''}</div><button class="remove-btn" data-index="${i}">✕ Remove</button></div>`;
       list.appendChild(item);
     });
-    list.querySelectorAll(".remove-btn").forEach(btn => {
-      btn.addEventListener("click", () => { registrations.splice(parseInt(btn.dataset.index),1); if(!registrations.length){resetCamperForm();showStep(0);return;} renderCart(); });
+    list.querySelectorAll(".remove-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{ registrations.splice(parseInt(btn.dataset.index),1); if(!registrations.length){resetCamperForm();showStep(0);return;} renderCart(); });
     });
-    const savings = grandOriginal - grandTotal;
-    let html = "";
-    if (registrations.length > 1) html += `<div class="total-line"><span>${registrations.length} campers</span><span></span></div>`;
-    if (savings > 0) html += `<div class="total-line"><span class="savings-text">🎉 Bundle savings</span><span class="savings-text">−$${savings}</span></div>`;
-    html += `<div class="total-line grand"><span>Total Due</span><span>$${grandTotal}</span></div>`;
-    document.getElementById("totalBox").innerHTML = html;
-    document.getElementById("reviewSubtitle").textContent = registrations.length === 1 ? "Confirm the registration below or add another camper" : `${registrations.length} campers registered — confirm or add more`;
-    document.getElementById("submitBtn").disabled = registrations.length === 0;
+    const savings=gOrig-gTotal;
+    let html="";
+    if(registrations.length>1) html+=`<div class="total-line"><span>${registrations.length} campers</span><span></span></div>`;
+    if(savings>0) html+=`<div class="total-line"><span class="savings-text">🎉 Bundle savings</span><span class="savings-text">−$${savings}</span></div>`;
+    html+=`<div class="total-line grand"><span>Total Due</span><span>$${gTotal}</span></div>`;
+    document.getElementById("totalBox").innerHTML=html;
+    document.getElementById("reviewSubtitle").textContent=registrations.length===1?"Confirm the registration or add another camper":`${registrations.length} campers — confirm or add more`;
+    document.getElementById("submitBtn").disabled=registrations.length===0;
   }
 
   function renderSuccessCards() {
-    const wrap = document.getElementById("successCards"); wrap.innerHTML = "";
-    registrations.forEach(r => { const chip = document.createElement("div"); chip.className = "reg-chip"; chip.innerHTML = `<span>${escHtml(r.studentName)}</span> ${r.weeks.join(", ")} · $${r.price}`; wrap.appendChild(chip); });
+    const wrap=document.getElementById("successCards"); wrap.innerHTML="";
+    registrations.forEach(r=>{ const c=document.createElement("div"); c.className="reg-chip"; c.innerHTML=`<span>${esc(r.studentName)}</span>${r.weeks.join(", ")} · $${r.price}`; wrap.appendChild(c); });
   }
 
   function resetCamperForm() {
-    currentCamper = {}; selectedWeeks = []; selectedTime = null; selectedShirt = null; selectedPayment = null;
-    document.querySelectorAll(".week-card").forEach(c => c.classList.remove("selected"));
-    document.querySelectorAll(".time-card").forEach(c => c.classList.remove("selected"));
-    document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
-    document.querySelectorAll(".payment-card").forEach(c => c.classList.remove("selected"));
+    currentCamper={}; selectedWeeks=[]; selectedTime=null; selectedShirt=null; selectedPayment=null;
+    document.querySelectorAll(".week-card").forEach(c=>c.classList.remove("selected"));
+    document.querySelectorAll(".time-card").forEach(c=>c.classList.remove("selected"));
+    document.querySelectorAll(".size-btn").forEach(b=>b.classList.remove("selected"));
+    document.querySelectorAll(".payment-card").forEach(c=>c.classList.remove("selected"));
     document.getElementById("bundleBanner").classList.add("hidden");
-    document.getElementById("displayPrice").textContent = "$0";
-    document.getElementById("originalPrice").style.display = "none";
-    document.getElementById("next1").disabled = true;
-    document.getElementById("next2").disabled = true;
-    document.getElementById("next4").disabled = true;
-    ["studentName","age","parentName","phone","email","address","city","state","zip","notes"].forEach(id => { document.getElementById(id).value = ""; });
+    document.getElementById("displayPrice").textContent="$0";
+    document.getElementById("originalPrice").style.display="none";
+    document.getElementById("next1").disabled=true; document.getElementById("next2").disabled=true; document.getElementById("next4").disabled=true;
+    ["studentName","age","parentName","phone","email","address","city","state","zip","notes"].forEach(id=>{document.getElementById(id).value="";});
   }
 
   function showStep(index) {
-    document.querySelectorAll(".card").forEach((card, i) => card.classList.toggle("active", i === index));
-    document.querySelectorAll(".step-dot").forEach((dot, i) => { dot.classList.remove("active","done"); if(i===index)dot.classList.add("active"); else if(i<index)dot.classList.add("done"); });
-    document.querySelectorAll(".step-line").forEach((line, i) => line.classList.toggle("done", i < index));
-    window.scrollTo({top:0,behavior:"smooth"});
-    if (index === 0) checkWeekAvailability();
+    document.querySelectorAll(".card").forEach((card,i)=>card.classList.toggle("active",i===index));
+    document.querySelectorAll(".step-dot").forEach((dot,i)=>{ dot.classList.remove("active","done"); if(i===index)dot.classList.add("active"); else if(i<index)dot.classList.add("done"); });
+    document.querySelectorAll(".step-line").forEach((line,i)=>line.classList.toggle("done",i<index));
+    document.getElementById("signup-form").scrollIntoView({behavior:"smooth", block:"start"});
+    if(index===0) checkWeekAvailability();
   }
 
   function sendAllForms() {
-    registrations.forEach(r => {
-      const data = new FormData();
-      data.append("week",r.weeks.join(", ")); data.append("bundleDeal",r.bundle?"Yes — $150 bundle":"No");
-      data.append("price",`$${r.price}`); data.append("time",r.time); data.append("studentName",r.studentName);
-      data.append("age",r.age); data.append("shirtSize",r.shirtSize); data.append("parentName",r.parentName);
-      data.append("phone",r.phone); data.append("email",r.email); data.append("address",r.address);
-      data.append("city",r.city); data.append("state",r.state); data.append("zip",r.zip);
-      data.append("notes",r.notes); data.append("payment",r.payment);
-      fetch(SHEET_URL, { method:"POST", body:data });
+    registrations.forEach(r=>{
+      const data=new FormData();
+      ["week","bundleDeal","price","time","studentName","age","shirtSize","parentName","phone","email","address","city","state","zip","notes","payment"].forEach(k=>{
+        const val = k==="week"?r.weeks.join(", "):k==="bundleDeal"?(r.bundle?"Yes — $150 bundle":"No"):k==="price"?`$${r.price}`:r[k];
+        data.append(k, val||"");
+      });
+      fetch(SHEET_URL,{method:"POST",body:data});
     });
   }
 
-  function escHtml(str) { return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 </script>
 </body>
 </html>
