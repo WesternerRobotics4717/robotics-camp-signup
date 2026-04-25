@@ -899,7 +899,7 @@
 <script>
   // ─────────────────────────────────────────────
   // ⬇ CHANGE THIS DATE to control when registration opens
-  const REGISTRATION_OPEN_DATE = "May 1, 2026";
+  const REGISTRATION_OPEN_DATE = "Febuary 1, 2026";
   // ─────────────────────────────────────────────
 
   const SHEET_URL      = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
@@ -908,9 +908,16 @@
 
   // ── Smooth scroll for all data-scroll links ──
   function scrollToSection(id) {
+    // If coming soon screen is active, always scroll to the notify form
+    const comingSoon = document.getElementById("comingSoonScreen");
+    if (comingSoon && comingSoon.classList.contains("active")) {
+      const target = document.getElementById("notifyForm") || document.querySelector(".notify-card");
+      if (target) { target.scrollIntoView({ behavior: "smooth", block: "center" }); }
+      return;
+    }
     const el = document.getElementById(id);
     if (!el) return;
-    const offset = 70; // navbar height
+    const offset = 70;
     const top = el.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top, behavior: "smooth" });
   }
