@@ -503,7 +503,6 @@
       const fd = new FormData();
       fd.append("action", "updateWeekSetting");
       fd.append("week", week);
-      fd.append("adminEmail", googleUser.email);
       if (changes.limit !== undefined) fd.append("limit", changes.limit);
       if (changes.open  !== undefined) fd.append("open",  changes.open ? "true" : "false");
       const res = await fetch(SHEET_URL, { method: "POST", body: fd });
