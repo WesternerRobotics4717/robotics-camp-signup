@@ -18,6 +18,7 @@
       --muted: #888;
       --green: #4caf7d;
       --green-dim: rgba(76,175,125,0.12);
+      --red: #e05555;
       --radius: 12px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,7 +51,7 @@
 
     .week-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
     .week-card { background: var(--surface2); border: 1.5px solid #3a3a3a; border-radius: var(--radius); padding: 1rem 0.5rem; cursor: pointer; text-align: center; transition: all 0.2s; user-select: none; position: relative; }
-    .week-card:hover { border-color: var(--gold); background: var(--gold-dim); }
+    .week-card:hover:not(.unavailable) { border-color: var(--gold); background: var(--gold-dim); }
     .week-card.selected { border-color: var(--gold); background: var(--gold-dim); }
     .week-card.selected .wk-label { color: var(--gold-light); }
     .week-card .wk-label { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; display: block; margin-bottom: 2px; }
@@ -58,6 +59,21 @@
     .week-card .wk-price { font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--gold); display: block; margin-top: 6px; }
     .week-card .check-badge { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; background: var(--gold); border-radius: 50%; display: none; place-items: center; font-size: 0.65rem; color: #111; font-weight: 900; }
     .week-card.selected .check-badge { display: grid; }
+
+    /* Unavailable week styles */
+    .week-card.unavailable {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+      border-color: #333 !important;
+      background: var(--surface2) !important;
+    }
+    .week-card.unavailable .wk-price { color: var(--red); font-size: 0.8rem; }
+    .week-card.unavailable .wk-sub { color: var(--red); }
+
+    /* Availability loading shimmer */
+    .week-card.loading { animation: shimmer 1.2s infinite; }
+    @keyframes shimmer { 0%,100% { opacity: 0.5; } 50% { opacity: 0.8; } }
 
     .bundle-banner { background: var(--green-dim); border: 1.5px solid var(--green); border-radius: 10px; padding: 0.85rem 1.1rem; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; animation: fadeUp 0.3s ease; }
     .bundle-banner .bb-icon { font-size: 1.3rem; flex-shrink: 0; }
@@ -355,6 +371,9 @@
 </main>
 
 <script>
+  // ── SHEET URL — defined at the top so all functions can use it ──
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
+
   const PRICE_PER_WEEK = 60;
   const BUNDLE_PRICE = 150;
 
@@ -365,9 +384,58 @@
   let selectedTime = null;
   let selectedPayment = null;
 
-  // ── Week multi-select ──
+  // ── Check week availability from Apps Script ──
+  async function checkWeekAvailability() {
+    // Show loading shimmer
+    document.querySelectorAll(".week-card").forEach(c => c.classList.add("loading"));
+
+    try {
+      const res = await fetch(`${SHEET_URL}?action=getWeekStatus`);
+      const status = await res.json();
+
+      document.querySelectorAll(".week-card").forEach(card => {
+        card.classList.remove("loading");
+        const week = card.dataset.value;
+        const s = status[week];
+        if (!s) return;
+
+        if (!s.open || s.isFull) {
+          // Mark unavailable — remove any previous selection too
+          card.classList.add("unavailable");
+          card.classList.remove("selected");
+          const sub   = card.querySelector(".wk-sub");
+          const price = card.querySelector(".wk-price");
+          if (sub)   sub.textContent   = s.isFull ? "FULL" : "CLOSED";
+          if (price) price.textContent = s.isFull ? "Full" : "Closed";
+
+          // If this week was already selected, deselect it
+          selectedWeeks = selectedWeeks.filter(w => w !== week);
+        } else {
+          // Make sure previously-closed weeks become available again if re-opened
+          card.classList.remove("unavailable");
+          const sub   = card.querySelector(".wk-sub");
+          const price = card.querySelector(".wk-price");
+          const wkNum = ["June 1-3","June 8-10","June 15-17"].indexOf(week) + 1;
+          if (sub)   sub.textContent   = `Week ${wkNum}`;
+          if (price) price.textContent = "$60";
+        }
+      });
+
+      // Recalculate price in case a selected week just became unavailable
+      updatePriceDisplay();
+      document.getElementById("next1").disabled = selectedWeeks.length === 0;
+
+    } catch(e) {
+      // If the check fails, just remove shimmer and let all weeks stay clickable
+      document.querySelectorAll(".week-card").forEach(c => c.classList.remove("loading"));
+      console.warn("Could not check week availability:", e);
+    }
+  }
+
+  // ── Week multi-select (skips unavailable cards) ──
   document.querySelectorAll(".week-card").forEach(card => {
     card.addEventListener("click", () => {
+      if (card.classList.contains("unavailable")) return;
       const val = card.dataset.value;
       if (selectedWeeks.includes(val)) {
         selectedWeeks = selectedWeeks.filter(w => w !== val);
@@ -386,8 +454,8 @@
   }
 
   function updatePriceDisplay() {
-    const count = selectedWeeks.length;
-    const price = calcPrice(count);
+    const count  = selectedWeeks.length;
+    const price  = calcPrice(count);
     const bundle = count === 3;
     document.getElementById("bundleBanner").classList.toggle("hidden", !bundle);
     document.getElementById("displayPrice").textContent = count ? `$${price}` : "$0";
@@ -431,8 +499,8 @@
 
   // ── Navigation ──
   document.getElementById("next1").addEventListener("click", () => {
-    currentCamper.weeks = [...selectedWeeks];
-    currentCamper.price = calcPrice(selectedWeeks.length);
+    currentCamper.weeks  = [...selectedWeeks];
+    currentCamper.price  = calcPrice(selectedWeeks.length);
     currentCamper.bundle = selectedWeeks.length === 3;
     showStep(1);
   });
@@ -472,7 +540,6 @@
   });
 
   document.getElementById("back4").addEventListener("click", () => {
-    // Pop last camper and restore their state
     const last = registrations.pop();
     currentCamper = { ...last };
     showStep(3);
@@ -480,7 +547,7 @@
 
   document.getElementById("addAnotherBtn").addEventListener("click", () => {
     resetCamperForm();
-    showStep(0);
+    showStep(0); // showStep(0) will trigger checkWeekAvailability via the step handler below
   });
 
   document.getElementById("submitBtn").addEventListener("click", () => {
@@ -493,13 +560,11 @@
   function renderCart() {
     const list = document.getElementById("cartList");
     list.innerHTML = "";
-    let grandTotal = 0;
-    let grandOriginal = 0;
+    let grandTotal = 0, grandOriginal = 0;
 
     registrations.forEach((r, i) => {
-      grandTotal += r.price;
+      grandTotal    += r.price;
       grandOriginal += r.weeks.length * PRICE_PER_WEEK;
-
       const item = document.createElement("div");
       item.className = "cart-item";
       item.innerHTML = `
@@ -519,25 +584,19 @@
       list.appendChild(item);
     });
 
-    // Remove buttons
     list.querySelectorAll(".remove-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         registrations.splice(parseInt(btn.dataset.index), 1);
-        if (registrations.length === 0) {
-          resetCamperForm();
-          showStep(0);
-          return;
-        }
+        if (registrations.length === 0) { resetCamperForm(); showStep(0); return; }
         renderCart();
       });
     });
 
-    // Total box
     const savings = grandOriginal - grandTotal;
     const totalBox = document.getElementById("totalBox");
     let html = "";
     if (registrations.length > 1) {
-      html += `<div class="total-line"><span>${registrations.length} campers · ${grandOriginal !== grandTotal ? `<span style="text-decoration:line-through;opacity:0.5;">$${grandOriginal}</span>` : ''}</span><span></span></div>`;
+      html += `<div class="total-line"><span>${registrations.length} campers${grandOriginal !== grandTotal ? ` · <span style="text-decoration:line-through;opacity:0.5;">$${grandOriginal}</span>` : ''}</span><span></span></div>`;
     }
     if (savings > 0) {
       html += `<div class="total-line"><span class="savings-text">🎉 Bundle savings</span><span class="savings-text">−$${savings}</span></div>`;
@@ -566,10 +625,10 @@
 
   // ── Reset for next camper ──
   function resetCamperForm() {
-    currentCamper = {};
-    selectedWeeks = [];
-    selectedTime = null;
-    selectedShirt = null;
+    currentCamper  = {};
+    selectedWeeks  = [];
+    selectedTime   = null;
+    selectedShirt  = null;
     selectedPayment = null;
 
     document.querySelectorAll(".week-card").forEach(c => c.classList.remove("selected"));
@@ -582,12 +641,11 @@
     document.getElementById("next1").disabled = true;
     document.getElementById("next2").disabled = true;
     document.getElementById("next4").disabled = true;
-    ["studentName","age","parentName","phone","email","address","city","state","zip","notes"].forEach(id => {
-      document.getElementById(id).value = "";
-    });
+    ["studentName","age","parentName","phone","email","address","city","state","zip","notes"]
+      .forEach(id => { document.getElementById(id).value = ""; });
   }
 
-  // ── Show step ──
+  // ── Show step — re-checks availability every time step 1 is shown ──
   function showStep(index) {
     document.querySelectorAll(".card").forEach((card, i) =>
       card.classList.toggle("active", i === index)
@@ -601,29 +659,31 @@
       line.classList.toggle("done", i < index);
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Re-fetch availability every time the week selection screen is shown
+    if (index === 0) checkWeekAvailability();
   }
 
   // ── Submit all ──
   function sendAllForms() {
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbyknc8nfxI7JQJJeDZpdE3yWVcrahpWdXPNIWvQuDeWMeWyvPEmgRgn4tL_tZBMnYQX0A/exec";
     registrations.forEach(r => {
       const data = new FormData();
-      data.append("week", r.weeks.join(", "));
+      data.append("week",       r.weeks.join(", "));
       data.append("bundleDeal", r.bundle ? "Yes — $150 bundle" : "No");
-      data.append("price", `$${r.price}`);
-      data.append("time", r.time);
-      data.append("studentName", r.studentName);
-      data.append("age", r.age);
-      data.append("shirtSize", r.shirtSize);
+      data.append("price",      `$${r.price}`);
+      data.append("time",       r.time);
+      data.append("studentName",r.studentName);
+      data.append("age",        r.age);
+      data.append("shirtSize",  r.shirtSize);
       data.append("parentName", r.parentName);
-      data.append("phone", r.phone);
-      data.append("email", r.email);
-      data.append("address", r.address);
-      data.append("city", r.city);
-      data.append("state", r.state);
-      data.append("zip", r.zip);
-      data.append("notes", r.notes);
-      data.append("payment", r.payment);
+      data.append("phone",      r.phone);
+      data.append("email",      r.email);
+      data.append("address",    r.address);
+      data.append("city",       r.city);
+      data.append("state",      r.state);
+      data.append("zip",        r.zip);
+      data.append("notes",      r.notes);
+      data.append("payment",    r.payment);
       fetch(SHEET_URL, { method: "POST", body: data });
     });
   }
@@ -631,31 +691,9 @@
   function escHtml(str) {
     return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
-    async function checkWeekAvailability() {
-      try {
-        const res = await fetch(`${SHEET_URL}?action=getWeekStatus`);
-        const status = await res.json();
-        document.querySelectorAll(".week-card").forEach(card => {
-          const week = card.dataset.value;
-          const s = status[week];
-          if (!s) return;
-          if (!s.open || s.isFull) {
-            card.classList.add("disabled");
-            card.style.opacity = "0.45";
-            card.style.cursor = "not-allowed";
-            card.style.pointerEvents = "none";
-            const sub = card.querySelector(".wk-sub");
-            if (sub) sub.textContent = s.isFull ? "FULL" : "CLOSED";
-            const price = card.querySelector(".wk-price");
-            if (price) price.textContent = s.isFull ? "Full" : "Closed";
-          }
-        });
-      } catch(e) {
-        console.warn("Could not check week availability", e);
-      }
-    }
 
-   checkWeekAvailability();  
+  // ── Run on page load ──
+  checkWeekAvailability();
 </script>
 </body>
 </html>
