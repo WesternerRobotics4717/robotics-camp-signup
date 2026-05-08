@@ -346,8 +346,13 @@
     document.getElementById("refreshBtn").classList.add("spinning");
     document.getElementById("lastSynced").textContent = "Syncing…";
     try {
-      const res  = await fetch(`${SHEET_URL}?action=getAdminData`);
-      const data = await res.json();
+      const res  = await fetch(`${SHEET_URL}?action=getAdminData`, {
+        method: "GET",
+        credentials: "omit",
+        redirect: "follow",
+      });
+      const text = await res.text();
+      const data = JSON.parse(text);
       weekData = data.weekData || {};
       signups  = data.signups  || [];
       renderWeeks();
@@ -355,6 +360,7 @@
       renderTable();
       document.getElementById("lastSynced").textContent = `Last synced: ${new Date().toLocaleTimeString()}`;
     } catch(e) {
+      console.error("loadData error:", e);
       showToast("❌ Could not load data. Check your Apps Script URL.", "error");
       document.getElementById("lastSynced").textContent = "Sync failed";
     }
@@ -481,8 +487,9 @@
       if (changes.limit !== undefined) fd.append("limit", changes.limit);
       if (changes.open  !== undefined) fd.append("open",  changes.open ? "true" : "false");
 
-      const res  = await fetch(SHEET_URL, { method: "POST", body: fd });
-      const data = await res.json();
+      const res  = await fetch(SHEET_URL, { method: "POST", body: fd, credentials: "omit", redirect: "follow" });
+      const text = await res.text();
+      const data = JSON.parse(text);
 
       if (data.result === "success") {
         showToast(`✅ ${week} updated`, "success");
