@@ -344,7 +344,7 @@
   // ── Load data ──
   async function loadData() {
     document.getElementById("refreshBtn").classList.add("spinning");
-    document.getElementById("lastSynced").textContent = "Syncing… (" + SHEET_URL.slice(-20) + ")";
+    document.getElementById("lastSynced").textContent = "Syncing…";
     try {
       const res  = await fetch(`${SHEET_URL}?action=getAdminData`, {
         method: "GET",
@@ -361,9 +361,8 @@
       document.getElementById("lastSynced").textContent = `Last synced: ${new Date().toLocaleTimeString()}`;
     } catch(e) {
       console.error("loadData error:", e);
-      const msg = "Error: " + (e && e.message ? e.message : String(e));
-      showToast("❌ " + msg, "error");
-      document.getElementById("lastSynced").textContent = msg;
+      showToast("❌ Could not load data. Check your Apps Script URL.", "error");
+      document.getElementById("lastSynced").textContent = "Sync failed";
     }
     document.getElementById("refreshBtn").classList.remove("spinning");
   }
@@ -451,7 +450,7 @@
         remaining += d.limit > 0 ? (d.limit - d.count) : 999;
       }
     });
-    signups.forEach(s => { revenue += parseInt((s.price||"").replace("$","")) || 0; });
+    signups.forEach(s => { revenue += parseInt(String(s.price||"").replace("$","")) || 0; });
     document.getElementById("statTotal").textContent     = total;
     document.getElementById("statOpen").textContent      = openCount;
     document.getElementById("statRemaining").textContent = remaining >= 999 ? "∞" : remaining;
