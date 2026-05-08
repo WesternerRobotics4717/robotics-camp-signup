@@ -344,7 +344,7 @@
   // ── Load data ──
   async function loadData() {
     document.getElementById("refreshBtn").classList.add("spinning");
-    document.getElementById("lastSynced").textContent = "Syncing…";
+    document.getElementById("lastSynced").textContent = "Syncing… (" + SHEET_URL.slice(-20) + ")";
     try {
       const res  = await fetch(`${SHEET_URL}?action=getAdminData`, {
         method: "GET",
@@ -361,8 +361,9 @@
       document.getElementById("lastSynced").textContent = `Last synced: ${new Date().toLocaleTimeString()}`;
     } catch(e) {
       console.error("loadData error:", e);
-      showToast("❌ Could not load data. Check your Apps Script URL.", "error");
-      document.getElementById("lastSynced").textContent = "Sync failed";
+      const msg = "Error: " + (e && e.message ? e.message : String(e));
+      showToast("❌ " + msg, "error");
+      document.getElementById("lastSynced").textContent = msg;
     }
     document.getElementById("refreshBtn").classList.remove("spinning");
   }
